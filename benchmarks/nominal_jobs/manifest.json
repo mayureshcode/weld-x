@@ -1,0 +1,10 @@
+{
+  "scope": "nominal integration fixtures, not robustness-qualified jobs or physical weld-procedure specifications",
+  "jobs": [
+    "benchmarks/nominal_jobs/straight_butt.json",
+    "benchmarks/nominal_jobs/parallel_seams.json",
+    "benchmarks/nominal_jobs/l_corner.json",
+    "benchmarks/nominal_jobs/raised_short.json",
+    "benchmarks/nominal_jobs/angled_torch.json"
+  ]
+}

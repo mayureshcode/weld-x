@@ -1,0 +1,789 @@
+{
+  "configuration_hash": "76cf79f0ada7249dd942dda695a247cfa30531f33f94521729871f80a46ce707",
+  "result": "rejected",
+  "nominal": "pass",
+  "robustness": "fail",
+  "boundary_tested": 60,
+  "boundary_failures": [
+    {
+      "scenario": {
+        "id": "heldout:base:boundary:4",
+        "source": "base",
+        "kind": "boundary",
+        "seed": 20261123,
+        "base": [
+          0.0,
+          0.0,
+          0.0,
+          -0.01
+        ],
+        "fixture": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "model": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "checks": [
+        {
+          "segment": "seam_1:weld",
+          "constraint": "tcp_tolerance",
+          "result": "fail",
+          "reason": "fixed-command boundary preflight: model TCP error 0.00363454122 m, orientation 0.01 rad; declared constraint fails",
+          "measurement": null,
+          "margin": null
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "heldout:base:boundary:5",
+        "source": "base",
+        "kind": "boundary",
+        "seed": 20261123,
+        "base": [
+          0.0,
+          0.0,
+          0.0,
+          0.01
+        ],
+        "fixture": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "model": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "checks": [
+        {
+          "segment": "seam_1:weld",
+          "constraint": "tcp_tolerance",
+          "result": "fail",
+          "reason": "fixed-command boundary preflight: model TCP error 0.00363454122 m, orientation 0.01 rad; declared constraint fails",
+          "measurement": null,
+          "margin": null
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "heldout:base:boundary:6",
+        "source": "base",
+        "kind": "boundary",
+        "seed": 20261123,
+        "base": [
+          -0.0005,
+          -0.0005,
+          0.0,
+          -0.01
+        ],
+        "fixture": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "model": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "checks": [
+        {
+          "segment": "seam_1:weld",
+          "constraint": "tcp_tolerance",
+          "result": "fail",
+          "reason": "fixed-command boundary preflight: model TCP error 0.00422200443 m, orientation 0.01 rad; declared constraint fails",
+          "measurement": null,
+          "margin": null
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "heldout:base:boundary:7",
+        "source": "base",
+        "kind": "boundary",
+        "seed": 20261123,
+        "base": [
+          0.0005,
+          0.0005,
+          0.0,
+          0.01
+        ],
+        "fixture": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "model": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "checks": [
+        {
+          "segment": "seam_1:weld",
+          "constraint": "tcp_tolerance",
+          "result": "fail",
+          "reason": "fixed-command boundary preflight: model TCP error 0.00421833162 m, orientation 0.01 rad; declared constraint fails",
+          "measurement": null,
+          "margin": null
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "heldout:fixture:boundary:8",
+        "source": "fixture",
+        "kind": "boundary",
+        "seed": 20261123,
+        "base": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fixture": [
+          -0.0005,
+          -0.0005,
+          -0.0005,
+          -0.01
+        ],
+        "model": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "checks": [
+        {
+          "segment": "seam_1:weld",
+          "constraint": "tcp_tolerance",
+          "result": "fail",
+          "reason": "fixed-command boundary preflight: model TCP error 0.00112048871 m, orientation 0.01 rad; declared constraint fails",
+          "measurement": null,
+          "margin": null
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "heldout:fixture:boundary:9",
+        "source": "fixture",
+        "kind": "boundary",
+        "seed": 20261123,
+        "base": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fixture": [
+          0.0005,
+          0.0005,
+          0.0005,
+          0.01
+        ],
+        "model": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "checks": [
+        {
+          "segment": "seam_1:weld",
+          "constraint": "tcp_tolerance",
+          "result": "fail",
+          "reason": "fixed-command boundary preflight: model TCP error 0.00112449761 m, orientation 0.01 rad; declared constraint fails",
+          "measurement": null,
+          "margin": null
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "heldout:model:boundary:8",
+        "source": "model",
+        "kind": "boundary",
+        "seed": 20261123,
+        "base": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fixture": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "model": [
+          -0.001,
+          -0.001,
+          -0.001,
+          -0.005
+        ]
+      },
+      "checks": [
+        {
+          "segment": "seam_1:weld",
+          "constraint": "tcp_tolerance",
+          "result": "fail",
+          "reason": "fixed-command boundary preflight: model TCP error 0.00173205081 m, orientation 0.005 rad; declared constraint fails",
+          "measurement": null,
+          "margin": null
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "heldout:model:boundary:9",
+        "source": "model",
+        "kind": "boundary",
+        "seed": 20261123,
+        "base": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fixture": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "model": [
+          0.001,
+          0.001,
+          0.001,
+          0.005
+        ]
+      },
+      "checks": [
+        {
+          "segment": "seam_1:weld",
+          "constraint": "tcp_tolerance",
+          "result": "fail",
+          "reason": "fixed-command boundary preflight: model TCP error 0.00173205081 m, orientation 0.005 rad; declared constraint fails",
+          "measurement": null,
+          "margin": null
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "heldout:combined:boundary:4",
+        "source": "combined",
+        "kind": "boundary",
+        "seed": 20261123,
+        "base": [
+          0.0,
+          0.0,
+          0.0,
+          -0.01
+        ],
+        "fixture": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "model": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "checks": [
+        {
+          "segment": "seam_1:weld",
+          "constraint": "tcp_tolerance",
+          "result": "fail",
+          "reason": "fixed-command boundary preflight: model TCP error 0.00363454122 m, orientation 0.01 rad; declared constraint fails",
+          "measurement": null,
+          "margin": null
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "heldout:combined:boundary:5",
+        "source": "combined",
+        "kind": "boundary",
+        "seed": 20261123,
+        "base": [
+          0.0,
+          0.0,
+          0.0,
+          0.01
+        ],
+        "fixture": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "model": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "checks": [
+        {
+          "segment": "seam_1:weld",
+          "constraint": "tcp_tolerance",
+          "result": "fail",
+          "reason": "fixed-command boundary preflight: model TCP error 0.00363454122 m, orientation 0.01 rad; declared constraint fails",
+          "measurement": null,
+          "margin": null
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "heldout:combined:boundary:22",
+        "source": "combined",
+        "kind": "boundary",
+        "seed": 20261123,
+        "base": [
+          -0.0005,
+          -0.0005,
+          0.0,
+          -0.01
+        ],
+        "fixture": [
+          -0.0005,
+          -0.0005,
+          -0.0005,
+          -0.01
+        ],
+        "model": [
+          -0.001,
+          -0.001,
+          -0.001,
+          -0.005
+        ]
+      },
+      "checks": [
+        {
+          "segment": "seam_1:weld",
+          "constraint": "tcp_tolerance",
+          "result": "fail",
+          "reason": "fixed-command boundary preflight: model TCP error 0.00349428106 m, orientation 0.005 rad; declared constraint fails",
+          "measurement": null,
+          "margin": null
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "heldout:combined:boundary:23",
+        "source": "combined",
+        "kind": "boundary",
+        "seed": 20261123,
+        "base": [
+          0.0005,
+          0.0005,
+          0.0,
+          0.01
+        ],
+        "fixture": [
+          0.0005,
+          0.0005,
+          0.0005,
+          0.01
+        ],
+        "model": [
+          0.001,
+          0.001,
+          0.001,
+          0.005
+        ]
+      },
+      "checks": [
+        {
+          "segment": "seam_1:weld",
+          "constraint": "tcp_tolerance",
+          "result": "fail",
+          "reason": "fixed-command boundary preflight: model TCP error 0.00350570956 m, orientation 0.005 rad; declared constraint fails",
+          "measurement": null,
+          "margin": null
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "heldout:combined:boundary:24",
+        "source": "combined",
+        "kind": "boundary",
+        "seed": 20261123,
+        "base": [
+          -0.0005,
+          -0.0005,
+          0.0,
+          0.0
+        ],
+        "fixture": [
+          0.0005,
+          0.0005,
+          -0.0005,
+          0.0
+        ],
+        "model": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "checks": [
+        {
+          "segment": "seam_1:weld",
+          "constraint": "tcp_tolerance",
+          "result": "fail",
+          "reason": "fixed-command boundary preflight: model TCP error 0.0015 m, orientation 0 rad; declared constraint fails",
+          "measurement": null,
+          "margin": null
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "heldout:combined:boundary:25",
+        "source": "combined",
+        "kind": "boundary",
+        "seed": 20261123,
+        "base": [
+          -0.0005,
+          -0.0005,
+          0.0,
+          0.0
+        ],
+        "fixture": [
+          0.0005,
+          0.0005,
+          0.0005,
+          0.0
+        ],
+        "model": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "checks": [
+        {
+          "segment": "seam_1:weld",
+          "constraint": "tcp_tolerance",
+          "result": "fail",
+          "reason": "fixed-command boundary preflight: model TCP error 0.0015 m, orientation 0 rad; declared constraint fails",
+          "measurement": null,
+          "margin": null
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "heldout:combined:boundary:26",
+        "source": "combined",
+        "kind": "boundary",
+        "seed": 20261123,
+        "base": [
+          -0.0005,
+          0.0005,
+          0.0,
+          0.0
+        ],
+        "fixture": [
+          0.0005,
+          -0.0005,
+          -0.0005,
+          0.0
+        ],
+        "model": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "checks": [
+        {
+          "segment": "seam_1:weld",
+          "constraint": "tcp_tolerance",
+          "result": "fail",
+          "reason": "fixed-command boundary preflight: model TCP error 0.0015 m, orientation 0 rad; declared constraint fails",
+          "measurement": null,
+          "margin": null
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "heldout:combined:boundary:27",
+        "source": "combined",
+        "kind": "boundary",
+        "seed": 20261123,
+        "base": [
+          -0.0005,
+          0.0005,
+          0.0,
+          0.0
+        ],
+        "fixture": [
+          0.0005,
+          -0.0005,
+          0.0005,
+          0.0
+        ],
+        "model": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "checks": [
+        {
+          "segment": "seam_1:weld",
+          "constraint": "tcp_tolerance",
+          "result": "fail",
+          "reason": "fixed-command boundary preflight: model TCP error 0.0015 m, orientation 0 rad; declared constraint fails",
+          "measurement": null,
+          "margin": null
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "heldout:combined:boundary:28",
+        "source": "combined",
+        "kind": "boundary",
+        "seed": 20261123,
+        "base": [
+          0.0005,
+          -0.0005,
+          0.0,
+          0.0
+        ],
+        "fixture": [
+          -0.0005,
+          0.0005,
+          -0.0005,
+          0.0
+        ],
+        "model": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "checks": [
+        {
+          "segment": "seam_1:weld",
+          "constraint": "tcp_tolerance",
+          "result": "fail",
+          "reason": "fixed-command boundary preflight: model TCP error 0.0015 m, orientation 0 rad; declared constraint fails",
+          "measurement": null,
+          "margin": null
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "heldout:combined:boundary:29",
+        "source": "combined",
+        "kind": "boundary",
+        "seed": 20261123,
+        "base": [
+          0.0005,
+          -0.0005,
+          0.0,
+          0.0
+        ],
+        "fixture": [
+          -0.0005,
+          0.0005,
+          0.0005,
+          0.0
+        ],
+        "model": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "checks": [
+        {
+          "segment": "seam_1:weld",
+          "constraint": "tcp_tolerance",
+          "result": "fail",
+          "reason": "fixed-command boundary preflight: model TCP error 0.0015 m, orientation 0 rad; declared constraint fails",
+          "measurement": null,
+          "margin": null
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "heldout:combined:boundary:30",
+        "source": "combined",
+        "kind": "boundary",
+        "seed": 20261123,
+        "base": [
+          0.0005,
+          0.0005,
+          0.0,
+          0.0
+        ],
+        "fixture": [
+          -0.0005,
+          -0.0005,
+          -0.0005,
+          0.0
+        ],
+        "model": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "checks": [
+        {
+          "segment": "seam_1:weld",
+          "constraint": "tcp_tolerance",
+          "result": "fail",
+          "reason": "fixed-command boundary preflight: model TCP error 0.0015 m, orientation 0 rad; declared constraint fails",
+          "measurement": null,
+          "margin": null
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "heldout:combined:boundary:31",
+        "source": "combined",
+        "kind": "boundary",
+        "seed": 20261123,
+        "base": [
+          0.0005,
+          0.0005,
+          0.0,
+          0.0
+        ],
+        "fixture": [
+          -0.0005,
+          -0.0005,
+          0.0005,
+          0.0
+        ],
+        "model": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "checks": [
+        {
+          "segment": "seam_1:weld",
+          "constraint": "tcp_tolerance",
+          "result": "fail",
+          "reason": "fixed-command boundary preflight: model TCP error 0.0015 m, orientation 0 rad; declared constraint fails",
+          "measurement": null,
+          "margin": null
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "source": "base",
+      "boundary_tested": 8,
+      "boundary_expected": 8,
+      "boundary_passed": 0,
+      "mc_tested": 0,
+      "mc_expected": 100,
+      "mc_passed": 0,
+      "mc_unknown": 0,
+      "empirical_rate": null,
+      "wilson95": null,
+      "outcome": "fail"
+    },
+    {
+      "source": "fixture",
+      "boundary_tested": 10,
+      "boundary_expected": 10,
+      "boundary_passed": 0,
+      "mc_tested": 0,
+      "mc_expected": 100,
+      "mc_passed": 0,
+      "mc_unknown": 0,
+      "empirical_rate": null,
+      "wilson95": null,
+      "outcome": "fail"
+    },
+    {
+      "source": "model",
+      "boundary_tested": 10,
+      "boundary_expected": 10,
+      "boundary_passed": 0,
+      "mc_tested": 0,
+      "mc_expected": 100,
+      "mc_passed": 0,
+      "mc_unknown": 0,
+      "empirical_rate": null,
+      "wilson95": null,
+      "outcome": "fail"
+    },
+    {
+      "source": "combined",
+      "boundary_tested": 32,
+      "boundary_expected": 32,
+      "boundary_passed": 0,
+      "mc_tested": 0,
+      "mc_expected": 100,
+      "mc_passed": 0,
+      "mc_unknown": 0,
+      "empirical_rate": null,
+      "wilson95": null,
+      "outcome": "fail"
+    }
+  ],
+  "elapsed_s": 15.474264894000044,
+  "mc_target": 0.99,
+  "mc_declared_per_source": 100,
+  "actual_mc_complete_jobs_executed": 0,
+  "measurement_compensation": "none; no measured physical specifications or independent-error compensation is claimed",
+  "limitations": "Boundary preflight rejects invalid commanded paths; screened survivors are unknown, not successful jobs. Monte Carlo acceptance is not attempted when a mandatory boundary fails."
+}

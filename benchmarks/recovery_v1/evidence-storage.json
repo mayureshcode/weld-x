@@ -1,0 +1,8 @@
+{
+  "format": "base64(gzip(full JSON))",
+  "path": "benchmarks/recovery_v1/validation-evidence.json.gz.b64",
+  "uncompressed_sha256": "e9e130b4889b0761d916297a784d1944a3961cd309a8ef8dcdaaf14b07b8406f",
+  "uncompressed_bytes": 1676358,
+  "decode": "python3 -c \"import base64,gzip,pathlib; p=pathlib.Path('benchmarks/recovery_v1/validation-evidence.json'); p.write_bytes(gzip.decompress(base64.b64decode(p.with_suffix(p.suffix+'.gz.b64').read_bytes())))\"",
+  "reason": "Full unabridged evidence retained; compressed text is compatible with the authorized GitHub file API. Archive contains plain full JSON too."
+}

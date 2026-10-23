@@ -1,0 +1,17 @@
+{
+  "configuration_hash": "76cf79f0ada7249dd942dda695a247cfa30531f33f94521729871f80a46ce707",
+  "phases": {
+    "search": {
+      "scenario_count": 460,
+      "boundary_count": 60,
+      "mc_count": 400,
+      "sha256": "0018cb12ec6c80d3e6cfb72cd78f8464d39c7cc0d8115368e2dfc5d73ece0201"
+    },
+    "heldout": {
+      "scenario_count": 460,
+      "boundary_count": 60,
+      "mc_count": 400,
+      "sha256": "0e23f949ca9ac5e1f8470ee6ed494cb458265a617b2a5ff141df6525f9771518"
+    }
+  }
+}
