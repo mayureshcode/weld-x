@@ -1,0 +1,31 @@
+{
+  "repository": "https://github.com/mayureshcode/weld-x",
+  "branch": "engineering/robotics-integration",
+  "baseline_remote": "58191bd134bdb55cef1ad91b72376db3302f4b48",
+  "source_commit": "ef3286a31ca27e83d5821bdba071cc6f37cbd1bb",
+  "local_source_commit": "3170858",
+  "method": "Authorized GitHub push_files API; local mirror and remote ancestry differ",
+  "main_modified": false,
+  "ci_run_claimed": false,
+  "evidence_commits": [
+    "a9cdbec47cf9695df36a16427ceac43eee71bc32",
+    "50178255fca71ccce1b05a96b1ba344c2a269eff",
+    "186dfb3793fba187c47cbc54d494607a2cee8a6e",
+    "d2c9ae7896f7113ea890c8856776f0f1772a501f",
+    "6fa9c2148913d0aa594ea44ef9cc7de1c44250b8",
+    "2b85bd3e3302e8049d299abe3d857a6f768e1ed8"
+  ],
+  "evidence_batch_count": 6,
+  "verification": {
+    "core_remote_git_blobs_match_local": {
+      "engine.py": "325e2feb77e4037fc88b59d58f928d2fb15de8ad",
+      "robustness.py": "dbf114f5e03637e71f54d1d2301369b69404f0cd",
+      "server.py": "a1f30fed425583ac41f3aba3b45dd8a68ddb0a08",
+      "validation.py": "463b9c919903eeb8c2dff670ec940532de5164f1"
+    },
+    "remote_main_head_readback": "8344af53d1d7451f878081f389ccc598c7db6558",
+    "lossless_encoded_records_verified": 23,
+    "raw_manifest_files_verified": 82,
+    "shutdown": "unresolved MoveIt SIGSEGV preserved; owned processes stopped"
+  }
+}

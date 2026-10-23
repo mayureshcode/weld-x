@@ -1,0 +1,72 @@
+{
+  "journals": [
+    {
+      "path": "evidence/phase3/dashboard-mobile-failure-audit.jsonl",
+      "records": 33,
+      "head": "8a89e679b74f214b3b700fabfb341de55609ed24aa8478cd8b58aae3595f2b8c",
+      "result": "passed"
+    },
+    {
+      "path": "evidence/phase3/dashboard-audit.jsonl",
+      "records": 39,
+      "head": "2a8742b64f9906eec2326eab78b33e69f5d5bd89f8006b85baa0d8ccf858a04d",
+      "result": "passed"
+    },
+    {
+      "path": "evidence/phase3/policy-comparison/recovery_v1_proposed-20261023.jsonl",
+      "records": 14,
+      "head": "adc67889eaa1bd7e9cc51451e813f6f87fd94dbd90d953741b398c4ea2b7be95",
+      "result": "passed"
+    },
+    {
+      "path": "evidence/phase3/policy-comparison/recovery_v1_proposed-20261024.jsonl",
+      "records": 14,
+      "head": "1fa64196d69e4404e3c033b2d8d1246581d05e0c3a142767ac8587cd7ab9b868",
+      "result": "passed"
+    },
+    {
+      "path": "evidence/phase3/policy-comparison/nominal_angled_torch_v1-20261023.jsonl",
+      "records": 14,
+      "head": "b770d03a3a820f15dcbb5225d6a04ee27aa31d000840e0d2bffcdabc6217765a",
+      "result": "passed"
+    },
+    {
+      "path": "evidence/phase3/policy-comparison/nominal_angled_torch_v1-20261024.jsonl",
+      "records": 14,
+      "head": "4df258042a8a13caa51ee361d054dbe5f7556f1dfc7ba92ab3ece15e24b9aa73",
+      "result": "passed"
+    },
+    {
+      "path": "evidence/phase3/recovery-v1/audit.jsonl",
+      "records": 4,
+      "head": "97d5910455912ee296853f9546d1b5c4601a82d2b3049254c94449af3cb65d2d",
+      "result": "passed"
+    },
+    {
+      "path": "evidence/phase3/strict/audit.jsonl",
+      "records": 4,
+      "head": "ef88fb2685df4fb51f8cdc82a16b59a409fd738a12d94ef66dd22d99f5a11819",
+      "result": "passed"
+    },
+    {
+      "path": "evidence/phase3/pre-teardown-fix/dashboard-audit.jsonl",
+      "records": 39,
+      "head": "f73e35cf82db7e864aac9f1f5b506a9a34bf697fdb2852a4904697818737043a",
+      "result": "passed"
+    },
+    {
+      "path": "evidence/phase3/post-teardown-fix/recovery-v1/audit.jsonl",
+      "records": 4,
+      "head": "82865ff33d43ad2a015c80bd0d29ef045b0ac38c874486cdd155f5090d83cd9a",
+      "result": "passed"
+    },
+    {
+      "path": "evidence/phase3/post-teardown-fix/strict/audit.jsonl",
+      "records": 4,
+      "head": "b1fd6f6e899c020d7b183439be396cae7a695847e34de6159089117166d8908f",
+      "result": "passed"
+    }
+  ],
+  "result": "passed",
+  "scope": "Hash-chain integrity, not tamper-proof certification"
+}
