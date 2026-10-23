@@ -1,0 +1,28 @@
+{
+  "outcome": "failed_shutdown_unresolved",
+  "scope": "MoveIt 2.12.4 process destruction after successful tests, not an observed in-job planning or motion failure",
+  "attempts": [
+    {
+      "launch_log": "evidence/phase3/cell-launch-shutdown-failure.log",
+      "move_group_exit": -11,
+      "execution_route": "default enabled"
+    },
+    {
+      "launch_log": "evidence/phase3/cell-launch-final.log",
+      "move_group_exit": -11,
+      "execution_route": "allow_trajectory_execution=false verified by ROS parameter readback"
+    }
+  ],
+  "stack": [
+    "moveit_cpp::MoveItCpp::~MoveItCpp",
+    "trajectory_execution_manager::TrajectoryExecutionManager::~TrajectoryExecutionManager",
+    "rclcpp::Node::~Node",
+    "rclcpp::node_interfaces::NodeBase::~NodeBase",
+    "rclcpp::CallbackGroup::~CallbackGroup"
+  ],
+  "conclusion": "Disabling unused execution requests does not prevent the manager destructor; attempted mitigation did not resolve the upstream lifetime defect. Root cause beyond the observed destructor chain is not established.",
+  "next_action": "Reproduce with a pinned symbol-enabled MoveIt/rclcpp build; establish controller-manager/plugin and callback ownership destruction order; test an upstream-supported fix before changing the installed target version. Do not hide the crash with SIGKILL or claim clean shutdown.",
+  "owned_processes_after_stop": "Gazebo, MoveGroup, ROS launch and WELD-X dashboard absent by ps/pgrep after their owned SIGINT shutdown.",
+  "unrelated_processes": "No killall or unrelated process shutdown performed",
+  "final_source_note": "Launch explanatory comments were corrected after the final tested attempt; functional launch parameters are unchanged."
+}

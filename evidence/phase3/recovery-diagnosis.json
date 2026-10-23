@@ -1,0 +1,47 @@
+{
+  "scope": "analytic necessary condition plus actual model/MoveIt boundary evidence; not physical metrology",
+  "config_sha256": "2883c6794eb59080b425685c7451b3c3f4d96b983dcd26edbe6e6964d60e0b08",
+  "tcp_euclidean_limit_m": 0.001,
+  "pure_translation_opposed_corner_residual_m": 0.0015,
+  "base_xy_error_m": [
+    0.0005,
+    0.0005
+  ],
+  "fixture_xyz_error_m": [
+    0.0005,
+    0.0005,
+    0.0005
+  ],
+  "derivation": "sqrt((base_dx-fixture_dx)^2+(base_dy-fixture_dy)^2+fixture_dz^2), opposite signed extrema; yaw and TCP calibration zero in this necessary-condition example",
+  "relocation_dependence": "This independent-error translation residual is invariant to nominal base relocation; relocation is not measurement or compensation.",
+  "measurement_compensation": "No supported real sensor, registration or compensation mechanism exists. Experiment truth is not fed into weld replanning.",
+  "retained_nontranslation_uncertainties": {
+    "base_yaw_rad": 0.01,
+    "fixture_yaw_rad": 0.01,
+    "model_tcp_translation_m": 0.001,
+    "model_tcp_yaw_rad": 0.005
+  },
+  "source_failure_counts": [
+    [
+      "base",
+      4,
+      4
+    ],
+    [
+      "fixture",
+      2,
+      8
+    ],
+    [
+      "model",
+      2,
+      8
+    ],
+    [
+      "combined",
+      12,
+      20
+    ]
+  ],
+  "engineering_decision": "A separately versioned measurement/registration experiment would require explicit authorization, declared residual assumptions and new full validation; not silently introduced."
+}

@@ -1,0 +1,13 @@
+{
+  "configuration_hash": "6deaf9918edec1d9bfbbbfc008cd2c56a7634028aec08765262135357c6dfee5",
+  "result": "rejected",
+  "nominal": "pass",
+  "robustness": "fail",
+  "boundary_tested": 60,
+  "elapsed_s": 6.137722295999993,
+  "mc_target": 0.95,
+  "mc_declared_per_source": 20,
+  "actual_mc_complete_jobs_executed": 0,
+  "measurement_compensation": "none; no measured physical specifications or independent-error compensation is claimed",
+  "limitations": "Boundary preflight rejects invalid commanded paths; screened survivors are unknown, not successful jobs. Monte Carlo acceptance is not attempted when a mandatory boundary fails."
+}

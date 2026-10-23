@@ -1,0 +1,25 @@
+test_01_exact_nominal_contract (tests_robotics.test_adapter.ActualAdapterTests.test_01_exact_nominal_contract) ... ok
+test_02_open_loop_failure_is_confirmed (tests_robotics.test_adapter.ActualAdapterTests.test_02_open_loop_failure_is_confirmed) ... ok
+test_03_unexecuted_scenario_is_unknown_not_pass (tests_robotics.test_adapter.ActualAdapterTests.test_03_unexecuted_scenario_is_unknown_not_pass) ... ok
+test_04_telemetry_comes_from_feedback (tests_robotics.test_adapter.ActualAdapterTests.test_04_telemetry_comes_from_feedback) ... ok
+test_05_expired_budget_unknown (tests_robotics.test_adapter.ActualAdapterTests.test_05_expired_budget_unknown) ... ok
+test_deliberate_collision_detected (tests_robotics.test_cell.ActualCellTests.test_deliberate_collision_detected) ... ok
+test_independent_model_fk (tests_robotics.test_cell.ActualCellTests.test_independent_model_fk) ... ok
+test_joint_feedback_and_controllers (tests_robotics.test_cell.ActualCellTests.test_joint_feedback_and_controllers) ... ok
+test_scene_readback_matches_nominal (tests_robotics.test_cell.ActualCellTests.test_scene_readback_matches_nominal) ... ok
+test_tcp_timing_enforced (tests_robotics.test_cell.ActualCellTests.test_tcp_timing_enforced) ... ok
+test_unreachable_target_rejected (tests_robotics.test_cell.ActualCellTests.test_unreachable_target_rejected) ... ok
+test_base_world_translation (tests_robotics.test_frames.FrameTests.test_base_world_translation) ... ok
+test_calibration_offset_is_tcp_local (tests_robotics.test_frames.FrameTests.test_calibration_offset_is_tcp_local) ... ok
+test_equal_world_errors_cancel_relative_translation (tests_robotics.test_frames.FrameTests.test_equal_world_errors_cancel_relative_translation) ... ok
+test_fixture_rotation_moves_attached_workpiece_about_fixture (tests_robotics.test_frames.FrameTests.test_fixture_rotation_moves_attached_workpiece_about_fixture) ... ok
+test_fixture_world_translation (tests_robotics.test_frames.FrameTests.test_fixture_world_translation) ... ok
+test_numerical_boundary_guard (tests_robotics.test_frames.FrameTests.test_numerical_boundary_guard) ... ok
+test_opposed_independent_errors_do_not_cancel (tests_robotics.test_frames.FrameTests.test_opposed_independent_errors_do_not_cancel) ... ok
+test_live_pose_drift_invalidates_exact_binding (tests_robotics.test_scenario_execution.ObservedScenarioTests.test_live_pose_drift_invalidates_exact_binding) ... ok
+test_observed_complete_small_fixture_error_receipt (tests_robotics.test_scenario_execution.ObservedScenarioTests.test_observed_complete_small_fixture_error_receipt) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 85.358s
+
+OK

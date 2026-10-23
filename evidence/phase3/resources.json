@@ -1,0 +1,30 @@
+{
+  "recorded_at_utc": "2026-10-23T16:54:30.363520+00:00",
+  "host": "Linux x86_64",
+  "cpu_count": 2,
+  "ram_MiB": 4284,
+  "gpu": "none available",
+  "swap": "none",
+  "rootfs_disk": "5.1 GiB measured by du",
+  "filesystem_free": "17 GiB at this checkpoint",
+  "rss_samples_KiB": {
+    "gazebo": 232344,
+    "move_group": 93672,
+    "dashboard": 236736
+  },
+  "rss_scope": "single live ps snapshot, not peak or complete process-tree consumption",
+  "policy_pool_elapsed_s": [
+    32.450870581001254,
+    30.08384052099973,
+    11.593286604999776,
+    10.992934905000766
+  ],
+  "nominal_job_wall_s": [
+    21.405444418000116,
+    43.234435367000515,
+    38.18913111399979,
+    17.881498302000182,
+    19.164115687999583
+  ],
+  "limitations": "Timing depends on GUI/headless load and software rendering. Per-policy isolated timings and peak resource usage were not instrumented."
+}

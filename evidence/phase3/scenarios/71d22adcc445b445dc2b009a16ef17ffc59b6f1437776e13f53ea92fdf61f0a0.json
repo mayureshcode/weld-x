@@ -1,0 +1,299 @@
+{
+  "scenario": {
+    "id": "integration:small-fixture-error",
+    "source": "fixture",
+    "kind": "mc",
+    "seed": 1701,
+    "base": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "fixture": [
+      0.0001,
+      0,
+      0,
+      0
+    ],
+    "model": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "scenario_hash": "2235f345395a62fcfeee59ffdd9601223574d2364c260a10d18fd45829cbec9a",
+  "config_hash": "6deaf9918edec1d9bfbbbfc008cd2c56a7634028aec08765262135357c6dfee5",
+  "adapter_version": "jazzy-harmonic:abb-45f4769:cell-v3:open-loop-calibration-model:5d39677c32ab6792",
+  "trajectory_id": "c42514a0b8e197cf4be39e0f8b71b0d5f23a12175941e71cb7e8c34c2c1202f1",
+  "outcome": "pass",
+  "complete_job_executed": true,
+  "scope": "actual Gazebo open-loop experiment; virtual TCP calibration mismatch, not physical dynamics",
+  "restoration": {
+    "confirmed": true,
+    "readback": {
+      "immediate": {
+        "weldx_robot": {
+          "position_error_m": 0.0,
+          "orientation_error_rad": 0.0
+        },
+        "base_link": {
+          "position_error_m": 0.0,
+          "orientation_error_rad": 0.0
+        },
+        "fixture": {
+          "position_error_m": 0.0,
+          "orientation_error_rad": 0.0
+        },
+        "workpiece": {
+          "position_error_m": 0.0,
+          "orientation_error_rad": 0.0
+        }
+      },
+      "persistent": {
+        "weldx_robot": {
+          "position_error_m": 0.0,
+          "orientation_error_rad": 0.0
+        },
+        "base_link": {
+          "position_error_m": 0.0,
+          "orientation_error_rad": 0.0
+        },
+        "fixture": {
+          "position_error_m": 0.0,
+          "orientation_error_rad": 0.0
+        },
+        "workpiece": {
+          "position_error_m": 0.0,
+          "orientation_error_rad": 0.0
+        }
+      }
+    }
+  },
+  "completed_segments": [
+    "seam_1:approach",
+    "seam_1:weld",
+    "seam_1:retreat",
+    "seam_1->seam_2:transition",
+    "seam_2:approach",
+    "seam_2:weld",
+    "seam_2:retreat"
+  ],
+  "segment_observations": [
+    {
+      "segment": "seam_1:approach",
+      "max_actual_scenario_tcp_error_m": 0.00013189954296332067,
+      "max_actual_scenario_orientation_error_rad": 0.0006430340064123989,
+      "controller_tracking": {
+        "feedback_samples": 422,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 0.0005999999999031225,
+          "tcp_error_m": 5.3948424526374746e-05,
+          "orientation_error_rad": 0.0006430340064123482
+        },
+        "joint_error_rad": 1.289246487345963e-13,
+        "tcp_position_error_m": 6.445141093110674e-14,
+        "tcp_orientation_error_rad": 1.7794266817282248e-13,
+        "observed": {
+          "joint_1": -0.13800602466436176,
+          "joint_2": 0.2127836757031811,
+          "joint_3": 0.1668873454631651,
+          "joint_4": 2.0519261033076483e-09,
+          "joint_5": 1.1911253056288278,
+          "joint_6": -3.279598683984939
+        },
+        "controller_status": 4
+      }
+    },
+    {
+      "segment": "seam_1:weld",
+      "max_actual_scenario_tcp_error_m": 0.00011773161905605505,
+      "max_actual_scenario_orientation_error_rad": 2.5971166179335583e-13,
+      "controller_tracking": {
+        "feedback_samples": 235,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 8.504490187946634e-05,
+          "tcp_error_m": 1.7731619067116827e-05,
+          "orientation_error_rad": 2.5971166179335583e-13
+        },
+        "joint_error_rad": 1.734723475976807e-13,
+        "tcp_position_error_m": 9.691863987157576e-14,
+        "tcp_orientation_error_rad": 2.5713832502944957e-13,
+        "observed": {
+          "joint_1": -0.11315098339869509,
+          "joint_2": 0.5164953122904273,
+          "joint_3": -0.23134446719320256,
+          "joint_4": 1.9847702581813507e-09,
+          "joint_5": 1.2856454816506682,
+          "joint_6": -3.2547436425169396
+        },
+        "controller_status": 4
+      }
+    },
+    {
+      "segment": "seam_1:retreat",
+      "max_actual_scenario_tcp_error_m": 0.00010141568052597786,
+      "max_actual_scenario_orientation_error_rad": 3.921854930233201e-13,
+      "controller_tracking": {
+        "feedback_samples": 62,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 5.4674415978450686e-05,
+          "tcp_error_m": 1.6887758013702594e-05,
+          "orientation_error_rad": 3.921854930233201e-13
+        },
+        "joint_error_rad": 1.821875983409882e-13,
+        "tcp_position_error_m": 9.877975007867838e-14,
+        "tcp_orientation_error_rad": 2.6883141062379204e-13,
+        "observed": {
+          "joint_1": -0.11315098241566886,
+          "joint_2": 0.5153224170970275,
+          "joint_3": -0.3264811202001182,
+          "joint_4": 1.9376644342307796e-09,
+          "joint_5": 1.381955029850995,
+          "joint_6": -3.2547436413390147
+        },
+        "controller_status": 4
+      }
+    },
+    {
+      "segment": "seam_1->seam_2:transition",
+      "max_actual_scenario_tcp_error_m": 0.0001358093820530631,
+      "max_actual_scenario_orientation_error_rad": 8.764940319413724e-09,
+      "controller_tracking": {
+        "feedback_samples": 33,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 0.00020000000000086615,
+          "tcp_error_m": 8.856352683152224e-05,
+          "orientation_error_rad": 8.764940319413724e-09
+        },
+        "joint_error_rad": 1.8224310949221945e-13,
+        "tcp_position_error_m": 9.912300873126695e-14,
+        "tcp_orientation_error_rad": 2.688775423314273e-13,
+        "observed": {
+          "joint_1": 0.11315464020330558,
+          "joint_2": 0.515327062536596,
+          "joint_3": -0.32648462037162923,
+          "joint_4": -4.891550713930709e-06,
+          "joint_5": 1.3819469356979839,
+          "joint_6": -3.0284320560007134
+        },
+        "controller_status": 4
+      }
+    },
+    {
+      "segment": "seam_2:approach",
+      "max_actual_scenario_tcp_error_m": 0.00010176095772100932,
+      "max_actual_scenario_orientation_error_rad": 6.179842330275113e-09,
+      "controller_tracking": {
+        "feedback_samples": 62,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 6.042080607904232e-05,
+          "tcp_error_m": 1.8846386061479147e-05,
+          "orientation_error_rad": 6.179842330275113e-09
+        },
+        "joint_error_rad": 1.7344459202206508e-13,
+        "tcp_position_error_m": 9.699923668151282e-14,
+        "tcp_orientation_error_rad": 2.570417948507203e-13,
+        "observed": {
+          "joint_1": 0.11315098310120741,
+          "joint_2": 0.5164953312698252,
+          "joint_3": -0.23134449004012134,
+          "joint_4": -3.6306610295604124e-09,
+          "joint_5": 1.2856454855645318,
+          "joint_6": -3.028441656844742
+        },
+        "controller_status": 4
+      }
+    },
+    {
+      "segment": "seam_2:weld",
+      "max_actual_scenario_tcp_error_m": 0.00010962584783925213,
+      "max_actual_scenario_orientation_error_rad": 2.596484200402753e-13,
+      "controller_tracking": {
+        "feedback_samples": 234,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 8.560774071304095e-05,
+          "tcp_error_m": 1.883094799934981e-05,
+          "orientation_error_rad": 2.596484200402753e-13
+        },
+        "joint_error_rad": 1.289246487345963e-13,
+        "tcp_position_error_m": 6.45111802401883e-14,
+        "tcp_orientation_error_rad": 1.778581066187589e-13,
+        "observed": {
+          "joint_1": 0.13800602637252343,
+          "joint_2": 0.21278366353830744,
+          "joint_3": 0.1668873536653895,
+          "joint_4": -3.748674149516022e-09,
+          "joint_5": 1.1911253096770271,
+          "joint_6": -3.003586613205784
+        },
+        "controller_status": 4
+      }
+    },
+    {
+      "segment": "seam_2:retreat",
+      "max_actual_scenario_tcp_error_m": 0.00010257670127694781,
+      "max_actual_scenario_orientation_error_rad": 3.676646776905275e-13,
+      "controller_tracking": {
+        "feedback_samples": 62,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 7.278712967062617e-05,
+          "tcp_error_m": 2.284218299650316e-05,
+          "orientation_error_rad": 3.676646776905275e-13
+        },
+        "joint_error_rad": 1.3465617509922367e-13,
+        "tcp_position_error_m": 6.476419664020637e-14,
+        "tcp_orientation_error_rad": 1.837736402615846e-13,
+        "observed": {
+          "joint_1": 0.13800602549504823,
+          "joint_2": 0.20115636642740573,
+          "joint_3": 0.08327026132514131,
+          "joint_4": -3.6240434792677793e-09,
+          "joint_5": 1.2863696991281828,
+          "joint_6": -3.003586614456591
+        },
+        "controller_status": 4
+      }
+    }
+  ],
+  "elapsed_s": 59.25465463300043,
+  "execution_evidence": {
+    "config_hash": "6deaf9918edec1d9bfbbbfc008cd2c56a7634028aec08765262135357c6dfee5",
+    "adapter_version": "jazzy-harmonic:abb-45f4769:cell-v3:open-loop-calibration-model:5d39677c32ab6792",
+    "scenario_hash": "2235f345395a62fcfeee59ffdd9601223574d2364c260a10d18fd45829cbec9a",
+    "trajectory_id": "c42514a0b8e197cf4be39e0f8b71b0d5f23a12175941e71cb7e8c34c2c1202f1",
+    "completed_segments": [
+      "seam_1:approach",
+      "seam_1:weld",
+      "seam_1:retreat",
+      "seam_1->seam_2:transition",
+      "seam_2:approach",
+      "seam_2:weld",
+      "seam_2:retreat"
+    ],
+    "feedback_samples_per_segment": [
+      422,
+      235,
+      62,
+      33,
+      62,
+      234,
+      62
+    ],
+    "maximum_tracking_error_rad": 0.0005999999999031225,
+    "maximum_tcp_error_m": 0.0001358093820530631,
+    "maximum_orientation_error_rad": 0.0006430340064123989,
+    "restored": true,
+    "observer": "Gazebo joint feedback and actual FollowJointTrajectory action feedback; virtual TCP calibration model",
+    "observed_segments": [
+      "seam_1:approach",
+      "seam_1:weld",
+      "seam_1:retreat",
+      "seam_1->seam_2:transition",
+      "seam_2:approach",
+      "seam_2:weld",
+      "seam_2:retreat"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "examples/commissioning_two_seam.json": {
+    "sha256": "341cec92b298f74383556a9512b7d2308cb372a587a04231f8612adef449f280",
+    "unchanged": true
+  },
+  "benchmarks/recovery_v1/configuration.json": {
+    "sha256": "2883c6794eb59080b425685c7451b3c3f4d96b983dcd26edbe6e6964d60e0b08",
+    "unchanged": true
+  },
+  "benchmarks/recovery_v1/preregistration.json": {
+    "sha256": "c4527846e90720a94d64b13a1351b31218024b417d9fb0ee541a6474b9847d56",
+    "unchanged": true
+  }
+}

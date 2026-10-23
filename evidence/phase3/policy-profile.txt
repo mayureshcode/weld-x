@@ -1,0 +1,29 @@
+## evidence/phase3/policy-comparison/results.json
+
+- Shape: 4 rows x 13 columns
+- Duplicate rows: 0
+- Candidate key columns (distinct == rows): block, config_hash, pool_evaluation_elapsed_s, total_wall_s, candidates
+
+| column | type | non-null | distinct | values |
+| --- | --- | --- | --- | --- |
+| block | text | 100% | 4 | top: recovery_v1_proposed-20261023 (1), recovery_v1_proposed-20261024 (1), nominal_angled_torch_v1-20261023 (1), nominal_angled_torch_v1-20261024 (1) |
+| source_job | text | 100% | 2 | top: benchmarks/recovery_v1/configuration.jso (2), benchmarks/nominal_jobs/angled_torch.jso (2) |
+| config_hash | text | 100% | 4 | top: 76cf79f0ada7249dd942dda695a247cfa30531f3 (1), a13a1d608e9313f01eec74eedac2d2b5e628e713 (1), 838c91c91952bd0bf0bb0c4ce7cb15b4070f84c5 (1), 6c53466af3f3bbb4c9188c2bfbca8ddbcbafeaa2 (1) |
+| seed | number | 100% | 2 | 20,261,023 → 20,261,024, mean 2.026e+07 |
+| candidate_count | number | 100% | 1 | 8 → 8, mean 8 |
+| pool_evaluation_elapsed_s | number | 100% | 4 | 10.99 → 32.45, mean 21.28 |
+| total_wall_s | number | 100% | 4 | 76.47 → 98, mean 82.64 |
+| termination | text | 100% | 1 | top: candidate_budget (4) |
+| candidates | text | 100% | 4 | top: [{"base": {"x_m": 0.0, "y_m": 0.0, "yaw_ (4) |
+| policies | text | 100% | 4 | top: [{"candidate_count": 8, "heldout_boundar (4) |
+| nominal_execution_records | text | 100% | 4 | top: {"76cf79f0ada7249dd942dda695a247cfa30531 (1), {"a13a1d608e9313f01eec74eedac2d2b5e628e7 (1), {"820a2b73ee4f18be70b9884ebb7ffdbd37ecdc (1), {"2afe467d0c0ff2e4584876154731702b367705 (1) |
+| manual_baseline_status | text | 100% | 1 | top: unavailable; fixed placement is a proxy, (4) |
+| limitations | text | 100% | 1 | top: No simulated MC success rate, physical p (4) |
+
+**Warnings:**
+
+- ⚠️ `candidate_count` is constant
+- ⚠️ `termination` is constant
+- ⚠️ `manual_baseline_status` is constant
+- ⚠️ `limitations` is constant
+

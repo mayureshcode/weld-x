@@ -1,0 +1,613 @@
+[
+  {
+    "job": "nominal_straight_butt_v1",
+    "config_hash": "8554e9f796f8f168ee69b9c7823f15fe778757f93acb0d44e9084e18b4d7a28a",
+    "path": "benchmarks/nominal_jobs/straight_butt.json",
+    "result": "passed",
+    "completed_segments": [
+      {
+        "segment": "butt:approach",
+        "feedback_samples": 85,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 0.00020010941002768234,
+          "tcp_error_m": 7.253791480882296e-05,
+          "orientation_error_rad": 2.7796450385918723e-08
+        },
+        "joint_error_rad": 1.2753686995381486e-13,
+        "tcp_position_error_m": 6.366123164139184e-14,
+        "tcp_orientation_error_rad": 1.7541644206126947e-13,
+        "observed": {
+          "joint_1": -1.015836974967298e-09,
+          "joint_2": 0.20011648485807187,
+          "joint_3": 0.1818427817142343,
+          "joint_4": 2.0524508881801873e-09,
+          "joint_5": 1.1888370602226197,
+          "joint_6": -3.141592660307812
+        },
+        "controller_status": 4
+      },
+      {
+        "segment": "butt:weld",
+        "feedback_samples": 233,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 4.292560426075176e-05,
+          "tcp_error_m": 9.60256286500898e-06,
+          "orientation_error_rad": 2.541864304003355e-13
+        },
+        "joint_error_rad": 1.7133516827527728e-13,
+        "tcp_position_error_m": 9.532849743279255e-14,
+        "tcp_orientation_error_rad": 2.534093011515091e-13,
+        "observed": {
+          "joint_1": -8.308140522690075e-10,
+          "joint_2": 0.5048638360818029,
+          "joint_3": -0.21475267627213224,
+          "joint_4": 1.9869799501719155e-09,
+          "joint_5": 1.280685166985334,
+          "joint_6": -3.1415926599259856
+        },
+        "controller_status": 4
+      },
+      {
+        "segment": "butt:retreat",
+        "feedback_samples": 61,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 6.154377213896112e-05,
+          "tcp_error_m": 1.922227049574603e-05,
+          "orientation_error_rad": 4.3498708681956507e-13
+        },
+        "joint_error_rad": 1.7996715229173788e-13,
+        "tcp_position_error_m": 9.723756799309134e-14,
+        "tcp_orientation_error_rad": 2.650387875042682e-13,
+        "observed": {
+          "joint_1": -8.302006495691786e-10,
+          "joint_2": 0.5030616217620115,
+          "joint_3": -0.3090114304559159,
+          "joint_4": 1.938933858153249e-09,
+          "joint_5": 1.37674613548892,
+          "joint_6": -3.1415926597305512
+        },
+        "controller_status": 4
+      }
+    ],
+    "scope": "nominal integration fixtures, not robustness-qualified jobs or physical weld-procedure specifications",
+    "planned_segments": [
+      {
+        "segment": "butt:approach",
+        "points": 23,
+        "joint_limit_margin_rad": 0.8080253008228546,
+        "collision_padding_m": 0.005,
+        "duration_s": 4.26266865,
+        "maximum_planned_tcp_speed_m_s": 0.07261002260091666
+      },
+      {
+        "segment": "butt:weld",
+        "points": 26,
+        "joint_limit_margin_rad": 0.8137098330146662,
+        "collision_padding_m": 0.005,
+        "duration_s": 11.696406647,
+        "maximum_planned_tcp_speed_m_s": 0.009523811316881998
+      },
+      {
+        "segment": "butt:retreat",
+        "points": 11,
+        "joint_limit_margin_rad": 0.7176488645110801,
+        "collision_padding_m": 0.005,
+        "duration_s": 3.098142686,
+        "maximum_planned_tcp_speed_m_s": 0.019047618885673318
+      }
+    ],
+    "elapsed_s": 21.270302770000853
+  },
+  {
+    "job": "nominal_parallel_seams_v1",
+    "config_hash": "4ab30a3f3c281a2411a93e79aedc9973c444934cf179db699c862b610937cb72",
+    "path": "benchmarks/nominal_jobs/parallel_seams.json",
+    "result": "passed",
+    "completed_segments": [
+      {
+        "segment": "seam_1:approach",
+        "feedback_samples": 110,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 0.0002000000002181368,
+          "tcp_error_m": 4.887002935156774e-05,
+          "orientation_error_rad": 6.167430395795062e-09
+        },
+        "joint_error_rad": 1.289246487345963e-13,
+        "tcp_position_error_m": 6.439649487777232e-14,
+        "tcp_orientation_error_rad": 1.7785827221833675e-13,
+        "observed": {
+          "joint_1": -0.13800602012182714,
+          "joint_2": 0.21278367537655984,
+          "joint_3": 0.16688734995764767,
+          "joint_4": -7.20547564441351e-09,
+          "joint_5": 1.1911253014618992,
+          "joint_6": -3.279598653464626
+        },
+        "controller_status": 4
+      },
+      {
+        "segment": "seam_1:weld",
+        "feedback_samples": 234,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 4.287258549701134e-05,
+          "tcp_error_m": 9.584817571395038e-06,
+          "orientation_error_rad": 2.5875012160412925e-13
+        },
+        "joint_error_rad": 1.734723475976807e-13,
+        "tcp_position_error_m": 9.707388275787455e-14,
+        "tcp_orientation_error_rad": 2.5741670727557395e-13,
+        "observed": {
+          "joint_1": -0.1131509796730859,
+          "joint_2": 0.5164953124603794,
+          "joint_3": -0.23134446743637274,
+          "joint_4": -6.969617745597571e-09,
+          "joint_5": 1.2856454819384868,
+          "joint_6": -3.2547436137263985
+        },
+        "controller_status": 4
+      },
+      {
+        "segment": "seam_1:retreat",
+        "feedback_samples": 62,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 6.167470800244601e-05,
+          "tcp_error_m": 1.9215147490351507e-05,
+          "orientation_error_rad": 4.608031327041358e-13
+        },
+        "joint_error_rad": 1.8224310949221945e-13,
+        "tcp_position_error_m": 9.869518956168202e-14,
+        "tcp_orientation_error_rad": 2.688460553621203e-13,
+        "observed": {
+          "joint_1": -0.11315097869281059,
+          "joint_2": 0.5153224172763641,
+          "joint_3": -0.3264811204564876,
+          "joint_4": -6.804203428647733e-09,
+          "joint_5": 1.3819550301426289,
+          "joint_6": -3.254743613430518
+        },
+        "controller_status": 4
+      },
+      {
+        "segment": "seam_1->seam_2:transition",
+        "feedback_samples": 32,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 0.00020019405980020721,
+          "tcp_error_m": 8.864821997814079e-05,
+          "orientation_error_rad": 1.480753804538833e-08
+        },
+        "joint_error_rad": 1.8224310949221945e-13,
+        "tcp_position_error_m": 9.887242365857752e-14,
+        "tcp_orientation_error_rad": 2.688354865036887e-13,
+        "observed": {
+          "joint_1": 0.11314398702861814,
+          "joint_2": 0.5153302677580024,
+          "joint_3": -0.32646894316875225,
+          "joint_4": -3.819288022100459e-06,
+          "joint_5": 1.3819490983725131,
+          "joint_6": -3.0284399396145267
+        },
+        "controller_status": 4
+      },
+      {
+        "segment": "seam_2:approach",
+        "feedback_samples": 62,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 6.153253061502717e-05,
+          "tcp_error_m": 1.916295882579071e-05,
+          "orientation_error_rad": 1.0631925026412098e-08
+        },
+        "joint_error_rad": 1.734723475976807e-13,
+        "tcp_position_error_m": 9.697971317834209e-14,
+        "tcp_orientation_error_rad": 2.5698689381833224e-13,
+        "observed": {
+          "joint_1": 0.11315098276998302,
+          "joint_2": 0.5164953312776274,
+          "joint_3": -0.23134449005863691,
+          "joint_4": -2.8346426354375454e-09,
+          "joint_5": 1.285645485576421,
+          "joint_6": -3.0284416601676556
+        },
+        "controller_status": 4
+      },
+      {
+        "segment": "seam_2:weld",
+        "feedback_samples": 232,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 4.299050298511853e-05,
+          "tcp_error_m": 9.60240230333697e-06,
+          "orientation_error_rad": 2.5946204078876197e-13
+        },
+        "joint_error_rad": 1.2889689315898067e-13,
+        "tcp_position_error_m": 6.436162054151036e-14,
+        "tcp_orientation_error_rad": 1.779678091542873e-13,
+        "observed": {
+          "joint_1": 0.1380060259692546,
+          "joint_2": 0.21278366352576958,
+          "joint_3": 0.16688735368026023,
+          "joint_4": -2.9267554885571992e-09,
+          "joint_5": 1.1911253096568906,
+          "joint_6": -3.003586616681358
+        },
+        "controller_status": 4
+      },
+      {
+        "segment": "seam_2:retreat",
+        "feedback_samples": 61,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 6.077556038297516e-05,
+          "tcp_error_m": 1.915158941965962e-05,
+          "orientation_error_rad": 3.7983860167930516e-13
+        },
+        "joint_error_rad": 1.3465617509922367e-13,
+        "tcp_position_error_m": 6.460352485028796e-14,
+        "tcp_orientation_error_rad": 1.8335299643814671e-13,
+        "observed": {
+          "joint_1": 0.13800602509215926,
+          "joint_2": 0.20115636641463255,
+          "joint_3": 0.0832702613401411,
+          "joint_4": -2.8294508236344355e-09,
+          "joint_5": 1.2863696991081517,
+          "joint_6": -3.003586617849929
+        },
+        "controller_status": 4
+      }
+    ],
+    "scope": "nominal integration fixtures, not robustness-qualified jobs or physical weld-procedure specifications",
+    "planned_segments": [
+      {
+        "segment": "seam_1:approach",
+        "points": 36,
+        "joint_limit_margin_rad": 0.7176488645110799,
+        "collision_padding_m": 0.005,
+        "duration_s": 5.529094421,
+        "maximum_planned_tcp_speed_m_s": 0.04887126267366768
+      },
+      {
+        "segment": "seam_1:weld",
+        "points": 26,
+        "joint_limit_margin_rad": 0.8087495180615134,
+        "collision_padding_m": 0.005,
+        "duration_s": 11.716904059,
+        "maximum_planned_tcp_speed_m_s": 0.00952381130112525
+      },
+      {
+        "segment": "seam_1:retreat",
+        "points": 11,
+        "joint_limit_margin_rad": 0.7124399698573713,
+        "collision_padding_m": 0.005,
+        "duration_s": 3.107451231,
+        "maximum_planned_tcp_speed_m_s": 0.019047618934309684
+      },
+      {
+        "segment": "seam_1->seam_2:transition",
+        "points": 18,
+        "joint_limit_margin_rad": 0.7124399698573713,
+        "collision_padding_m": 0.005,
+        "duration_s": 1.6315183690000001,
+        "maximum_planned_tcp_speed_m_s": 0.08856228835087318
+      },
+      {
+        "segment": "seam_2:approach",
+        "points": 11,
+        "joint_limit_margin_rad": 0.7124459016274871,
+        "collision_padding_m": 0.005,
+        "duration_s": 3.104834317,
+        "maximum_planned_tcp_speed_m_s": 0.019047619174820857
+      },
+      {
+        "segment": "seam_2:weld",
+        "points": 26,
+        "joint_limit_margin_rad": 0.808749514423579,
+        "collision_padding_m": 0.005,
+        "duration_s": 11.639867652,
+        "maximum_planned_tcp_speed_m_s": 0.009523809516392921
+      },
+      {
+        "segment": "seam_2:retreat",
+        "points": 11,
+        "joint_limit_margin_rad": 0.8080253008918483,
+        "collision_padding_m": 0.005,
+        "duration_s": 3.066237166,
+        "maximum_planned_tcp_speed_m_s": 0.019047617946066377
+      }
+    ],
+    "elapsed_s": 43.19981708300111
+  },
+  {
+    "job": "nominal_l_corner_v1",
+    "config_hash": "1278ab88a0e33163114e75e96df41e7b073fc63bcfb5da785791357b5bd3963f",
+    "path": "benchmarks/nominal_jobs/l_corner.json",
+    "result": "passed",
+    "completed_segments": [
+      {
+        "segment": "corner:approach",
+        "feedback_samples": 93,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 0.00020000000010260421,
+          "tcp_error_m": 7.402203175040617e-05,
+          "orientation_error_rad": 1.2180932126121546e-08
+        },
+        "joint_error_rad": 1.3211653993039363e-13,
+        "tcp_position_error_m": 6.68448411388364e-14,
+        "tcp_orientation_error_rad": 1.8390822419131936e-13,
+        "observed": {
+          "joint_1": -0.08090409707657686,
+          "joint_2": 0.24128798414770167,
+          "joint_3": 0.13273249051890146,
+          "joint_4": -4.317034297473785e-09,
+          "joint_5": 1.1967758521294034,
+          "joint_6": -3.2224967384339362
+        },
+        "controller_status": 4
+      },
+      {
+        "segment": "corner:weld",
+        "feedback_samples": 560,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 2.2290306575328822e-05,
+          "tcp_error_m": 9.559621339066084e-06,
+          "orientation_error_rad": 2.4303122507279374e-13
+        },
+        "joint_error_rad": 1.6484036358122012e-13,
+        "tcp_position_error_m": 9.061140310555537e-14,
+        "tcp_orientation_error_rad": 2.4220580759540986e-13,
+        "observed": {
+          "joint_1": 0.06965457493914053,
+          "joint_2": 0.4686753091247044,
+          "joint_3": -0.16378544701919012,
+          "joint_4": -4.16751860401981e-09,
+          "joint_5": 1.2659064652936245,
+          "joint_6": -3.0719380667447216
+        },
+        "controller_status": 4
+      },
+      {
+        "segment": "corner:retreat",
+        "feedback_samples": 61,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 6.120439237689013e-05,
+          "tcp_error_m": 1.923782489512636e-05,
+          "orientation_error_rad": 4.0626681354901266e-13
+        },
+        "joint_error_rad": 1.7319479184152442e-13,
+        "tcp_position_error_m": 9.23882441731257e-14,
+        "tcp_orientation_error_rad": 2.526413610834579e-13,
+        "observed": {
+          "joint_1": 0.06965457549797632,
+          "joint_2": 0.4650688174319974,
+          "joint_3": -0.25561481012566495,
+          "joint_4": -4.061127862885497e-09,
+          "joint_5": 1.361342320092817,
+          "joint_6": -3.07193806659322
+        },
+        "controller_status": 4
+      }
+    ],
+    "scope": "nominal integration fixtures, not robustness-qualified jobs or physical weld-procedure specifications",
+    "planned_segments": [
+      {
+        "segment": "corner:approach",
+        "points": 27,
+        "joint_limit_margin_rad": 0.8025978093525283,
+        "collision_padding_m": 0.005,
+        "duration_s": 4.659982282,
+        "maximum_planned_tcp_speed_m_s": 0.07414308991006469
+      },
+      {
+        "segment": "corner:weld",
+        "points": 33,
+        "joint_limit_margin_rad": 0.8284885347063757,
+        "collision_padding_m": 0.005,
+        "duration_s": 28.021955557,
+        "maximum_planned_tcp_speed_m_s": 0.00952380935902555
+      },
+      {
+        "segment": "corner:retreat",
+        "points": 11,
+        "joint_limit_margin_rad": 0.7330526799071833,
+        "collision_padding_m": 0.005,
+        "duration_s": 3.078034087,
+        "maximum_planned_tcp_speed_m_s": 0.019047618722535593
+      }
+    ],
+    "elapsed_s": 38.132477855000616
+  },
+  {
+    "job": "nominal_raised_short_v1",
+    "config_hash": "10509fab6a6fc92a497758d3211dc120d1192c6b6a4b64dd603e7c310ee5c02a",
+    "path": "benchmarks/nominal_jobs/raised_short.json",
+    "result": "passed",
+    "completed_segments": [
+      {
+        "segment": "raised:approach",
+        "feedback_samples": 95,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 0.00020000000030863385,
+          "tcp_error_m": 5.374769393148135e-05,
+          "orientation_error_rad": 9.856430555057068e-09
+        },
+        "joint_error_rad": 1.3673784327039584e-13,
+        "tcp_position_error_m": 6.821842925285842e-14,
+        "tcp_orientation_error_rad": 1.8996027240940584e-13,
+        "observed": {
+          "joint_1": -2.4722222167031293e-09,
+          "joint_2": 0.24855051114939078,
+          "joint_3": 0.07517649194887831,
+          "joint_4": 5.092724727585419e-09,
+          "joint_5": 1.2470693236975496,
+          "joint_6": -3.141592672745862
+        },
+        "controller_status": 4
+      },
+      {
+        "segment": "raised:weld",
+        "feedback_samples": 154,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 4.914311976386698e-05,
+          "tcp_error_m": 9.402255634169836e-06,
+          "orientation_error_rad": 2.4361155337354086e-13
+        },
+        "joint_error_rad": 1.674216321134736e-13,
+        "tcp_position_error_m": 8.889744357989585e-14,
+        "tcp_orientation_error_rad": 2.4311208423284474e-13,
+        "observed": {
+          "joint_1": -2.1803198836186534e-09,
+          "joint_2": 0.43999303657120203,
+          "joint_3": -0.2048602157496135,
+          "joint_4": 4.962787163671493e-09,
+          "joint_5": 1.335663505974283,
+          "joint_6": -3.1415926719896525
+        },
+        "controller_status": 4
+      },
+      {
+        "segment": "raised:retreat",
+        "feedback_samples": 61,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 6.362149442601384e-05,
+          "tcp_error_m": 1.847480237235942e-05,
+          "orientation_error_rad": 4.3155805546822574e-13
+        },
+        "joint_error_rad": 1.7619239400801234e-13,
+        "tcp_position_error_m": 9.091972432999338e-14,
+        "tcp_orientation_error_rad": 2.551855902261236e-13,
+        "observed": {
+          "joint_1": -2.1786942549436314e-09,
+          "joint_2": 0.44527423908115044,
+          "joint_3": -0.30901142813105165,
+          "joint_4": 4.867751132521651e-09,
+          "joint_5": 1.4345335158457848,
+          "joint_6": -3.1415926714924094
+        },
+        "controller_status": 4
+      }
+    ],
+    "scope": "nominal integration fixtures, not robustness-qualified jobs or physical weld-procedure specifications",
+    "planned_segments": [
+      {
+        "segment": "raised:approach",
+        "points": 29,
+        "joint_limit_margin_rad": 0.733052679907183,
+        "collision_padding_m": 0.005,
+        "duration_s": 4.769531422,
+        "maximum_planned_tcp_speed_m_s": 0.05384055826885558
+      },
+      {
+        "segment": "raised:weld",
+        "points": 21,
+        "joint_limit_margin_rad": 0.758731494025717,
+        "collision_padding_m": 0.005,
+        "duration_s": 7.733266078,
+        "maximum_planned_tcp_speed_m_s": 0.009523812788007143
+      },
+      {
+        "segment": "raised:retreat",
+        "points": 12,
+        "joint_limit_margin_rad": 0.6598614841542152,
+        "collision_padding_m": 0.005,
+        "duration_s": 3.091821119,
+        "maximum_planned_tcp_speed_m_s": 0.019047619599944752
+      }
+    ],
+    "elapsed_s": 17.83717959599926
+  },
+  {
+    "job": "nominal_angled_torch_v1",
+    "config_hash": "14f22cf00aa41d59d81f6c88aa31bb829256b07871f1b8e211d52742e6dffee5",
+    "path": "benchmarks/nominal_jobs/angled_torch.json",
+    "result": "passed",
+    "completed_segments": [
+      {
+        "segment": "angle:approach",
+        "feedback_samples": 95,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 0.00020000000016226482,
+          "tcp_error_m": 5.5599666970716125e-05,
+          "orientation_error_rad": 0.00012093338487889548
+        },
+        "joint_error_rad": 1.4221263056057865e-13,
+        "tcp_position_error_m": 6.914276359391781e-14,
+        "tcp_orientation_error_rad": 1.8971168112825086e-13,
+        "observed": {
+          "joint_1": 0.08085138749057134,
+          "joint_2": 0.3249598790840619,
+          "joint_3": 0.01675953094355899,
+          "joint_4": 0.00010447048083362925,
+          "joint_5": 1.3490768748637325,
+          "joint_6": -3.140770368721502
+        },
+        "controller_status": 4
+      },
+      {
+        "segment": "angle:weld",
+        "feedback_samples": 180,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 4.7479800466709854e-05,
+          "tcp_error_m": 9.496887264561488e-06,
+          "orientation_error_rad": 2.6229707424606614e-10
+        },
+        "joint_error_rad": 1.8185453143360064e-13,
+        "tcp_position_error_m": 9.647021990838047e-14,
+        "tcp_orientation_error_rad": 2.59470392128845e-13,
+        "observed": {
+          "joint_1": 0.07017829165160516,
+          "joint_2": 0.5630530469550433,
+          "joint_3": -0.3104441058663337,
+          "joint_4": -0.0011861748317085362,
+          "joint_5": 1.438181745404361,
+          "joint_6": -3.1511868916769843
+        },
+        "controller_status": 4
+      },
+      {
+        "segment": "angle:retreat",
+        "feedback_samples": 62,
+        "maximum_in_motion_tracking": {
+          "joint_error_rad": 6.431239524906651e-05,
+          "tcp_error_m": 1.8852979849113128e-05,
+          "orientation_error_rad": 9.574865210563777e-10
+        },
+        "joint_error_rad": 1.9118040484045196e-13,
+        "tcp_position_error_m": 9.852822872350941e-14,
+        "tcp_orientation_error_rad": 2.731003018255373e-13,
+        "observed": {
+          "joint_1": 0.07017818853356297,
+          "joint_2": 0.5663046553500937,
+          "joint_3": -0.4120521681270483,
+          "joint_4": -0.0011762199059199016,
+          "joint_5": 1.5365381306188453,
+          "joint_6": -3.1513035646581793
+        },
+        "controller_status": 4
+      }
+    ],
+    "scope": "nominal integration fixtures, not robustness-qualified jobs or physical weld-procedure specifications",
+    "planned_segments": [
+      {
+        "segment": "angle:approach",
+        "points": 28,
+        "joint_limit_margin_rad": 0.6504071374449649,
+        "collision_padding_m": 0.005,
+        "duration_s": 4.756889704,
+        "maximum_planned_tcp_speed_m_s": 0.055750985198137155
+      },
+      {
+        "segment": "angle:weld",
+        "points": 23,
+        "joint_limit_margin_rad": 0.6562132545956263,
+        "collision_padding_m": 0.005,
+        "duration_s": 8.997588748,
+        "maximum_planned_tcp_speed_m_s": 0.009523812152761529
+      },
+      {
+        "segment": "angle:retreat",
+        "points": 12,
+        "joint_limit_margin_rad": 0.5578568693811423,
+        "collision_padding_m": 0.005,
+        "duration_s": 3.113565107,
+        "maximum_planned_tcp_speed_m_s": 0.019047619363545213
+      }
+    ],
+    "elapsed_s": 19.18239692699899
+  }
+]

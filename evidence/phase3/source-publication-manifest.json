@@ -1,0 +1,147 @@
+{
+  "baseline_remote": "58191bd134bdb55cef1ad91b72376db3302f4b48",
+  "baseline_remote_adapter_blob_verified": "6e0095b425b54e2849992dde1df7697272430fc5",
+  "branch": "engineering/robotics-integration",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "21291b1ff49d4539c6cbdc18b5fac95d824e2a59157aafcbca53e928cb8990ea"
+    },
+    {
+      "path": "benchmarks/policy_comparison_v1/protocol.json",
+      "sha256": "2e084e4fdae14f6595ac83f1a76401657ac224d387353fd5c0b69f41130835bb"
+    },
+    {
+      "path": "dashboard/app.js",
+      "sha256": "9e297730e6d5bb8bd6b7812dfe6e4e1917b33d777f7d5f7f3b4adecb0dc58ee7"
+    },
+    {
+      "path": "dashboard/index.html",
+      "sha256": "f7090d840ab2decdba506136b52aebde7af50cd2ebfa68d4d198ae6eb8d78706"
+    },
+    {
+      "path": "dashboard/scene.js",
+      "sha256": "6906c59f862c7c43f2cc4d528490a7957fc752f2d9d2f9c21b496ce0d775ad4f"
+    },
+    {
+      "path": "dashboard/style.css",
+      "sha256": "e2114fa27f66aa16bb0d781552aa4d8e744ec7e4d4b2cb6c5c03837f3ef08c8c"
+    },
+    {
+      "path": "docs/interfaces.md",
+      "sha256": "5b27decb7b882987adea0e761a4766df4d711f5f242e511a90ef9862f58abf01"
+    },
+    {
+      "path": "docs/phase3/architecture.md",
+      "sha256": "8aaa82e5966724daa1a6963ae85b4a2d531279ce7d9d255cef1beadd9d38dd0a"
+    },
+    {
+      "path": "docs/phase3/final-report.md",
+      "sha256": "e593cdde476a67cdc54fc7b3461fed18dd827a81d6777eabeceafde07a18133a"
+    },
+    {
+      "path": "docs/phase3/requirements.md",
+      "sha256": "cf0b6ff3d5e0c6ee88bd62817d3911eb69c3e8d8e09084739bd5a38e009ebffe"
+    },
+    {
+      "path": "docs/phase3/runbook.md",
+      "sha256": "7728559c39c524043d9d9a0a7f6607aeff703bd23301a4b8975afd3c54559b4f"
+    },
+    {
+      "path": "docs/phase3/status.md",
+      "sha256": "624bc326e2741bfc457b5ca7d115bcca572e7139c0047cff1ffa878eaa3ec10f"
+    },
+    {
+      "path": "docs/report.md",
+      "sha256": "6bfb38a88da705f45bade4024c3a1e5c4883d8ae319209a8376dda7dbf2067c0"
+    },
+    {
+      "path": "docs/runbook.md",
+      "sha256": "0f80751d327b02bd7f9434387359afae882802317cdd42751f56ded9a19156b8"
+    },
+    {
+      "path": "docs/status.md",
+      "sha256": "9ab2733758bea8263141222a9fc8917e7f194cdad1d14b757bd75380642338a8"
+    },
+    {
+      "path": "robotics/adapter.py",
+      "sha256": "0404cf656ea8839c2419dcf362291b06bbc923472bedb30ea1b28fa6087952e9"
+    },
+    {
+      "path": "robotics/benchmark.py",
+      "sha256": "912564e8829abca4947640e685060cb04e9f7bc638040baf593533ec731c1a3e"
+    },
+    {
+      "path": "robotics/model_view.py",
+      "sha256": "98707e0f4af85721ea94220865644ade046693ffccbcdcd81964278776f59a29"
+    },
+    {
+      "path": "robotics/nominal_suite.py",
+      "sha256": "f7724f373d7bc20065d7d2b0437f3f73c61d7cd5156cc8d76cbfff072fd92257"
+    },
+    {
+      "path": "robotics/policy_benchmark.py",
+      "sha256": "2d50e86b44e3b79b708a3a80101904a1ba3ea53122e1651c51d70cf09795c253"
+    },
+    {
+      "path": "robotics/uncertain_execution.py",
+      "sha256": "3ecfdeec7062c8724e9c08cb45357621cff648090a4b7fad370701e250c5f2b5"
+    },
+    {
+      "path": "ros_ws/src/weldx_bringup/launch/cell.launch.py",
+      "sha256": "5a1c75c568bc2094ffec018c644b62795a4766977b3b0ffcf667bde9493b7c09"
+    },
+    {
+      "path": "tests/support.py",
+      "sha256": "59005b37552165e44670a62efe1886fae536c8075db2a351fca8a58204998923"
+    },
+    {
+      "path": "tests/test_api.py",
+      "sha256": "c5d18a9de52c07e614cd1b2471cf3de2f04029d5fe44fd3a34ad62fe4a334d15"
+    },
+    {
+      "path": "tests/test_application_sync.py",
+      "sha256": "e4d82b616c359de8cb9b2218bf10a65e28d61fda39a6081bb2be8bda531c73aa"
+    },
+    {
+      "path": "tests/test_core.py",
+      "sha256": "b9242828f12faf5906e3401a5631d800ff19cc0dd4a58c25a62154505368dc59"
+    },
+    {
+      "path": "tests/test_scenario_receipts.py",
+      "sha256": "f8cadafe9fbc4e014b544dfe9ef1edb09e75d9985d4560beb19307e4782c8a55"
+    },
+    {
+      "path": "tests_robotics/test_adapter.py",
+      "sha256": "1256f93af19f4348c5c33b300270a57b3d049d6d987d84e2e304c028a1d3b8ab"
+    },
+    {
+      "path": "tests_robotics/test_scenario_execution.py",
+      "sha256": "4e77e9caf0eb543180ee5117eea8a2a2f2f228b60ca7cf8044dae70d3c0aa486"
+    },
+    {
+      "path": "tools/analyze-policy-results.py",
+      "sha256": "898ccdb54e7195c2c00403aa8c666790506f47beb5fc85494bf4de9208ad0ed8"
+    },
+    {
+      "path": "tools/browser-phase3-test.py",
+      "sha256": "7b26f9f3f6e7433c3096e70ce6323af34a8b21a96e93e733b3caf5a1d7c672e6"
+    },
+    {
+      "path": "weldx/engine.py",
+      "sha256": "3fa8c55b5504979cced459e63f74ded1002ba835ce5d0f316de4f3d18c225358"
+    },
+    {
+      "path": "weldx/robustness.py",
+      "sha256": "db1ba31ee3d3e75503137693c56d748d11c86d891fa505056505fb38dbd3617e"
+    },
+    {
+      "path": "weldx/server.py",
+      "sha256": "e7ada2465984a50e30dc576af9d2a8c0a48cd9934d8932d5ed43e24f161f6a68"
+    },
+    {
+      "path": "weldx/validation.py",
+      "sha256": "6e5fe61cb75645049cd6ef3f7d0099b2dcab76305f72cfb953ebf02f649f43ed"
+    }
+  ]
+}

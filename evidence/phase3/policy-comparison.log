@@ -1,0 +1,4 @@
+recovery_v1_proposed-20261023 candidates 8 [('fixed_original_placement_proxy', 'pass', 'fail'), ('nominal_first_feasible', 'pass', 'fail'), ('nominal_ranked', 'pass', 'fail'), ('robust_hard_gated', 'not_run', 'no_qualifying_candidate')]
+recovery_v1_proposed-20261024 candidates 8 [('fixed_original_placement_proxy', 'pass', 'fail'), ('nominal_first_feasible', 'pass', 'fail'), ('nominal_ranked', 'pass', 'fail'), ('robust_hard_gated', 'not_run', 'no_qualifying_candidate')]
+nominal_angled_torch_v1-20261023 candidates 8 [('fixed_original_placement_proxy', 'pass', 'fail'), ('nominal_first_feasible', 'pass', 'fail'), ('nominal_ranked', 'pass', 'fail'), ('robust_hard_gated', 'not_run', 'no_qualifying_candidate')]
+nominal_angled_torch_v1-20261024 candidates 8 [('fixed_original_placement_proxy', 'pass', 'fail'), ('nominal_first_feasible', 'pass', 'fail'), ('nominal_ranked', 'pass', 'fail'), ('robust_hard_gated', 'not_run', 'no_qualifying_candidate')]
