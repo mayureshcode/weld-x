@@ -46,13 +46,13 @@ python -m unittest discover -v
 python -m weldx.server --config examples/job_01.json --audit .runtime/demo.jsonl
 ```
 
-Open http://127.0.0.1:8765 locally or through an authenticated localhost tunnel. This sandbox URL is not a public deployment. Runbook details the actual negative-path demonstration. **No working simulation launch command exists.** Ctrl+C stops only this process. Final acceptance servers were temporary test processes, not a deployed service.
+Open http://127.0.0.1:8765 locally or through an authenticated localhost tunnel. This sandbox URL is not a public deployment. Runbook details the actual negative-path demonstration. **No working simulation launch command exists.** Ctrl+C stops only this process. Final acceptance servers were temporary test processes, not a deployed service; they were stopped after evidence capture.
 
 ## Benchmarks and resource limitations
 
 Robotics benchmarks: **NOT RUN**. Five example job definitions parse, but none is commissioned. No manual baseline, planning time, robust placement, simulated complete-job success rate or production-reliability measurement is claimed. See runbook.md for the predeclared protocol.
 
-Measured final core/API suite: 12.370 s wall time; peak test-process RSS 67840 KiB (66.25 MiB), Python 3.13.15. This is orchestration-test resource usage, not simulation performance. Available host: 2 CPUs, 4.2 GiB RAM, no swap/GPU device found. Browser/infrastructure timing is not motion-planning timing. Remote GitHub Actions CI definition is supplied; its remote result has not been verified.
+Measured final core/API suite: 12.370 s wall time; peak test-process RSS 67840 KiB (66.25 MiB), Python 3.13.15. This is orchestration-test resource usage, not simulation performance. Available host: 2 CPUs, 4.2 GiB RAM, no swap/GPU device found. Browser/infrastructure timing is not motion-planning timing. The CI definition is supplied only in the local/archive workspace. GitHub rejected the batch containing workflow configuration with HTTP 403; publishing the same batch without the workflow succeeded. No remote workflow/run is claimed.
 
 ## Defects, unknowns and next priorities
 
@@ -62,4 +62,4 @@ No known failing core regression remains. Critical unimplemented/unverified item
 
 ## Modified-file summary
 
-All files are new within the authorized workspace: Python core/API, orchestration/API/integrity/browser tests, five input fixtures, dashboard assets, JSON schema, core CI, evidence and engineering documentation. No unrelated repository or host configuration changed. A source digest manifest is retained in ../evidence/source-manifest.json. No mandatory robotics milestone is falsely marked complete.
+All files are new within the authorized workspace: Python core/API, orchestration/API/integrity/browser tests, five input fixtures, dashboard assets, JSON schema, core CI, evidence and engineering documentation. No unrelated repository or host configuration changed. A source digest manifest distinguishes published files from local-only artifacts in ../evidence/source-manifest.json. All six remote core source blobs and the test summary were fetched/compared with local Git blob hashes; matches are recorded in ../evidence/publication-verification.json. No mandatory robotics milestone is falsely marked complete.

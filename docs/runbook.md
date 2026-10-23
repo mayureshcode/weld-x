@@ -45,7 +45,7 @@ Record job/method/seed/config/model identity, complete-job success, MC denominat
 - R08 MEDIUM: five example jobs vary geometry/orientation but are not commissioned feasible jobs or exhaustive benchmark coverage.
 - R09 MEDIUM: 2 CPU/4.2 GiB host may be inadequate for concurrent simulation/planning/rendering. No simulation resource profile exists.
 - R10 MEDIUM: no project distribution license selected. Upstream model not copied. Review package/asset licensing before vendoring/publishing.
-- R11 MEDIUM: core CI definition added; remote CI success must be observed separately before claiming it passed.
+- R11 MEDIUM: core CI definition is local/archive only. GitHub rejected the batch containing the workflow with 403; the same batch excluding it succeeded. Workflow publication needs appropriate connection permissions; no remote CI pass is claimed.
 - R12 MEDIUM: sensor/controller tracking semantics depend on a trusted future adapter; finite bounded scalar tracking alone is not full TCP execution proof.
 
 ## Troubleshooting

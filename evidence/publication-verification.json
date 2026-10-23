@@ -1,0 +1,22 @@
+{
+  "repository": "https://github.com/mayureshcode/weld-x",
+  "branch": "main",
+  "code_commit": "b80825d0a0bf9201ac9fd674e5e9d9cf64a80846",
+  "remote_core_blob_sha1": {
+    "__init__.py": "bc6a24d8dfb94c006aa9ae418a468a450a7ac783",
+    "engine.py": "d28ac133df045d3c8369f7deaa63b28b13d52ac4",
+    "model.py": "9a79820ef4ffaa193c28e56dd4d4a2080e9a64ff",
+    "robustness.py": "d535ea743398f6ea723995ba7d78d4a7b9c7dda3",
+    "server.py": "c5b6a3aed62c897b2a647a505eaa1ba1b7a287db",
+    "validation.py": "eb15a80148661039197470da3839a1aa5f297b5d"
+  },
+  "all_six_core_files_match_local": true,
+  "remote_test_summary_matches_local": true,
+  "workflow_publication": "batch containing .github/workflows/core.yml rejected HTTP 403; same batch excluding workflow succeeded",
+  "remote_ci_run": "not verified; CI workflow not published",
+  "local_only_artifacts": [
+    ".github/workflows/core.yml",
+    "evidence/*.png"
+  ],
+  "temporary_acceptance_servers": "stopped after checks"
+}

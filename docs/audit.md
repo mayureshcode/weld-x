@@ -52,3 +52,7 @@ Do not install ROS 1 packages into this host or pretend that a dashboard animati
 ## Expected changed areas and verification
 
 New project only: `weldx/`, `tests/`, `examples/`, `dashboard/`, `docs/`, `evidence/`, project metadata and core CI. Verify with unittest, compileall, JS syntax checks and real local HTTP/browser tests. Simulation acceptance remains gated on model verification, actual joint feedback, collision-aware complete-job execution and held-out robustness records.
+
+## Observed publication permission boundary
+
+Repository creation and Contents API writes succeeded. A Git data batch including `.github/workflows/core.yml` returned HTTP 403 `Resource not accessible by personal access token`. An otherwise identical batch excluding the workflow succeeded. Therefore source/evidence publication is verified, but workflow configuration publication is blocked with this connection. No workflow write workaround was attempted; the definition is local/archive only. No remote CI execution is claimed.

@@ -45,6 +45,8 @@ WELDX_CHROMIUM="$(command -v chromium)" node tests/browser.cjs
 
 The browser test needs Playwright and Chromium, not ROS. Test doubles in `tests/support.py` are labelled orchestration fixtures and cannot be selected through the production API. Their success is **not simulation evidence**.
 
+The core CI workflow is retained in the downloadable workspace archive but **not published to GitHub**: the connected token rejected a batch containing workflow configuration (403). Publishing code/evidence without it succeeded. No remote CI run is claimed.
+
 ## Engineering record
 
 - [Audit and robot assessment](docs/audit.md)
