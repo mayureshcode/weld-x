@@ -1,5 +1,6 @@
 'use strict';
 let state=null, token=null, selected=null;
+let candidateKey=null, detailKey=null, auditKey=null, mapKey=null, evidenceKey=null;
 const $=id=>document.getElementById(id);
 const text=(id,value)=>{$(id).textContent=value;};
 function node(tag,value){const n=document.createElement(tag);n.textContent=value;return n;}
@@ -11,11 +12,12 @@ async function post(path,body={}){
 function evidence(candidate){return candidate?candidate.evidence.evaluation:(state.final||state.initial);}
 function showEvidence(candidate){
  const ev=evidence(candidate);const source=$('source-select')?.value||'';
+ const key=JSON.stringify([candidate?.id,ev?.config_hash,ev?.elapsed_s,source]);if(key===evidenceKey)return;evidenceKey=key;
  const trials=(ev?.robustness?.trials||[]).filter(t=>!source||t.scenario.source===source);
  const checks=source?trials.flatMap(t=>(t.summary_checks||t.plan?.checks||[]).filter(c=>c.result!=='pass').map(c=>({...c,reason:t.scenario.id+' — '+c.reason}))):(ev?.nominal?.checks||[]);
  text('source-detail',trials.length?`${trials.length} recorded trials; ${trials.filter(t=>t.outcome==='fail').length} confirmed failures; ${trials.filter(t=>t.outcome==='unknown').length} incomplete. Select source to inspect scenario constraints.`:'No uncertainty trials recorded for this selection.');
  const counts={pass:0,fail:0,unknown:0};for(const c of checks)counts[c.result]++;
- text('diagnostic-summary',checks.length?`${counts.pass} pass / ${counts.fail} fail / ${counts.unknown} unknown — ${checks.length} checks`:'No complete validation evidence. Execution remains blocked.');
+ text('diagnostic-summary',checks.length?`${counts.pass} pass / ${counts.fail} fail / ${counts.unknown} unknown — ${checks.length} ${source?'displayed scenario-summary checks':'checks'}`:'No complete validation evidence. Execution remains blocked.');
  $('diagnostics').replaceChildren();for(const c of checks){const row=node('div','');row.className='record';row.append(node('strong',`${c.segment} / ${c.constraint} — ${c.result.toUpperCase()}`),node('span',c.reason));$('diagnostics').append(row);}
  $('sensitivity').replaceChildren();for(const group of ev?.robustness?.groups||[]){const row=document.createElement('tr');for(const value of [group.source,`${group.mc_passed} / ${group.mc_tested}; ${group.mc_unknown} unknown (required ${group.mc_expected})`,`${group.boundary_passed} / ${group.boundary_tested} (required ${group.boundary_expected})`,group.outcome])row.append(node('td',value));$('sensitivity').append(row);}
  if(!ev)$('sensitivity').append(node('tr','No scenario records available.'));
@@ -32,16 +34,17 @@ function render(){
  $('revalidate').disabled=busy||!['IDLE','DETECT','APPLY','STOPPED'].includes(state.stage);$('execute').disabled=busy||!state.authorized;$('cancel').disabled=!busy;
  text('task',state.task?`${state.task.operation}: ${state.task.status}${state.task.error?' — '+state.task.error:''}`:'No active task');
  for(const li of document.querySelectorAll('.workflow li'))li.classList.toggle('current',li.textContent.toUpperCase().includes(state.stage));
- text('count',`${state.candidates.length} EVALUATED`);$('candidates').replaceChildren();
+ text('count',`${state.candidates.length} EVALUATED`);const nextCandidates=JSON.stringify(state.candidates.map(c=>[c.id,c.classification]));if(candidateKey!==nextCandidates){candidateKey=nextCandidates;$('candidates').replaceChildren();
  for(const candidate of state.candidates){const row=document.createElement('tr');const b=candidate.base;for(const value of [candidate.id.slice(0,10),`${b.x_m.toFixed(3)} / ${b.y_m.toFixed(3)}`,b.yaw_rad.toFixed(3),candidate.classification.replaceAll('_',' ')])row.append(node('td',value));const cell=document.createElement('td');const button=node('button','Inspect');button.onclick=()=>selectCandidate(candidate.id);cell.append(button);row.append(cell);$('candidates').append(row);}
  if(!state.candidates.length){const row=document.createElement('tr');const cell=node('td','No placements evaluated. Run detection, then search.');cell.colSpan=5;row.append(cell);$('candidates').append(row);}
- const candidate=state.candidates.find(x=>x.id===selected);$('candidate-detail').replaceChildren();if(candidate){$('candidate-detail').append(node('h3','Selected candidate: '+candidate.id.slice(0,10)));const pre=node('pre',JSON.stringify({base:candidate.base,classification:candidate.classification,robustness:candidate.evidence.evaluation.robustness.groups},null,2));$('candidate-detail').append(pre);const full=node('button','Inspect complete evidence');full.onclick=()=>inspectRecord('/api/evidence?candidate_id='+encodeURIComponent(candidate.id),$('candidate-detail'));$('candidate-detail').append(full);}
+ }
+ const candidate=state.candidates.find(x=>x.id===selected);const nextDetail=candidate?.id||'';if(detailKey!==nextDetail){detailKey=nextDetail;$('candidate-detail').replaceChildren();if(candidate){$('candidate-detail').append(node('h3','Selected candidate: '+candidate.id.slice(0,10)));const pre=node('pre',JSON.stringify({base:candidate.base,classification:candidate.classification,robustness:candidate.evidence.evaluation.robustness.groups},null,2));$('candidate-detail').append(pre);const full=node('button','Inspect complete evidence');full.onclick=()=>inspectRecord('/api/evidence?candidate_id='+encodeURIComponent(candidate.id),$('candidate-detail'));$('candidate-detail').append(full);}}
  renderMap();renderComparison(candidate);
  const previousSeam=$('seam-select').value;if($('seam-select').dataset.job!==state.config_hash){$('seam-select').replaceChildren(node('option','All seams'));$('seam-select').firstChild.value='';for(const seam of state.configuration.job.seams){const o=node('option',seam.id);o.value=seam.id;$('seam-select').append(o);}$('seam-select').dataset.job=state.config_hash;}
  window.dispatchEvent(new CustomEvent('weldx-selection',{detail:{state,candidate,seamId:$('seam-select').value}}));
  const connected=state.health.adapter==='real_ROS2';const healthy=state.health.ros==='connected'&&state.health.gazebo==='live_pose_feedback'&&state.health.controllers==='active'&&state.health.moveit==='services_ready';text('runtime-title',connected&&!healthy?'ROBOTICS CONNECTION FAULT':connected?'REAL ROBOTICS ADAPTER / EVIDENCE GATED':'ROBOTICS RUNTIME NOT CONNECTED');text('runtime-notice',connected&&!healthy?'A simulator, planner, controller or feedback connection is missing or stale. Execution remains blocked.':connected?'Actual Jazzy / Harmonic / MoveIt telemetry. ABB model physical fidelity is provisional. Uncertainty trials require complete observed execution for success; insufficient budgets remain unknown and blocked.':'No real ROS adapter is selected. Missing or unknown evidence blocks execution.');
  showEvidence(candidate);$('approval-form').hidden=!state.recommended;$('approve').disabled=busy||state.stage!=='RECOMMEND';$('apply').disabled=busy||!state.approval;
- $('audit').replaceChildren();for(const entry of [...state.audit].reverse()){const row=node('div','');row.className='record';row.append(node('strong',`${String(entry.sequence).padStart(3,'0')} / ${entry.kind}`),node('span',new Date(entry.time_unix_s*1000).toISOString()+' · '+entry.digest.slice(0,16)));const inspect=node('button','Inspect record');inspect.onclick=()=>inspectRecord('/api/audit?sequence='+entry.sequence,row);row.append(inspect);$('audit').append(row);}
+ const nextAudit=state.audit.at(-1)?.digest||'';if(auditKey!==nextAudit){auditKey=nextAudit;$('audit').replaceChildren();for(const entry of [...state.audit].reverse()){const row=node('div','');row.className='record';row.append(node('strong',`${String(entry.sequence).padStart(3,'0')} / ${entry.kind}`),node('span',new Date(entry.time_unix_s*1000).toISOString()+' · '+entry.digest.slice(0,16)));const inspect=node('button','Inspect record');inspect.onclick=()=>inspectRecord('/api/audit?sequence='+entry.sequence,row);row.append(inspect);$('audit').append(row);}}
 }
 let refreshing=false;
 async function refresh(){if(refreshing)return;refreshing=true;try{const response=await fetch('/api/state');if(!response.ok)throw new Error(`API ${response.status}`);state=await response.json();render();}catch(error){text('connection','BACKEND DISCONNECTED');$('connection').className='tag bad';text('authorization','LOCKED');text('authreason','Backend unreachable. Displayed records may be stale.');text('error',error.message);for(const button of document.querySelectorAll('button'))button.disabled=true;}finally{refreshing=false;}}
@@ -50,9 +53,9 @@ $('approve').onclick=()=>post('approve',{candidate_id:state.recommended,config_h
 $('apply').onclick=()=>post('apply',{approval_id:state.approval.id});
 (async()=>{try{const r=await fetch('/api/session');token=(await r.json()).csrf_token;}catch(error){text('error','Session initialization failed: '+error.message);}await refresh();setInterval(refresh,1500);})();
 function selectCandidate(id){selected=id;const candidate=state.candidates.find(c=>c.id===id);if(candidate)$('map-yaw').value=String(candidate.base.yaw_rad);render();}
-function renderMap(){
+function renderMap(force=false){
  const svg=$('placement-map'),region=state.configuration.search,width=svg.clientWidth,height=svg.clientHeight;
- if(width<=0)return;svg.setAttribute('viewBox',`0 0 ${width} ${height}`);svg.replaceChildren();
+ if(width<=0)return;const nextMap=JSON.stringify([state.candidates.map(c=>[c.id,c.classification]),selected,$('map-yaw').value,width,height,state.recommended]);if(force!==true&&mapKey===nextMap)return;mapKey=nextMap;svg.setAttribute('viewBox',`0 0 ${width} ${height}`);svg.replaceChildren();
  const ns='http://www.w3.org/2000/svg';function el(tag,attrs,label){const e=document.createElementNS(ns,tag);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,String(v));if(label!==undefined)e.textContent=label;svg.append(e);return e;}
  const left=60,right=22,top=24,bottom=44,dx=region.x_m.maximum-region.x_m.minimum,dy=region.y_m.maximum-region.y_m.minimum;
  const x=v=>left+(v-region.x_m.minimum)/(dx||1)*(width-left-right),y=v=>height-bottom-(v-region.y_m.minimum)/(dy||1)*(height-top-bottom);
@@ -73,7 +76,7 @@ function renderComparison(candidate){
  const table=document.createElement('table');for(const values of [['Evidence','Original','Selected'],['Classification',original?'See original diagnostics':'Not validated',candidate.classification.replaceAll('_',' ')],['Joint margin',margin(original),margin(ev)],['Relocation','0 m',candidate.evidence.relocation_m.toFixed(4)+' m'],['Recommendation','Engineer-controlled',candidate.id===state.recommended?'Best qualifying tested candidate':'Not authorized / not recommended']]){const row=document.createElement('tr');for(const v of values)row.append(node('td',v));table.append(row);}$('comparison').append(table);
 }
 async function telemetry(){try{const r=await fetch('/api/telemetry');if(!r.ok)throw new Error('telemetry unavailable');window.dispatchEvent(new CustomEvent('weldx-telemetry',{detail:await r.json()}));}catch(e){window.dispatchEvent(new CustomEvent('weldx-telemetry',{detail:{live:false,joint_positions:{}}}));}}
-$('map-yaw').onchange=renderMap;window.addEventListener('resize',()=>{if(state)renderMap();});
+$('map-yaw').onchange=()=>renderMap(true);window.addEventListener('resize',()=>{if(state)renderMap(true);});
 $('seam-select').onchange=()=>window.dispatchEvent(new CustomEvent('weldx-selection',{detail:{state,candidate:state?.candidates.find(c=>c.id===selected),seamId:$('seam-select').value}}));
 $('source-select').onchange=()=>{if(state)showEvidence(state.candidates.find(c=>c.id===selected));};
 setInterval(telemetry,300);telemetry();
