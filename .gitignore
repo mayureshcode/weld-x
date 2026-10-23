@@ -7,3 +7,9 @@ install/
 log/
 .runtime/
 node_modules/
+
+# Phase-2 robotics build artifacts
+ros_ws/build/
+ros_ws/install/
+ros_ws/log/
+release/

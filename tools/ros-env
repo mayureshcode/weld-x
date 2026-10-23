@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -e
+export ROS_DOMAIN_ID=47
+export ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST
+export GZ_PARTITION=weldx_virtual
+source /opt/ros/jazzy/setup.bash
+if [ -f /workspace/ros_ws/install/setup.bash ]; then source /workspace/ros_ws/install/setup.bash; fi
+exec "$@"

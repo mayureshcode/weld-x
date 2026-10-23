@@ -46,6 +46,30 @@ class APITests(unittest.TestCase):
         s=self.app.engine.snapshot();self.assertTrue(s['candidates']);self.assertFalse(s['authorized'])
         self.assertTrue(all(c['classification']=='validation_incomplete' for c in s['candidates']))
         self.assertIsNone(s['recommended'])
+    def test_summary_does_not_replace_authoritative_evidence(self):
+        from .support import TestAdapter
+        self.app.engine.adapter = TestAdapter()  # Isolated serialization contract, not robotics evidence.
+        self.request('/api/detect',{});self.wait()
+        self.request('/api/search',{});self.wait()
+        status,raw=self.request('/api/state');state=json.loads(raw)
+        self.assertEqual(status,200)
+        candidate=state['candidates'][0]
+        trials=candidate['evidence']['evaluation']['robustness']['trials']
+        self.assertTrue(trials)
+        self.assertIn('summary_checks',trials[0]);self.assertNotIn('plan',trials[0])
+        self.assertNotIn('payload',state['audit'][0])
+        status,raw=self.request('/api/evidence?candidate_id='+candidate['id'])
+        full=json.loads(raw);self.assertEqual(status,200)
+        self.assertIn('plan',full['evaluation']['robustness']['trials'][0])
+        status,raw=self.request('/api/audit?sequence=1')
+        self.assertEqual(status,200);self.assertIn('payload',json.loads(raw))
+        self.assertFalse(self.app.engine.authorized())
+    def test_evidence_route_is_allowlisted(self):
+        for path,status in [('/api/evidence',400),('/api/audit?sequence=bad',400),
+                            ('/api/audit?sequence=999999',404),('/api/evidence?candidate_id=missing',404),
+                            ('/api/evidence?candidate_id=a&candidate_id=b',400)]:
+            self.assertEqual(self.request(path)[0],status)
+        self.assertEqual(self.request('/api/audit?sequence=1',headers={'Host':'evil.invalid'})[0],403)
     def test_execution_fails_asynchronously(self):
         self.assertEqual(self.request('/api/execute',{})[0],202);self.wait()
         self.assertEqual(self.app.task['status'],'failed');self.assertIn('execution denied',self.app.task['error'])

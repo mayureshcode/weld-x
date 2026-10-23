@@ -39,6 +39,16 @@ def scenarios(config: Configuration, phase: str):
                 vectors.append({(name, axis): sign * size})
         for sign in (-1, 1):
             vectors.append({(name, axis): sign * size for name, axis, size in dims})
+        # Independent installation and fixture errors can oppose one another.
+        # Same-sign corners alone miss the largest relative translation. Include
+        # all eight opposed planar corners / fixture-height extremes explicitly.
+        if source == 'combined' and u.base_translation_m and u.fixture_translation_m:
+            for sx,sy,sz in itertools.product((-1,1),repeat=3):
+                vectors.append({('base',0):sx*u.base_translation_m,
+                    ('base',1):sy*u.base_translation_m,
+                    ('fixture',0):-sx*u.fixture_translation_m,
+                    ('fixture',1):-sy*u.fixture_translation_m,
+                    ('fixture',2):sz*u.fixture_translation_m})
         for index, vector in enumerate(vectors):
             values = {name: [0.0] * 4 for name in ranges}
             for (name, axis), value in vector.items():
@@ -106,7 +116,11 @@ def aggregate(config, phase, trials):
         mp = sum(t.outcome == Result.PASS for t in mc)
         unknown = sum(t.outcome == Result.UNKNOWN for t in mc)
         rate = mp / len(mc) if mc and not unknown else None
-        if not intact or len(b) != be or len(mc) != me or unknown or any(t.outcome == Result.UNKNOWN for t in b) or len(mc) < config.uncertainty.min_mc_count:
+        if not intact:
+            outcome = Result.UNKNOWN
+        elif any(t.outcome == Result.FAIL for t in b):
+            outcome = Result.FAIL
+        elif len(b) != be or len(mc) != me or unknown or any(t.outcome == Result.UNKNOWN for t in b) or len(mc) < config.uncertainty.min_mc_count:
             outcome = Result.UNKNOWN
         elif bp != be or rate < config.uncertainty.success_threshold:
             outcome = Result.FAIL

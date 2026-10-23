@@ -4,6 +4,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import argparse
 import json
 from pathlib import Path
+from urllib.parse import urlsplit, parse_qs
 import secrets
 import threading
 from .engine import Denied, Engine, Journal, serial
@@ -40,7 +41,7 @@ def handler(app):
             # HTTP access logs remain visible to the local operator.
             super().log_message(fmt, *args)
         def respond(self, status, body, content_type="application/json"):
-            data = body.encode() if isinstance(body, str) else json.dumps(serial(body), allow_nan=False).encode()
+            data = body if isinstance(body,bytes) else body.encode() if isinstance(body, str) else json.dumps(serial(body), allow_nan=False).encode()
             self.send_response(status)
             self.send_header("Content-Type", content_type)
             self.send_header("Content-Length", str(len(data)))
@@ -55,11 +56,46 @@ def handler(app):
         def do_GET(self):
             if not self.local():
                 return self.respond(403, {"error": "loopback Host required"})
+            if self.path == "/favicon.ico":return self.respond(204,b"","image/x-icon")
             if self.path == "/api/session":
                 return self.respond(200, {"csrf_token": app.token})
+            parsed = urlsplit(self.path)
+            if parsed.path in ("/api/evidence", "/api/audit"):
+                query = parse_qs(parsed.query)
+                with app.engine.lock:
+                    if parsed.path == "/api/evidence":
+                        if set(query) != {"candidate_id"} or len(query["candidate_id"]) != 1:
+                            return self.respond(400, {"error": "one exact candidate_id required"})
+                        record = app.engine.candidates.get(query["candidate_id"][0])
+                    else:
+                        try:
+                            if set(query) != {"sequence"} or len(query["sequence"]) != 1:
+                                raise ValueError()
+                            sequence = int(query["sequence"][0])
+                            record = next((e for e in app.engine.journal.events if e["sequence"] == sequence), None)
+                        except ValueError:
+                            return self.respond(400, {"error": "one integer sequence required"})
+                    if record is None:
+                        return self.respond(404, {"error": "evidence record not found"})
+                    return self.respond(200, record)
             if self.path == "/api/state":
                 return self.respond(200, {**app.engine.snapshot(), "task": app.task})
-            assets = {"/": ("index.html", "text/html"), "/app.js": ("app.js", "application/javascript"), "/style.css": ("style.css", "text/css")}
+            if self.path == '/api/telemetry':
+                adapter=app.engine.adapter
+                return self.respond(200,adapter.telemetry() if hasattr(adapter,'telemetry') else {'live':False,'joint_positions':{},'reason':'ROS adapter not enabled'})
+            if self.path == '/api/model':
+                if not hasattr(app.engine.adapter,'cell'):return self.respond(503,{'error':'real runtime model unavailable'})
+                from robotics.model_view import model_view
+                return self.respond(200,model_view(app.engine.adapter.cell))
+            vendor={'/vendor/'+n:n for n in ['three.module.min.js','STLLoader.js','OrbitControls.js']}
+            if self.path in vendor:
+                return self.respond(200,(Path(__file__).resolve().parent.parent/'dashboard/vendor'/vendor[self.path]).read_bytes(),'application/javascript')
+            meshes={'/assets/visual/'+n+'.stl':n+'.stl' for n in ['base_link']+['link_'+str(i) for i in range(1,7)]}
+            if self.path in meshes:
+                path=Path(__file__).resolve().parent.parent/'ros_ws/src/weldx_description/meshes/irb120_3_58/visual'/meshes[self.path]
+                if not path.exists():return self.respond(503,{'error':'asset missing; run tools/fetch-robot-assets.py'})
+                return self.respond(200,path.read_bytes(),'model/stl')
+            assets = {"/": ("index.html", "text/html"), "/app.js": ("app.js", "application/javascript"), "/style.css": ("style.css", "text/css"), "/scene.js": ("scene.js", "application/javascript")}
             if self.path in assets:
                 filename, mime = assets[self.path]
                 return self.respond(200, (Path(__file__).resolve().parent.parent/"dashboard"/filename).read_text(), mime)
@@ -97,6 +133,7 @@ def main():
     parser.add_argument("--config", default="examples/job_01.json")
     parser.add_argument("--audit", default=".runtime/audit.jsonl")
     parser.add_argument("--port", type=int, default=8765)
+    parser.add_argument("--robotics",action="store_true",help="real Jazzy/Harmonic adapter; no success mock")
     args = parser.parse_args()
     import fcntl
     lock_path = Path(args.audit+".lock")
@@ -107,9 +144,14 @@ def main():
     except BlockingIOError:
         raise SystemExit("another server owns this audit journal; choose a separate audit path")
     config = Configuration.model_validate_json(Path(args.config).read_text())
-    app = App(Engine(config, Journal(args.audit)))
+    adapter=None
+    if args.robotics:
+        import rclpy
+        from robotics.adapter import RosAdapter
+        rclpy.init();adapter=RosAdapter()
+    app = App(Engine(config, Journal(args.audit),adapter))
     server = ThreadingHTTPServer(("127.0.0.1", args.port), handler(app))
-    print(f"WELD-X http://127.0.0.1:{server.server_port} — robotics unavailable; execution blocked", flush=True)
+    print(f"WELD-X http://127.0.0.1:{server.server_port} — backend="+app.engine.adapter.version+"; mandatory gates enforced", flush=True)
     try:
         server.serve_forever()
     except KeyboardInterrupt:
@@ -118,6 +160,8 @@ def main():
         app.cancel.set()
         server.server_close()
         app.pool.shutdown(wait=True)
+        if args.robotics:
+            adapter.close();rclpy.shutdown()
 
 if __name__ == "__main__":
     main()

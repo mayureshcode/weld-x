@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Isolated userspace; no global package installation or persistent host mounts.
+set -euo pipefail
+PROJECT=$(cd "$(dirname "$0")/.." && pwd)
+ROOT="$PROJECT/.runtime/ubuntu-rootfs"
+exec sudo unshare --mount --propagation private bash -ceu '
+root=$1; project=$2; shift 2
+mount -t proc proc "$root/proc"
+mount --rbind /dev "$root/dev"
+mount --make-rslave "$root/dev"
+mount --bind "$project" "$root/workspace"
+exec chroot "$root" /usr/bin/env HOME=/root LANG=C.UTF-8 DEBIAN_FRONTEND=noninteractive PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin bash -c '\''cd /workspace; exec "$@"'\'' -- "$@"
+' -- "$ROOT" "$PROJECT" "$@"

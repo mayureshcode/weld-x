@@ -139,6 +139,14 @@ class Engine:
         nominal = self._plan(config, NOMINAL, cancel, deadline)
         trials = []
         if nominal.outcome(config, self.adapter.version) == Result.PASS:
+            if hasattr(self.adapter,"preflight_boundaries"):
+                preflight=self.adapter.preflight_boundaries(config,phase,cancel,deadline)
+                if any(t.outcome == Result.FAIL for t in preflight):
+                    self._event("mandatory_boundary_rejected", {"config_hash":config.digest(),"phase":phase,
+                        "tested":len(preflight),"failures":[serial(t) for t in preflight if t.outcome==Result.FAIL],
+                        "mc_status":"not run: mandatory boundary failed; no success-rate claim"})
+                    return Evaluation(config.digest(),self.adapter.version,phase,nominal,
+                        aggregate(config,phase,preflight),time.monotonic()-start)
             for scenario in scenarios(config, phase):
                 if cancel.is_set() or time.monotonic() >= deadline:
                     break
@@ -262,8 +270,8 @@ class Engine:
                 raise Denied("approval missing, stale or already consumed")
             c = self.candidates[a["candidate_id"]]
             updated = Configuration.model_validate({**c.configuration.model_dump(mode="json"), "revision": self.config.revision+1})
-            # Declarative application only. Runtime scene application is NOT implemented;
-            # an unavailable adapter ensures revalidation/execution cannot pass.
+            # Declarative application invalidates authority. The trusted adapter must
+            # confirm exact runtime synchronization during revalidation before any execution.
             self._event("configuration_applied", {"approval": a, "configuration": updated.model_dump(mode="json"),
                                                   "hash": updated.digest(), "execution_authorization": "invalidated"})
             self.config = updated
@@ -343,12 +351,40 @@ class Engine:
     def snapshot(self):
         with self.lock:
             return {"stage": self.stage, "configuration": self.config.model_dump(mode="json"),
+                "original_base": self.original.base.model_dump(),
                 "config_hash": self.config.digest(), "health": self.adapter.health(), "authorized": self.authorized(),
                 "recommended": self.recommended, "approval": self.approval, "search": self.last_search,
                 "candidates": [{"id": c.id, "base": c.configuration.base.model_dump(),
-                    "classification": c.classification(self.adapter), "evidence": serial(c)} for c in self.candidates.values()],
-                "initial": serial(self.initial), "final": serial(self.final), "execution": serial(self.execution),
-                "audit": list(self.journal.events), "active_operation": self.active_operation}
+                    "classification": c.classification(self.adapter), "evidence": candidate_summary(c)} for c in self.candidates.values()],
+                "initial": evaluation_summary(self.initial), "final": evaluation_summary(self.final), "execution": serial(self.execution),
+                "audit": [{k: e[k] for k in ("sequence", "time_unix_s", "kind", "digest", "previous")} for e in self.journal.events],
+                "presentation": "Summaries only; full immutable evidence is available through /api/evidence and /api/audit", "active_operation": self.active_operation}
+
+def evaluation_summary(e):
+    """Read-only presentation, never an input to any authorization gate.
+
+    Keep the full nominal record; summarize repeated scenario checks without
+    copying all plans or journal payloads into every polling response.
+    """
+    if e is None:
+        return None
+    trials=[]
+    for t in e.robustness.trials:
+        failed=[c for c in t.plan.checks if c.result == Result.FAIL]
+        unknown=[c for c in t.plan.checks if c.result == Result.UNKNOWN]
+        trials.append({"scenario": serial(t.scenario), "outcome": serial(t.outcome),
+            "summary_checks": serial(failed or unknown[:1]),
+            "check_count": len(t.plan.checks), "trajectory_id": t.plan.trajectory_id})
+    return {"config_hash": e.config_hash, "adapter_version": e.adapter_version,
+        "phase": e.phase, "elapsed_s": e.elapsed_s, "nominal": serial(e.nominal),
+        "robustness": {"phase": e.robustness.phase, "outcome": serial(e.robustness.outcome),
+            "groups": serial(e.robustness.groups), "trials": trials},
+        "presentation": "Scenario check summaries, not complete Plan records"}
+
+def candidate_summary(c):
+    return {"id": c.id, "origin_hash": c.origin_hash,
+        "configuration": c.configuration.model_dump(mode="json"),
+        "evaluation": evaluation_summary(c.evaluation), "relocation_m": c.relocation_m}
 
 def axis_values(axis):
     count = math.floor((axis.maximum-axis.minimum)/axis.step + 1e-10) + 1
@@ -358,11 +394,22 @@ def axis_values(axis):
             yield min(value, axis.maximum)
 
 def grid(search):
-    # Nested lazy loops avoid materializing unbounded Cartesian products.
-    for x in axis_values(search.x_m):
-        for y in axis_values(search.y_m):
-            for yaw in axis_values(search.yaw_rad):
-                yield Base(x_m=x, y_m=y, yaw_rad=yaw)
+    # Lazy, deterministic, space-spreading grid traversal. A row-major prefix
+    # previously exhausted small budgets along one edge of the installation region.
+    axes=(search.x_m,search.y_m,search.yaw_rad)
+    counts=tuple(math.floor((a.maximum-a.minimum)/a.step+1e-10)+1 for a in axes)
+    total=math.prod(counts);bits=(total-1).bit_length()
+    center=tuple((n-1)//2 for n in counts)
+    center_linear=(center[0]*counts[1]+center[1])*counts[2]+center[2]
+    def point(linear):
+        ix,remainder=divmod(linear,counts[1]*counts[2]);iy,iz=divmod(remainder,counts[2])
+        values=[min(a.maximum,a.minimum+i*a.step) for a,i in zip(axes,(ix,iy,iz))]
+        return Base(x_m=values[0],y_m=values[1],yaw_rad=values[2])
+    yield point(center_linear)
+    if total==1:return
+    for index in range(1<<bits):
+        linear=int(format(index,'0'+str(bits)+'b')[::-1],2)
+        if linear<total and linear!=center_linear:yield point(linear)
 
 def refine(candidates, search):
     for c in candidates:
