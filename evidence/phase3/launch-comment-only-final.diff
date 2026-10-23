@@ -1,0 +1,1 @@
+Final source change after post-attempt regressions only corrects the explanatory launch comment; allow_trajectory_execution remains false. No runtime behavior or tolerances changed.

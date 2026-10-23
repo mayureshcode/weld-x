@@ -1,0 +1,71 @@
+{
+  "scope": "real no-solution workflow; no fabricated approval or robust success",
+  "checks": [
+    "real detection fails and execution stays blocked",
+    "bounded actual search reports explicit fail/unknown candidate states and no solution",
+    "selected candidate and actual recorded scenario link exact planned paths and explicitly predicted source residual to 3D",
+    "planned-path visibility and scenario-selection controls operate",
+    "sensitivity separates screen failures, zero observed jobs, missing MC and unavailable empirical rates"
+  ],
+  "errors": [],
+  "search": {
+    "candidate_count": 16,
+    "elapsed_s": 83.38527662700017,
+    "termination": "candidate_budget",
+    "bounds": {
+      "x_m": {
+        "minimum": -0.2,
+        "maximum": 0.2,
+        "step": 0.1
+      },
+      "y_m": {
+        "minimum": -0.2,
+        "maximum": 0.2,
+        "step": 0.1
+      },
+      "yaw_rad": {
+        "minimum": -0.3,
+        "maximum": 0.3,
+        "step": 0.3
+      },
+      "max_candidates": 16,
+      "max_seconds": 300.0,
+      "max_attempts": 3,
+      "total_seconds": 900.0,
+      "refinement_fraction": 0.25,
+      "robustness_comparable_delta": 0.02
+    },
+    "attempt": 1,
+    "cumulative_search_seconds": 83.38527662700017
+  },
+  "scene_evidence": {
+    "config_hash": "76cf79f0ada7249dd942dda695a247cfa30531f33f94521729871f80a46ce707",
+    "trajectory_id": "1d9e8ef185b2b3af8ddc0c18fc447ef2b298bd08660cad994547fcb7ef0133da",
+    "segment_count": 7,
+    "scenario": {
+      "id": "search:base:boundary:4",
+      "source": "base",
+      "kind": "boundary",
+      "seed": 20261023,
+      "base": [
+        0.0,
+        0.0,
+        0.0,
+        -0.01
+      ],
+      "fixture": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "model": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "predicted_residual_m": 0.004428299501389282
+  }
+}
