@@ -1,0 +1,151 @@
+{
+  "source": "evidence/phase3/policy-comparison/results.json",
+  "source_sha256": "2865db6e11915f3ecb2a9ee7de71d9524144928942b2ff226aa7870024812620",
+  "population": "two existing jobs \u00d7 two preregistered search seed blocks; shared actual candidate pool per block; no statistical independence of policy replay outcomes",
+  "metrics": {
+    "blocks": 4,
+    "candidate_evaluations": 32,
+    "nominally_feasible_candidates": 20,
+    "unique_nominal_executions": 6,
+    "unique_nominal_execution_passes": 6,
+    "qualified_candidates": 0
+  },
+  "policy_summary": [
+    {
+      "policy": "fixed_original_placement_proxy",
+      "blocks": 4,
+      "selected": 4,
+      "nominal_pass_records": 4,
+      "heldout_boundary_fail_records": 4,
+      "fully_qualified": 0,
+      "relocation_m": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "joint_limit_margin_rad": [
+        0.7124399701462774,
+        0.7124386149086679,
+        0.5578568693811419,
+        0.5578568693811414
+      ],
+      "policy_wall_time_s": null,
+      "human_task_time_s": null
+    },
+    {
+      "policy": "nominal_first_feasible",
+      "blocks": 4,
+      "selected": 4,
+      "nominal_pass_records": 4,
+      "heldout_boundary_fail_records": 4,
+      "fully_qualified": 0,
+      "relocation_m": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "joint_limit_margin_rad": [
+        0.7124399701462774,
+        0.7124386149086679,
+        0.5578568693811419,
+        0.5578568693811414
+      ],
+      "policy_wall_time_s": null,
+      "human_task_time_s": null
+    },
+    {
+      "policy": "nominal_ranked",
+      "blocks": 4,
+      "selected": 4,
+      "nominal_pass_records": 4,
+      "heldout_boundary_fail_records": 4,
+      "fully_qualified": 0,
+      "relocation_m": [
+        0.0,
+        0.0,
+        0.14142135623730953,
+        0.14142135623730953
+      ],
+      "joint_limit_margin_rad": [
+        0.7124399701462774,
+        0.7124386149086679,
+        0.6711839603249303,
+        0.6711839603249303
+      ],
+      "policy_wall_time_s": null,
+      "human_task_time_s": null
+    },
+    {
+      "policy": "robust_hard_gated",
+      "blocks": 4,
+      "selected": 0,
+      "nominal_pass_records": 0,
+      "heldout_boundary_fail_records": 0,
+      "fully_qualified": 0,
+      "relocation_m": [],
+      "joint_limit_margin_rad": [],
+      "policy_wall_time_s": null,
+      "human_task_time_s": null
+    }
+  ],
+  "candidate_class_counts": [
+    {
+      "block": "recovery_v1_proposed-20261023",
+      "total": 8,
+      "nominally_infeasible": 3,
+      "nominally_feasible_not_robust": 5,
+      "robustly_feasible": 0,
+      "unknown": 0
+    },
+    {
+      "block": "recovery_v1_proposed-20261024",
+      "total": 8,
+      "nominally_infeasible": 3,
+      "nominally_feasible_not_robust": 5,
+      "robustly_feasible": 0,
+      "unknown": 0
+    },
+    {
+      "block": "nominal_angled_torch_v1-20261023",
+      "total": 8,
+      "nominally_infeasible": 3,
+      "nominally_feasible_not_robust": 5,
+      "robustly_feasible": 0,
+      "unknown": 0
+    },
+    {
+      "block": "nominal_angled_torch_v1-20261024",
+      "total": 8,
+      "nominally_infeasible": 3,
+      "nominally_feasible_not_robust": 5,
+      "robustly_feasible": 0,
+      "unknown": 0
+    }
+  ],
+  "manual_trial_available": false,
+  "paired_replay": "The same cached candidate can be selected by multiple policies. Actual execution is reused, not counted as independent repeated executions.",
+  "missing_measurements": [
+    "Human manual selection/task time",
+    "Independent per-policy search wall time",
+    "Monte Carlo empirical complete-job success rate"
+  ],
+  "comparison_plan": [
+    {
+      "question": "Which evaluated placements passed nominal versus robust gates?",
+      "grain": "actual candidate per job/seed block",
+      "unit": "candidate count",
+      "finding": "No nominally feasible candidate qualified robustly",
+      "delivery": "stacked count chart and policy lookup table",
+      "reason": "Mutually exclusive complete pool classes; not reliability probabilities"
+    },
+    {
+      "question": "Does a nominal execution demonstrate robustness?",
+      "grain": "unique selected candidate execution per block",
+      "unit": "observed job outcome",
+      "delivery": "prose/table",
+      "reason": "Shared replay is not independent policy performance or a human study"
+    }
+  ]
+}

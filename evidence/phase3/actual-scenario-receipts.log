@@ -1,0 +1,7 @@
+test_live_pose_drift_invalidates_exact_binding (tests_robotics.test_scenario_execution.ObservedScenarioTests.test_live_pose_drift_invalidates_exact_binding) ... ok
+test_observed_complete_small_fixture_error_receipt (tests_robotics.test_scenario_execution.ObservedScenarioTests.test_observed_complete_small_fixture_error_receipt) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 67.633s
+
+OK

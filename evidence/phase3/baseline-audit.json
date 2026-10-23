@@ -1,0 +1,28 @@
+{
+  "baseline_remote": "58191bd134bdb55cef1ad91b72376db3302f4b48",
+  "branch": "engineering/robotics-integration",
+  "local_head": "2207ce6cacfae0de077bc1f4f716fbd011a23a3d",
+  "working_tree_before": "?? evidence/dashboard-desktop.png\n?? evidence/dashboard-diagnostics.png\n?? evidence/dashboard-disconnected.png\n?? evidence/dashboard-mobile-records.png\n?? evidence/dashboard-mobile.png\n?? evidence/dashboard-placement-records.png\n?? evidence/dashboard-records.png\n",
+  "preserved_sha256": {
+    "examples/commissioning_two_seam.json": "341cec92b298f74383556a9512b7d2308cb372a587a04231f8612adef449f280",
+    "benchmarks/recovery_v1/configuration.json": "2883c6794eb59080b425685c7451b3c3f4d96b983dcd26edbe6e6964d60e0b08",
+    "benchmarks/recovery_v1/preregistration.json": "c4527846e90720a94d64b13a1351b31218024b417d9fb0ee541a6474b9847d56"
+  },
+  "runtime": "Existing project-local Ubuntu 24.04.3, Jazzy, Gazebo 8.15.0, MoveIt 2.12.4, gz_ros2_control 1.2.20 imports/version checks passed; native host Amazon Linux; owned simulation stopped at baseline",
+  "confirmed_gaps": [
+    "No durable structured per-scenario execution receipt bound to a Plan; robustness currently trusts returned Plan PASS",
+    "Incomplete versus screened versus actually executed counts are not distinct enough",
+    "apply declares a version but physical scene synchronization is deferred to revalidation",
+    "No successful approval-gated real recovery under the unchanged envelopes; invariant independent error exceeds tolerance",
+    "Full seeded boundary and MC execution resource needs exceed original 300 s budget for qualifying candidates",
+    "Sensitivity/scene linkage and equal-budget workflow comparison incomplete"
+  ],
+  "implementation_order": [
+    "Enforce scenario execution receipts and complete-job result accounting",
+    "Validate counterfactual independent-error diagnosis; keep strict and recovery-v1 bytes unchanged",
+    "Exact application synchronization, stale runtime pose rejection and recovery audit tests",
+    "Connect actual planned trajectories and source-specific scenario preview to viewer",
+    "Predeclare and run paired actual policy comparison and nominal regressions",
+    "Publish tested increments; report approval and manual benchmark limits honestly"
+  ]
+}

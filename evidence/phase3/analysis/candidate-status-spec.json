@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "form": "categorical-bars",
+  "mode": "stacked",
+  "orientation": "horizontal",
+  "title": "Nominal feasibility did not produce a robustness-qualified placement",
+  "aside": "Shared evaluated pools, not job reliability rates",
+  "labels": [
+    "recovery_v1_proposed-20261023",
+    "recovery_v1_proposed-20261024",
+    "nominal_angled_torch_v1-20261023",
+    "nominal_angled_torch_v1-20261024"
+  ],
+  "axis": {
+    "zero": true
+  },
+  "series": [
+    {
+      "label": "Nominal feasible, robustness failed",
+      "valueKind": "count",
+      "role": "base",
+      "data": [
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "label": "Nominal infeasible",
+      "valueKind": "count",
+      "role": "base",
+      "data": [
+        3,
+        3,
+        3,
+        3
+      ]
+    }
+  ]
+}

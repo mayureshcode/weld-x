@@ -1,0 +1,98 @@
+test_approval_missing_and_invalid_input (tests.test_api.APITests.test_approval_missing_and_invalid_input) ... 127.0.0.1 - - [23/Oct/2026 16:32:21] "POST /api/approve HTTP/1.1" 400 -
+127.0.0.1 - - [23/Oct/2026 16:32:21] "POST /api/approve HTTP/1.1" 409 -
+ok
+test_csrf_required (tests.test_api.APITests.test_csrf_required) ... 127.0.0.1 - - [23/Oct/2026 16:32:22] "POST /api/detect HTTP/1.1" 403 -
+ok
+test_detect_and_search_real_unavailable_adapter (tests.test_api.APITests.test_detect_and_search_real_unavailable_adapter) ... 127.0.0.1 - - [23/Oct/2026 16:32:22] "POST /api/detect HTTP/1.1" 202 -
+127.0.0.1 - - [23/Oct/2026 16:32:22] "POST /api/search HTTP/1.1" 202 -
+ok
+test_evidence_route_is_allowlisted (tests.test_api.APITests.test_evidence_route_is_allowlisted) ... 127.0.0.1 - - [23/Oct/2026 16:32:23] "GET /api/evidence HTTP/1.1" 400 -
+127.0.0.1 - - [23/Oct/2026 16:32:23] "GET /api/audit?sequence=bad HTTP/1.1" 400 -
+127.0.0.1 - - [23/Oct/2026 16:32:23] "GET /api/audit?sequence=999999 HTTP/1.1" 404 -
+127.0.0.1 - - [23/Oct/2026 16:32:23] "GET /api/evidence?candidate_id=missing HTTP/1.1" 404 -
+127.0.0.1 - - [23/Oct/2026 16:32:23] "GET /api/evidence?candidate_id=a&candidate_id=b HTTP/1.1" 400 -
+127.0.0.1 - - [23/Oct/2026 16:32:23] "GET /api/audit?sequence=1 HTTP/1.1" 403 -
+ok
+test_execution_fails_asynchronously (tests.test_api.APITests.test_execution_fails_asynchronously) ... 127.0.0.1 - - [23/Oct/2026 16:32:23] "POST /api/execute HTTP/1.1" 202 -
+ok
+test_foreign_origin_and_host_rejected (tests.test_api.APITests.test_foreign_origin_and_host_rejected) ... 127.0.0.1 - - [23/Oct/2026 16:32:24] "POST /api/detect HTTP/1.1" 403 -
+127.0.0.1 - - [23/Oct/2026 16:32:24] "GET /api/state HTTP/1.1" 403 -
+ok
+test_read_contract (tests.test_api.APITests.test_read_contract) ... 127.0.0.1 - - [23/Oct/2026 16:32:24] "GET /api/state HTTP/1.1" 200 -
+ok
+test_revalidate_unknown_then_cancel_records (tests.test_api.APITests.test_revalidate_unknown_then_cancel_records) ... 127.0.0.1 - - [23/Oct/2026 16:32:25] "POST /api/revalidate HTTP/1.1" 202 -
+127.0.0.1 - - [23/Oct/2026 16:32:25] "POST /api/cancel HTTP/1.1" 202 -
+ok
+test_static_assets_and_missing_route (tests.test_api.APITests.test_static_assets_and_missing_route) ... 127.0.0.1 - - [23/Oct/2026 16:32:25] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [23/Oct/2026 16:32:25] "GET /app.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Oct/2026 16:32:25] "GET /style.css HTTP/1.1" 200 -
+127.0.0.1 - - [23/Oct/2026 16:32:25] "GET /../weldx/engine.py HTTP/1.1" 404 -
+ok
+test_summary_does_not_replace_authoritative_evidence (tests.test_api.APITests.test_summary_does_not_replace_authoritative_evidence) ... 127.0.0.1 - - [23/Oct/2026 16:32:26] "POST /api/detect HTTP/1.1" 202 -
+127.0.0.1 - - [23/Oct/2026 16:32:26] "POST /api/search HTTP/1.1" 202 -
+127.0.0.1 - - [23/Oct/2026 16:32:26] "GET /api/state HTTP/1.1" 200 -
+127.0.0.1 - - [23/Oct/2026 16:32:26] "GET /api/evidence?candidate_id=adf4bb4a9c0bfcaacf281a5dabd41babbf56d7929976a77db1e33bff31decdb8 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Oct/2026 16:32:26] "GET /api/audit?sequence=1 HTTP/1.1" 200 -
+ok
+test_confirmed_boundary_failure_rejects_even_before_mc (tests.test_boundary_evidence.BoundaryEvidenceTests.test_confirmed_boundary_failure_rejects_even_before_mc) ... ok
+test_corrupted_duplicate_boundary_is_not_trusted (tests.test_boundary_evidence.BoundaryEvidenceTests.test_corrupted_duplicate_boundary_is_not_trusted) ... ok
+test_opposed_base_fixture_boundaries_exist (tests.test_boundary_evidence.BoundaryEvidenceTests.test_opposed_base_fixture_boundaries_exist) ... ok
+test_all_five_example_jobs_parse (tests.test_core.CoreTests.test_all_five_example_jobs_parse) ... ok
+test_approval_requires_exact_hash_and_candidate (tests.test_core.CoreTests.test_approval_requires_exact_hash_and_candidate) ... ok
+test_audit_roundtrip_and_tampering (tests.test_core.CoreTests.test_audit_roundtrip_and_tampering) ... ok
+test_budget_and_no_solution (tests.test_core.CoreTests.test_budget_and_no_solution) ... ok
+test_cancelled_validation_never_authorizes (tests.test_core.CoreTests.test_cancelled_validation_never_authorizes) ... ok
+test_complete_test_double_workflow_and_single_use_execution (tests.test_core.CoreTests.test_complete_test_double_workflow_and_single_use_execution) ... ok
+test_controller_exception_records_stop (tests.test_core.CoreTests.test_controller_exception_records_stop) ... ok
+test_disconnect_revokes_authorization (tests.test_core.CoreTests.test_disconnect_revokes_authorization) ... ok
+test_extremely_fine_grid_is_lazy (tests.test_core.CoreTests.test_extremely_fine_grid_is_lazy) ... ok
+test_fixed_scenarios_reproducible_and_heldout_separate (tests.test_core.CoreTests.test_fixed_scenarios_reproducible_and_heldout_separate) ... ok
+test_grid_and_refinement_bounds (tests.test_core.CoreTests.test_grid_and_refinement_bounds) ... ok
+test_hard_failure_cannot_be_overridden (tests.test_core.CoreTests.test_hard_failure_cannot_be_overridden) ... ok
+test_immutable_configuration_and_digest (tests.test_core.CoreTests.test_immutable_configuration_and_digest) ... ok
+test_incomplete_observed_execution_rejected (tests.test_core.CoreTests.test_incomplete_observed_execution_rejected) ... ok
+test_missing_duplicate_and_stale_checks_unknown (tests.test_core.CoreTests.test_missing_duplicate_and_stale_checks_unknown) ... ok
+test_multi_seam_job_segment_order (tests.test_core.CoreTests.test_multi_seam_job_segment_order) ... ok
+test_operation_lock (tests.test_core.CoreTests.test_operation_lock) ... ok
+test_ranking_deterministic_and_feasible_first (tests.test_core.CoreTests.test_ranking_deterministic_and_feasible_first) ... ok
+test_revalidation_failure_and_bounded_stop (tests.test_core.CoreTests.test_revalidation_failure_and_bounded_stop) ... ok
+test_robustness_unknown_insufficient_duplicate_and_boundary (tests.test_core.CoreTests.test_robustness_unknown_insufficient_duplicate_and_boundary) ... FAIL
+test_schema_units_and_unknown_fields (tests.test_core.CoreTests.test_schema_units_and_unknown_fields) ... ok
+test_search_and_uncertainty_schema (tests.test_core.CoreTests.test_search_and_uncertainty_schema) ... ok
+test_snapshot_json_contract (tests.test_core.CoreTests.test_snapshot_json_contract) ... ok
+test_stale_model_and_health_reject_execution (tests.test_core.CoreTests.test_stale_model_and_health_reject_execution) ... ok
+test_unavailable_runtime_never_authorizes (tests.test_core.CoreTests.test_unavailable_runtime_never_authorizes) ... ok
+test_version_application_and_single_use_approval (tests.test_core.CoreTests.test_version_application_and_single_use_approval) ... ok
+test_wilson_interval_not_certain_at_all_success (tests.test_core.CoreTests.test_wilson_interval_not_certain_at_all_success) ... ok
+test_backend_planning_exception_is_unknown (tests.test_integrity.IntegrityTests.test_backend_planning_exception_is_unknown) ... ok
+test_config_mutation_invalidates_authorization (tests.test_integrity.IntegrityTests.test_config_mutation_invalidates_authorization) ... ok
+test_cumulative_time_budget (tests.test_integrity.IntegrityTests.test_cumulative_time_budget) ... ok
+test_expired_evaluation_is_incomplete (tests.test_integrity.IntegrityTests.test_expired_evaluation_is_incomplete) ... ok
+test_hard_failure_ranks_after_qualifying_candidate (tests.test_integrity.IntegrityTests.test_hard_failure_ranks_after_qualifying_candidate) ... ok
+test_invalid_adapter_plan_contract_fails_closed (tests.test_integrity.IntegrityTests.test_invalid_adapter_plan_contract_fails_closed) ... ok
+test_invalid_execution_contract_stops (tests.test_integrity.IntegrityTests.test_invalid_execution_contract_stops) ... ok
+test_missing_audit_health_revokes (tests.test_integrity.IntegrityTests.test_missing_audit_health_revokes) ... ok
+test_non_string_engineer_rejected (tests.test_integrity.IntegrityTests.test_non_string_engineer_rejected) ... ok
+test_nonfinite_measurement_rejected (tests.test_integrity.IntegrityTests.test_nonfinite_measurement_rejected) ... ok
+test_scene_hash_mismatch_blocks (tests.test_integrity.IntegrityTests.test_scene_hash_mismatch_blocks) ... ok
+test_scene_sync_error_blocks_and_is_recorded (tests.test_integrity.IntegrityTests.test_scene_sync_error_blocks_and_is_recorded) ... ok
+test_search_attempt_budget_and_rejections_audited (tests.test_integrity.IntegrityTests.test_search_attempt_budget_and_rejections_audited) ... ok
+test_tracking_error_threshold_enforced (tests.test_integrity.IntegrityTests.test_tracking_error_threshold_enforced) ... ok
+test_unknown_mc_does_not_publish_failure_rate (tests.test_integrity.IntegrityTests.test_unknown_mc_does_not_publish_failure_rate) ... ok
+test_exact_receipt_preserves_complete_execution (tests.test_scenario_receipts.ReceiptTests.test_exact_receipt_preserves_complete_execution) ... ok
+test_plan_pass_without_execution_cannot_pass_boundary (tests.test_scenario_receipts.ReceiptTests.test_plan_pass_without_execution_cannot_pass_boundary) ... ok
+test_rate_is_unavailable_for_partial_mc (tests.test_scenario_receipts.ReceiptTests.test_rate_is_unavailable_for_partial_mc) ... ok
+test_stale_receipt_is_unknown (tests.test_scenario_receipts.ReceiptTests.test_stale_receipt_is_unknown) ... ok
+
+======================================================================
+FAIL: test_robustness_unknown_insufficient_duplicate_and_boundary (tests.test_core.CoreTests.test_robustness_unknown_insufficient_duplicate_and_boundary)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/test_core.py", line 94, in test_robustness_unknown_insufficient_duplicate_and_boundary
+    self.assertEqual(aggregate(c,'heldout',changed).outcome,Result.FAIL)
+AssertionError: <Result.UNKNOWN: 'unknown'> != <Result.FAIL: 'fail'>
+
+----------------------------------------------------------------------
+Ran 59 tests in 10.020s
+
+FAILED (failures=1)
