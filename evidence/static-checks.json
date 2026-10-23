@@ -1,0 +1,14 @@
+{
+  "schema_matches_model": true,
+  "five_inputs_parse": true,
+  "python_compileall": "passed",
+  "dashboard_js_syntax": "passed",
+  "text_contrast_ratios": {
+    "body_on_bg": 17.174307044534604,
+    "body_on_surface": 15.586074926990403,
+    "muted_on_surface": 8.274310103155948,
+    "cyan_on_button": 9.783404667233201,
+    "warning_on_notice": 10.732462721880472,
+    "error_on_surface": 8.393602811931423
+  }
+}

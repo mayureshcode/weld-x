@@ -1,0 +1,21 @@
+{
+  "result": "passed",
+  "tests": [
+    "initial_execution_disabled",
+    "backend_connected",
+    "detect_real_unknown_results",
+    "bounded_search_real_candidates",
+    "candidate_selection_real_diagnostics",
+    "unknown_revalidation_blocks_execution",
+    "mobile_no_page_overflow",
+    "disconnect_visible_and_fail_closed",
+    "no_browser_runtime_errors"
+  ],
+  "evaluated_candidates": 16,
+  "robotics_execution_tested": false,
+  "viewports": [
+    "1440x1100",
+    "390x844"
+  ],
+  "browser": "153.0.8010.12"
+}

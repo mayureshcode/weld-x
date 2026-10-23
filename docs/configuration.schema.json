@@ -1,0 +1,518 @@
+{
+  "$defs": {
+    "Axis": {
+      "additionalProperties": false,
+      "properties": {
+        "minimum": {
+          "title": "Minimum",
+          "type": "number"
+        },
+        "maximum": {
+          "title": "Maximum",
+          "type": "number"
+        },
+        "step": {
+          "exclusiveMinimum": 0,
+          "title": "Step",
+          "type": "number"
+        }
+      },
+      "required": [
+        "minimum",
+        "maximum",
+        "step"
+      ],
+      "title": "Axis",
+      "type": "object"
+    },
+    "Base": {
+      "additionalProperties": false,
+      "properties": {
+        "x_m": {
+          "title": "X M",
+          "type": "number"
+        },
+        "y_m": {
+          "title": "Y M",
+          "type": "number"
+        },
+        "yaw_rad": {
+          "default": 0,
+          "title": "Yaw Rad",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x_m",
+        "y_m"
+      ],
+      "title": "Base",
+      "type": "object"
+    },
+    "Constraints": {
+      "additionalProperties": false,
+      "properties": {
+        "position_tolerance_m": {
+          "default": 0.001,
+          "exclusiveMinimum": 0,
+          "title": "Position Tolerance M",
+          "type": "number"
+        },
+        "orientation_tolerance_rad": {
+          "default": 0.02,
+          "exclusiveMinimum": 0,
+          "title": "Orientation Tolerance Rad",
+          "type": "number"
+        },
+        "minimum_clearance_m": {
+          "default": 0.005,
+          "minimum": 0,
+          "title": "Minimum Clearance M",
+          "type": "number"
+        },
+        "max_joint_velocity_rad_s": {
+          "default": 1.0,
+          "exclusiveMinimum": 0,
+          "title": "Max Joint Velocity Rad S",
+          "type": "number"
+        },
+        "max_joint_acceleration_rad_s2": {
+          "default": 2.0,
+          "exclusiveMinimum": 0,
+          "title": "Max Joint Acceleration Rad S2",
+          "type": "number"
+        },
+        "planning_timeout_s": {
+          "default": 5.0,
+          "exclusiveMinimum": 0,
+          "maximum": 60,
+          "title": "Planning Timeout S",
+          "type": "number"
+        },
+        "execution_timeout_s": {
+          "default": 120.0,
+          "exclusiveMinimum": 0,
+          "maximum": 3600,
+          "title": "Execution Timeout S",
+          "type": "number"
+        },
+        "max_tracking_error_rad": {
+          "default": 0.02,
+          "exclusiveMinimum": 0,
+          "title": "Max Tracking Error Rad",
+          "type": "number"
+        },
+        "access_required": {
+          "default": true,
+          "title": "Access Required",
+          "type": "boolean"
+        }
+      },
+      "title": "Constraints",
+      "type": "object"
+    },
+    "Job": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "seams": {
+          "items": {
+            "$ref": "#/$defs/Seam"
+          },
+          "maxItems": 20,
+          "minItems": 1,
+          "title": "Seams",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "seams"
+      ],
+      "title": "Job",
+      "type": "object"
+    },
+    "Pose": {
+      "additionalProperties": false,
+      "properties": {
+        "x_m": {
+          "default": 0,
+          "title": "X M",
+          "type": "number"
+        },
+        "y_m": {
+          "default": 0,
+          "title": "Y M",
+          "type": "number"
+        },
+        "z_m": {
+          "default": 0,
+          "title": "Z M",
+          "type": "number"
+        },
+        "roll_rad": {
+          "default": 0,
+          "title": "Roll Rad",
+          "type": "number"
+        },
+        "pitch_rad": {
+          "default": 0,
+          "title": "Pitch Rad",
+          "type": "number"
+        },
+        "yaw_rad": {
+          "default": 0,
+          "title": "Yaw Rad",
+          "type": "number"
+        }
+      },
+      "title": "Pose",
+      "type": "object"
+    },
+    "Seam": {
+      "additionalProperties": false,
+      "properties": {
+        "frame": {
+          "const": "workpiece",
+          "default": "workpiece",
+          "title": "Frame",
+          "type": "string"
+        },
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "points_m": {
+          "items": {
+            "maxItems": 3,
+            "minItems": 3,
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array"
+          },
+          "maxItems": 1000,
+          "minItems": 2,
+          "title": "Points M",
+          "type": "array"
+        },
+        "tool_rpy_rad": {
+          "maxItems": 3,
+          "minItems": 3,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Tool Rpy Rad",
+          "type": "array"
+        },
+        "approach_m": {
+          "default": 0.03,
+          "exclusiveMinimum": 0,
+          "title": "Approach M",
+          "type": "number"
+        },
+        "retreat_m": {
+          "default": 0.03,
+          "exclusiveMinimum": 0,
+          "title": "Retreat M",
+          "type": "number"
+        },
+        "weld_speed_m_s": {
+          "default": 0.01,
+          "exclusiveMinimum": 0,
+          "title": "Weld Speed M S",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "points_m",
+        "tool_rpy_rad"
+      ],
+      "title": "Seam",
+      "type": "object"
+    },
+    "Search": {
+      "additionalProperties": false,
+      "properties": {
+        "x_m": {
+          "$ref": "#/$defs/Axis"
+        },
+        "y_m": {
+          "$ref": "#/$defs/Axis"
+        },
+        "yaw_rad": {
+          "$ref": "#/$defs/Axis"
+        },
+        "max_candidates": {
+          "default": 32,
+          "maximum": 10000,
+          "minimum": 1,
+          "title": "Max Candidates",
+          "type": "integer"
+        },
+        "max_seconds": {
+          "default": 30,
+          "exclusiveMinimum": 0,
+          "maximum": 3600,
+          "title": "Max Seconds",
+          "type": "number"
+        },
+        "max_attempts": {
+          "default": 3,
+          "maximum": 10,
+          "minimum": 1,
+          "title": "Max Attempts",
+          "type": "integer"
+        },
+        "total_seconds": {
+          "default": 90,
+          "exclusiveMinimum": 0,
+          "maximum": 36000,
+          "title": "Total Seconds",
+          "type": "number"
+        },
+        "refinement_fraction": {
+          "default": 0.25,
+          "exclusiveMaximum": 1,
+          "exclusiveMinimum": 0,
+          "title": "Refinement Fraction",
+          "type": "number"
+        },
+        "robustness_comparable_delta": {
+          "default": 0.02,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Robustness Comparable Delta",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x_m",
+        "y_m",
+        "yaw_rad"
+      ],
+      "title": "Search",
+      "type": "object"
+    },
+    "Uncertainty": {
+      "additionalProperties": false,
+      "properties": {
+        "distribution": {
+          "const": "independent_uniform_bounded",
+          "default": "independent_uniform_bounded",
+          "title": "Distribution",
+          "type": "string"
+        },
+        "base_translation_m": {
+          "default": 0.002,
+          "minimum": 0,
+          "title": "Base Translation M",
+          "type": "number"
+        },
+        "base_yaw_rad": {
+          "default": 0.01,
+          "minimum": 0,
+          "title": "Base Yaw Rad",
+          "type": "number"
+        },
+        "fixture_translation_m": {
+          "default": 0.002,
+          "minimum": 0,
+          "title": "Fixture Translation M",
+          "type": "number"
+        },
+        "fixture_yaw_rad": {
+          "default": 0.01,
+          "minimum": 0,
+          "title": "Fixture Yaw Rad",
+          "type": "number"
+        },
+        "model_tcp_translation_m": {
+          "default": 0.001,
+          "minimum": 0,
+          "title": "Model Tcp Translation M",
+          "type": "number"
+        },
+        "model_tcp_yaw_rad": {
+          "default": 0.005,
+          "minimum": 0,
+          "title": "Model Tcp Yaw Rad",
+          "type": "number"
+        },
+        "mc_count": {
+          "default": 20,
+          "maximum": 10000,
+          "minimum": 1,
+          "title": "Mc Count",
+          "type": "integer"
+        },
+        "min_mc_count": {
+          "default": 20,
+          "maximum": 10000,
+          "minimum": 1,
+          "title": "Min Mc Count",
+          "type": "integer"
+        },
+        "success_threshold": {
+          "default": 0.95,
+          "exclusiveMinimum": 0,
+          "maximum": 1,
+          "title": "Success Threshold",
+          "type": "number"
+        },
+        "search_seed": {
+          "default": 1701,
+          "minimum": 0,
+          "title": "Search Seed",
+          "type": "integer"
+        },
+        "heldout_seed": {
+          "default": 2903,
+          "minimum": 0,
+          "title": "Heldout Seed",
+          "type": "integer"
+        }
+      },
+      "title": "Uncertainty",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "revision": {
+      "default": 1,
+      "minimum": 1,
+      "title": "Revision",
+      "type": "integer"
+    },
+    "units": {
+      "const": "SI:m,rad,s",
+      "default": "SI:m,rad,s",
+      "title": "Units",
+      "type": "string"
+    },
+    "frame_convention": {
+      "const": "world:REP-103;poses:fixed-XYZ-RPY",
+      "default": "world:REP-103;poses:fixed-XYZ-RPY",
+      "title": "Frame Convention",
+      "type": "string"
+    },
+    "robot": {
+      "const": "ABB_IRB_120_PROVISIONAL",
+      "default": "ABB_IRB_120_PROVISIONAL",
+      "title": "Robot",
+      "type": "string"
+    },
+    "model_version": {
+      "default": "unverified",
+      "minLength": 1,
+      "title": "Model Version",
+      "type": "string"
+    },
+    "software_version": {
+      "default": "weld-x/0.1.0",
+      "minLength": 1,
+      "title": "Software Version",
+      "type": "string"
+    },
+    "base_height_m": {
+      "default": 0,
+      "title": "Base Height M",
+      "type": "number"
+    },
+    "base": {
+      "$ref": "#/$defs/Base"
+    },
+    "workpiece": {
+      "$ref": "#/$defs/Pose"
+    },
+    "fixture": {
+      "$ref": "#/$defs/Pose"
+    },
+    "tcp": {
+      "$ref": "#/$defs/Pose"
+    },
+    "job": {
+      "$ref": "#/$defs/Job"
+    },
+    "constraints": {
+      "$ref": "#/$defs/Constraints",
+      "default": {
+        "position_tolerance_m": 0.001,
+        "orientation_tolerance_rad": 0.02,
+        "minimum_clearance_m": 0.005,
+        "max_joint_velocity_rad_s": 1.0,
+        "max_joint_acceleration_rad_s2": 2.0,
+        "planning_timeout_s": 5.0,
+        "execution_timeout_s": 120.0,
+        "max_tracking_error_rad": 0.02,
+        "access_required": true
+      }
+    },
+    "uncertainty": {
+      "$ref": "#/$defs/Uncertainty",
+      "default": {
+        "distribution": "independent_uniform_bounded",
+        "base_translation_m": 0.002,
+        "base_yaw_rad": 0.01,
+        "fixture_translation_m": 0.002,
+        "fixture_yaw_rad": 0.01,
+        "model_tcp_translation_m": 0.001,
+        "model_tcp_yaw_rad": 0.005,
+        "mc_count": 20,
+        "min_mc_count": 20,
+        "success_threshold": 0.95,
+        "search_seed": 1701,
+        "heldout_seed": 2903
+      }
+    },
+    "search": {
+      "$ref": "#/$defs/Search"
+    },
+    "max_recoveries": {
+      "default": 2,
+      "maximum": 10,
+      "minimum": 0,
+      "title": "Max Recoveries",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "base",
+    "workpiece",
+    "fixture",
+    "tcp",
+    "job",
+    "search"
+  ],
+  "title": "Configuration",
+  "type": "object"
+}

@@ -1,0 +1,30 @@
+{
+  "dashboard-desktop.png": {
+    "bytes": 126569,
+    "sha256": "76268e69744bc580302482f08634f32177c32e4b080abbecd5d5fa3e08ece105"
+  },
+  "dashboard-diagnostics.png": {
+    "bytes": 146774,
+    "sha256": "63f225a4c280997e43c4e3fb7e56c1802e5c7d01b90a4b5719debebb6e9eb958"
+  },
+  "dashboard-disconnected.png": {
+    "bytes": 53017,
+    "sha256": "2f983ecf4617055e2e8cee2bc755d94808588977cb5d9f6a439afc7c96b40fa2"
+  },
+  "dashboard-mobile-records.png": {
+    "bytes": 58469,
+    "sha256": "f9f729340a072960b0bf9275b368f890ef03987205aedcc484d7d3bf71941209"
+  },
+  "dashboard-mobile.png": {
+    "bytes": 52862,
+    "sha256": "67e9b11f0ab6fa544706e32e0f0937f0f7bfa9e5bcc25a052c8d5e40b290886c"
+  },
+  "dashboard-placement-records.png": {
+    "bytes": 116228,
+    "sha256": "784e5c242fef412a675ba0de06db444b2087426929ea19a68bb9a5d7d63d8ed5"
+  },
+  "dashboard-records.png": {
+    "bytes": 124449,
+    "sha256": "06f4499b144f864a3ae0b76e597a4da4fc2b1872a7a1736a574c4a60faf682c9"
+  }
+}

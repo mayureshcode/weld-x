@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "revision": 1,
+  "units": "SI:m,rad,s",
+  "frame_convention": "world:REP-103;poses:fixed-XYZ-RPY",
+  "robot": "ABB_IRB_120_PROVISIONAL",
+  "model_version": "unverified",
+  "software_version": "weld-x/0.1.0",
+  "base_height_m": 0.0,
+  "base": {
+    "x_m": 0.0,
+    "y_m": 0.0,
+    "yaw_rad": 0.0
+  },
+  "workpiece": {
+    "x_m": 0.35,
+    "y_m": 0.0,
+    "z_m": 0.25,
+    "roll_rad": 0.0,
+    "pitch_rad": 0.0,
+    "yaw_rad": 0.0
+  },
+  "fixture": {
+    "x_m": 0.35,
+    "y_m": 0.0,
+    "z_m": 0.2,
+    "roll_rad": 0.0,
+    "pitch_rad": 0.0,
+    "yaw_rad": 0.0
+  },
+  "tcp": {
+    "x_m": 0.0,
+    "y_m": 0.0,
+    "z_m": 0.12,
+    "roll_rad": 0.0,
+    "pitch_rad": 0.0,
+    "yaw_rad": 0.0
+  },
+  "job": {
+    "id": "job_03",
+    "seams": [
+      {
+        "frame": "workpiece",
+        "id": "seam_1",
+        "points_m": [
+          [
+            0.345,
+            -0.08,
+            0.27
+          ],
+          [
+            0.425,
+            -0.08,
+            0.27
+          ]
+        ],
+        "tool_rpy_rad": [
+          3.141592653589793,
+          0.0,
+          0.2
+        ],
+        "approach_m": 0.03,
+        "retreat_m": 0.03,
+        "weld_speed_m_s": 0.01
+      },
+      {
+        "frame": "workpiece",
+        "id": "seam_2",
+        "points_m": [
+          [
+            0.345,
+            0.0,
+            0.27
+          ],
+          [
+            0.425,
+            0.0,
+            0.27
+          ]
+        ],
+        "tool_rpy_rad": [
+          3.141592653589793,
+          0.0,
+          0.2
+        ],
+        "approach_m": 0.03,
+        "retreat_m": 0.03,
+        "weld_speed_m_s": 0.01
+      }
+    ]
+  },
+  "constraints": {
+    "position_tolerance_m": 0.001,
+    "orientation_tolerance_rad": 0.02,
+    "minimum_clearance_m": 0.005,
+    "max_joint_velocity_rad_s": 1.0,
+    "max_joint_acceleration_rad_s2": 2.0,
+    "planning_timeout_s": 5.0,
+    "execution_timeout_s": 120.0,
+    "max_tracking_error_rad": 0.02,
+    "access_required": true
+  },
+  "uncertainty": {
+    "distribution": "independent_uniform_bounded",
+    "base_translation_m": 0.002,
+    "base_yaw_rad": 0.01,
+    "fixture_translation_m": 0.002,
+    "fixture_yaw_rad": 0.01,
+    "model_tcp_translation_m": 0.001,
+    "model_tcp_yaw_rad": 0.005,
+    "mc_count": 20,
+    "min_mc_count": 20,
+    "success_threshold": 0.95,
+    "search_seed": 1701,
+    "heldout_seed": 2903
+  },
+  "search": {
+    "x_m": {
+      "minimum": -0.2,
+      "maximum": 0.2,
+      "step": 0.1
+    },
+    "y_m": {
+      "minimum": -0.2,
+      "maximum": 0.2,
+      "step": 0.1
+    },
+    "yaw_rad": {
+      "minimum": -0.3,
+      "maximum": 0.3,
+      "step": 0.3
+    },
+    "max_candidates": 16,
+    "max_seconds": 30.0,
+    "max_attempts": 3,
+    "total_seconds": 90.0,
+    "refinement_fraction": 0.25,
+    "robustness_comparable_delta": 0.02
+  },
+  "max_recoveries": 2
+}

@@ -1,0 +1,238 @@
+{
+  "scope": "unavailable production adapter; NOT robotics simulation evidence",
+  "health": {
+    "adapter": "unavailable",
+    "ros": "not_connected",
+    "gazebo": "not_connected",
+    "moveit": "not_connected",
+    "controllers": "not_connected",
+    "robot_model": "provisional",
+    "execution": "blocked"
+  },
+  "search": {
+    "candidate_count": 16,
+    "elapsed_s": 0.09988722299999608,
+    "termination": "candidate_budget",
+    "bounds": {
+      "x_m": {
+        "minimum": -0.2,
+        "maximum": 0.2,
+        "step": 0.1
+      },
+      "y_m": {
+        "minimum": -0.2,
+        "maximum": 0.2,
+        "step": 0.1
+      },
+      "yaw_rad": {
+        "minimum": -0.3,
+        "maximum": 0.3,
+        "step": 0.3
+      },
+      "max_candidates": 16,
+      "max_seconds": 30,
+      "max_attempts": 3,
+      "total_seconds": 90,
+      "refinement_fraction": 0.25,
+      "robustness_comparable_delta": 0.02
+    },
+    "attempt": 1,
+    "cumulative_search_seconds": 0.09988722299999608
+  },
+  "authorized": false,
+  "recommended": null,
+  "candidates": [
+    {
+      "id": "49c7aac2d7c364980dabb61971750d3ffd15e1fdf38434edef2d38cd0231b6bf",
+      "base": {
+        "x_m": -0.2,
+        "y_m": -0.2,
+        "yaw_rad": -0.3
+      },
+      "classification": "validation_incomplete",
+      "nominal_check_count": 30,
+      "unknown_checks": 30,
+      "robustness": "unknown"
+    },
+    {
+      "id": "3ba1a6f5db9b473fca31fd6f5f83b577ed88ea18fe849718fcd3d1d726d10fc7",
+      "base": {
+        "x_m": -0.2,
+        "y_m": -0.2,
+        "yaw_rad": 0
+      },
+      "classification": "validation_incomplete",
+      "nominal_check_count": 30,
+      "unknown_checks": 30,
+      "robustness": "unknown"
+    },
+    {
+      "id": "a4bf9b49dfa3200347933b3e3349cffcf34f6be2bad51c389f90ae091c7c2e6b",
+      "base": {
+        "x_m": -0.2,
+        "y_m": -0.2,
+        "yaw_rad": 0.3
+      },
+      "classification": "validation_incomplete",
+      "nominal_check_count": 30,
+      "unknown_checks": 30,
+      "robustness": "unknown"
+    },
+    {
+      "id": "d1f96abb517f3e434415c8db6fc235f7130d27a69596bed5e60366d26fe12c8d",
+      "base": {
+        "x_m": -0.2,
+        "y_m": -0.1,
+        "yaw_rad": -0.3
+      },
+      "classification": "validation_incomplete",
+      "nominal_check_count": 30,
+      "unknown_checks": 30,
+      "robustness": "unknown"
+    },
+    {
+      "id": "db0db8b80b2e652fd3b9788c9e90b042d18b18c1894d71513e99ea21af4857cb",
+      "base": {
+        "x_m": -0.2,
+        "y_m": -0.1,
+        "yaw_rad": 0
+      },
+      "classification": "validation_incomplete",
+      "nominal_check_count": 30,
+      "unknown_checks": 30,
+      "robustness": "unknown"
+    },
+    {
+      "id": "10aa1742f3064110a73b3143e7c5e65cd40036599c8731bc5c8fb00c8c9b8d4e",
+      "base": {
+        "x_m": -0.2,
+        "y_m": -0.1,
+        "yaw_rad": 0.3
+      },
+      "classification": "validation_incomplete",
+      "nominal_check_count": 30,
+      "unknown_checks": 30,
+      "robustness": "unknown"
+    },
+    {
+      "id": "582065a957e2ec3ac88f68438a0ab2d3a749e15be88d43ef3568ec3d8f1ad879",
+      "base": {
+        "x_m": -0.2,
+        "y_m": 0,
+        "yaw_rad": -0.3
+      },
+      "classification": "validation_incomplete",
+      "nominal_check_count": 30,
+      "unknown_checks": 30,
+      "robustness": "unknown"
+    },
+    {
+      "id": "5466f47aaaff8826efd935fb377899b2144552458444c76276d74c81366501d1",
+      "base": {
+        "x_m": -0.2,
+        "y_m": 0,
+        "yaw_rad": 0
+      },
+      "classification": "validation_incomplete",
+      "nominal_check_count": 30,
+      "unknown_checks": 30,
+      "robustness": "unknown"
+    },
+    {
+      "id": "2cc8288d49fb81ca3e3107af210e61ab880cd353a821958ac5cdad557b58b7cb",
+      "base": {
+        "x_m": -0.2,
+        "y_m": 0,
+        "yaw_rad": 0.3
+      },
+      "classification": "validation_incomplete",
+      "nominal_check_count": 30,
+      "unknown_checks": 30,
+      "robustness": "unknown"
+    },
+    {
+      "id": "5325644d5885975f79930cbdd95c23918783d36d2dc1e52b23efddb2bd1bd5c7",
+      "base": {
+        "x_m": -0.2,
+        "y_m": 0.10000000000000003,
+        "yaw_rad": -0.3
+      },
+      "classification": "validation_incomplete",
+      "nominal_check_count": 30,
+      "unknown_checks": 30,
+      "robustness": "unknown"
+    },
+    {
+      "id": "cff6bd88c5eb8431eb269e474cce669a26d105429f14f42a4e3700c114008d28",
+      "base": {
+        "x_m": -0.2,
+        "y_m": 0.10000000000000003,
+        "yaw_rad": 0
+      },
+      "classification": "validation_incomplete",
+      "nominal_check_count": 30,
+      "unknown_checks": 30,
+      "robustness": "unknown"
+    },
+    {
+      "id": "6b0292ebe0e1ead4fe342d37f46bd55ea290fab740bcaa5fa5cf72699aa41b9c",
+      "base": {
+        "x_m": -0.2,
+        "y_m": 0.10000000000000003,
+        "yaw_rad": 0.3
+      },
+      "classification": "validation_incomplete",
+      "nominal_check_count": 30,
+      "unknown_checks": 30,
+      "robustness": "unknown"
+    },
+    {
+      "id": "ec4600b9bfeb4446a0e40cf028e789c7209ff88ce0244a6f2f87c15e0c1cb589",
+      "base": {
+        "x_m": -0.2,
+        "y_m": -0.05,
+        "yaw_rad": 0.15
+      },
+      "classification": "validation_incomplete",
+      "nominal_check_count": 30,
+      "unknown_checks": 30,
+      "robustness": "unknown"
+    },
+    {
+      "id": "8cf8390db45c39c36b7f3e7d857c2863ac6d63a207f4f4e45e79d9bc1ac6ff29",
+      "base": {
+        "x_m": -0.2,
+        "y_m": -0.05,
+        "yaw_rad": 0.3
+      },
+      "classification": "validation_incomplete",
+      "nominal_check_count": 30,
+      "unknown_checks": 30,
+      "robustness": "unknown"
+    },
+    {
+      "id": "a26a9d2784d4b5d18fcfbaf8147db7666ceff63b039ce5b7ca13fdb0ef152423",
+      "base": {
+        "x_m": -0.2,
+        "y_m": 0,
+        "yaw_rad": 0.15
+      },
+      "classification": "validation_incomplete",
+      "nominal_check_count": 30,
+      "unknown_checks": 30,
+      "robustness": "unknown"
+    },
+    {
+      "id": "02d339f6a21542389e3bbf081da116f9d61e8175fd3c84fbf70f900c3c292add",
+      "base": {
+        "x_m": -0.2,
+        "y_m": 0.05,
+        "yaw_rad": 0.15
+      },
+      "classification": "validation_incomplete",
+      "nominal_check_count": 30,
+      "unknown_checks": 30,
+      "robustness": "unknown"
+    }
+  ]
+}

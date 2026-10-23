@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "weld-x"
+version = "0.1.0"
+description = "Fail-closed virtual welding commissioning orchestration"
+requires-python = ">=3.12"
+dependencies = ["pydantic>=2.12,<3"]
+
+[tool.setuptools]
+packages = ["weldx"]

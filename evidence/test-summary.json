@@ -1,0 +1,13 @@
+{
+  "scope": "unit and local HTTP integration; labelled robotics doubles only; no simulator execution",
+  "tests_run": 50,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "success": true,
+  "elapsed_s": 12.37004023899999,
+  "peak_rss_kib": 67840,
+  "python": "3.13.15",
+  "platform": "Linux-6.18.49-x86_64-with-glibc2.34",
+  "time_utc": "2026-10-23T14:11:52.794887+00:00"
+}
