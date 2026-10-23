@@ -14,12 +14,17 @@ function showEvidence(candidate){
  const ev=evidence(candidate);const source=$('source-select')?.value||'';
  const key=JSON.stringify([candidate?.id,ev?.config_hash,ev?.elapsed_s,source]);if(key===evidenceKey)return;evidenceKey=key;
  const trials=(ev?.robustness?.trials||[]).filter(t=>!source||t.scenario.source===source);
+ const previousScenario=$('scenario-select').value;$('scenario-select').replaceChildren();
+ for(const t of trials){const o=node('option',`${t.scenario.id} · ${t.outcome} · ${t.evidence_kind}`);o.value=t.scenario.id;$('scenario-select').append(o);}
+ if(trials.some(t=>t.scenario.id===previousScenario))$('scenario-select').value=previousScenario;
+ else if(trials.length)$('scenario-select').value=(trials.find(t=>t.outcome==='fail')||trials[0]).scenario.id;
+ emitSceneEvidence(candidate);
  const checks=source?trials.flatMap(t=>(t.summary_checks||t.plan?.checks||[]).filter(c=>c.result!=='pass').map(c=>({...c,reason:t.scenario.id+' — '+c.reason}))):(ev?.nominal?.checks||[]);
  text('source-detail',trials.length?`${trials.length} recorded trials; ${trials.filter(t=>t.outcome==='fail').length} confirmed failures; ${trials.filter(t=>t.outcome==='unknown').length} incomplete. Select source to inspect scenario constraints.`:'No uncertainty trials recorded for this selection.');
  const counts={pass:0,fail:0,unknown:0};for(const c of checks)counts[c.result]++;
  text('diagnostic-summary',checks.length?`${counts.pass} pass / ${counts.fail} fail / ${counts.unknown} unknown — ${checks.length} ${source?'displayed scenario-summary checks':'checks'}`:'No complete validation evidence. Execution remains blocked.');
  $('diagnostics').replaceChildren();for(const c of checks){const row=node('div','');row.className='record';row.append(node('strong',`${c.segment} / ${c.constraint} — ${c.result.toUpperCase()}`),node('span',c.reason));$('diagnostics').append(row);}
- $('sensitivity').replaceChildren();for(const group of ev?.robustness?.groups||[]){const row=document.createElement('tr');for(const value of [group.source,`${group.mc_passed} / ${group.mc_tested}; ${group.mc_unknown} unknown (required ${group.mc_expected})`,`${group.boundary_passed} / ${group.boundary_tested} (required ${group.boundary_expected})`,group.outcome])row.append(node('td',value));$('sensitivity').append(row);}
+ $('sensitivity').replaceChildren();for(const group of ev?.robustness?.groups||[]){const row=document.createElement('tr');for(const value of [group.source,`${group.mc_passed} successful complete jobs / ${group.mc_executed} observed runs; ${group.mc_not_run} not run; ${group.mc_unknown} inconclusive. Rate: ${group.empirical_rate===null?'unavailable':(100*group.empirical_rate).toFixed(1)+'%'}${group.wilson95?' (95% Wilson '+group.wilson95.map(x=>(100*x).toFixed(1)).join('–')+'%)':''}`,`${group.boundary_passed} complete-job passes / ${group.boundary_executed} observed runs; ${group.boundary_failed} confirmed failures in ${group.boundary_screened} recorded screens/trials; ${group.boundary_unknown} inconclusive; ${group.boundary_not_run} not run (required ${group.boundary_expected})`,group.outcome])row.append(node('td',value));$('sensitivity').append(row);}
  if(!ev)$('sensitivity').append(node('tr','No scenario records available.'));
 }
 function render(){
@@ -73,7 +78,7 @@ function renderMap(force=false){
 function renderComparison(candidate){
  $('comparison').replaceChildren();if(!candidate)return;const original=state.initial,ev=candidate.evidence.evaluation;
  function margin(e){const values=(e?.nominal?.checks||[]).filter(c=>c.constraint==='joint_limits'&&c.margin!==null).map(c=>c.margin);return values.length?Math.min(...values).toFixed(4)+' rad':'Not available';}
- const table=document.createElement('table');for(const values of [['Evidence','Original','Selected'],['Classification',original?'See original diagnostics':'Not validated',candidate.classification.replaceAll('_',' ')],['Joint margin',margin(original),margin(ev)],['Relocation','0 m',candidate.evidence.relocation_m.toFixed(4)+' m'],['Recommendation','Engineer-controlled',candidate.id===state.recommended?'Best qualifying tested candidate':'Not authorized / not recommended']]){const row=document.createElement('tr');for(const v of values)row.append(node('td',v));table.append(row);}$('comparison').append(table);
+ const table=document.createElement('table');for(const values of [['Evidence','Original','Selected'],['Classification',original?'See original diagnostics':'Not validated',candidate.classification.replaceAll('_',' ')],['Joint margin',margin(original),margin(ev)],['Relocation','0 m',candidate.evidence.relocation_m.toFixed(4)+' m'],['Recommendation','Engineer-controlled',candidate.id===state.recommended?'Best qualifying tested candidate':'Not authorized / not recommended']]){const row=document.createElement('tr');for(const v of values)row.append(node('td',v));table.append(row);}for(const group of ev?.robustness?.groups||[]){const baseline=original?.robustness?.groups?.find(g=>g.source===group.source);const row=document.createElement('tr');for(const v of ['Boundary failures / required — '+group.source,baseline?`${baseline.boundary_failed} / ${baseline.boundary_expected}`:'Not evaluated',`${group.boundary_failed} / ${group.boundary_expected}`])row.append(node('td',v));table.append(row);}const row=document.createElement('tr');for(const v of ['Empirical MC evidence','Source counts below; no missing-as-zero rates','Source counts below; no missing-as-zero rates'])row.append(node('td',v));table.append(row);$('comparison').append(table);
 }
 async function telemetry(){try{const r=await fetch('/api/telemetry');if(!r.ok)throw new Error('telemetry unavailable');window.dispatchEvent(new CustomEvent('weldx-telemetry',{detail:await r.json()}));}catch(e){window.dispatchEvent(new CustomEvent('weldx-telemetry',{detail:{live:false,joint_positions:{}}}));}}
 $('map-yaw').onchange=()=>renderMap(true);window.addEventListener('resize',()=>{if(state)renderMap(true);});
@@ -82,3 +87,7 @@ $('source-select').onchange=()=>{if(state)showEvidence(state.candidates.find(c=>
 setInterval(telemetry,300);telemetry();
 
 async function inspectRecord(url,target){try{const r=await fetch(url);if(!r.ok)throw new Error('Evidence HTTP '+r.status);const body=await r.json();document.getElementById('evidence-dialog')?.remove();const dialog=document.createElement('dialog');dialog.id='evidence-dialog';const close=node('button','Close evidence');close.onclick=()=>dialog.close();const pre=node('pre',JSON.stringify(body,null,2));pre.className='full-record';dialog.append(close,pre);document.body.append(dialog);dialog.showModal();}catch(e){text('error',e.message);}}
+
+function emitSceneEvidence(candidate){window.dispatchEvent(new CustomEvent('weldx-evidence-selection',{detail:{candidateId:candidate?.id||'',source:$('source-select').value,scenarioId:$('scenario-select').value,showPlanned:$('show-planned').checked}}));}
+$('scenario-select').onchange=()=>emitSceneEvidence(state?.candidates.find(c=>c.id===selected));
+$('show-planned').onchange=()=>emitSceneEvidence(state?.candidates.find(c=>c.id===selected));

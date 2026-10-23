@@ -44,3 +44,20 @@ let lastJob='';window.addEventListener('weldx-selection',e=>{
  for(const seam of c.job.seams){const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints(seam.points_m.map(p=>new THREE.Vector3(...p))),new THREE.LineBasicMaterial({color:!seamId||seamId===seam.id?0x67e8de:0x506879}));wp.add(line);}seams.add(wp);
 });
 init().catch(error=>{status.textContent='3D view unavailable: '+error.message;host.textContent='No valid runtime model or WebGL connection. Execution remains backend-gated.';});
+// Static engineering overlays from the exact cached backend plan. Robot motion
+// remains exclusively observed telemetry; scenario predictions never move it.
+let evidenceGroup=null,evidenceRequest=0,lastEvidenceKey='',lastEvidence=null;
+function disposeGroup(group){if(!group)return;for(const child of [...group.children]){group.remove(child);child.geometry?.dispose();child.material?.dispose();}scene.remove(group);}
+function drawEvidence(data,showPlanned){
+ if(!loaded)return;disposeGroup(evidenceGroup);evidenceGroup=new THREE.Group();scene.add(evidenceGroup);
+ if(showPlanned)for(const path of data.segments||[]){const colors={weld:0x67e8de,approach:0x6b9dd7,retreat:0xb79ee3,transition:0x879aa9};const kind=path.id.split(':').at(-1);const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints(path.world_tcp_points_m.map(v=>new THREE.Vector3(...v))),new THREE.LineBasicMaterial({color:colors[kind]||0x879aa9}));evidenceGroup.add(line);}
+ const p=data.scenario_preview,w=p?.worst_planned_residual;const label=document.getElementById('scene-evidence-status');
+ if(w){const from=new THREE.Vector3(...w.target_world_m),delta=new THREE.Vector3(...w.delta_m);if(delta.length()>1e-12)evidenceGroup.add(new THREE.ArrowHelper(delta.clone().normalize(),from,delta.length()*50,0xffaa71,.008,.004));
+  label.textContent=`${data.segments.length} exact planned segments · ${p.scenario.id} · predicted residual ${(w.norm_m*1000).toFixed(3)} mm · error arrow ×50 for visibility. Prediction only; no compensation or scene application.`;
+ }else label.textContent=data.segments?.length?`${data.segments.length} exact cached planned TCP paths in world metres; not execution evidence. Approach blue · weld teal · retreat purple · transition gray.`:data.reason||'No exact trajectory evidence available.';
+}
+window.addEventListener('weldx-evidence-selection',async event=>{
+ const v=event.detail,key=JSON.stringify([v.candidateId,v.source,v.scenarioId]);if(key===lastEvidenceKey&&lastEvidence){drawEvidence(lastEvidence,v.showPlanned);return;}
+ lastEvidenceKey=key;const request=++evidenceRequest;const q=new URLSearchParams();if(v.candidateId)q.set('candidate_id',v.candidateId);if(v.source)q.set('source',v.source);if(v.scenarioId)q.set('scenario_id',v.scenarioId);
+ try{const r=await fetch('/api/scene-evidence?'+q);if(!r.ok)throw new Error('scene evidence HTTP '+r.status);const data=await r.json();if(request!==evidenceRequest)return;lastEvidence=data;drawEvidence(data,v.showPlanned);}catch(error){if(request===evidenceRequest){disposeGroup(evidenceGroup);evidenceGroup=null;document.getElementById('scene-evidence-status').textContent='Scene evidence unavailable: '+error.message;}}
+});

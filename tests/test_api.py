@@ -70,6 +70,16 @@ class APITests(unittest.TestCase):
                             ('/api/evidence?candidate_id=a&candidate_id=b',400)]:
             self.assertEqual(self.request(path)[0],status)
         self.assertEqual(self.request('/api/audit?sequence=1',headers={'Host':'evil.invalid'})[0],403)
+    def test_apply_is_async_and_exact_version_invalidates_authority(self):
+        from .support import TestAdapter
+        e=self.app.engine;e.adapter=TestAdapter();e.detect();e.search()
+        a=e.approve(e.recommended,e.config.digest(),'Unit-test operator, not actual engineer acceptance')
+        status,_=self.request('/api/apply',{'approval_id':a['id']})
+        self.assertEqual(status,202);self.wait();self.assertEqual(self.app.task['status'],'finished')
+        self.assertEqual(e.config.revision,2);self.assertIsNone(e.approval);self.assertFalse(e.authorized())
+    def test_scene_evidence_without_robotics_is_unavailable(self):
+        self.assertEqual(self.request('/api/scene-evidence')[0],503)
+        self.assertEqual(self.request('/api/scene-evidence?file=../../etc/passwd')[0],400)
     def test_execution_fails_asynchronously(self):
         self.assertEqual(self.request('/api/execute',{})[0],202);self.wait()
         self.assertEqual(self.app.task['status'],'failed');self.assertIn('execution denied',self.app.task['error'])

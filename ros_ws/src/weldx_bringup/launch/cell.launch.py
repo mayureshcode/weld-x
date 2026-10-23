@@ -34,7 +34,10 @@ def generate_launch_description():
     spawn=Node(package='ros_gz_sim',executable='create',arguments=['-world','weldx_cell','-name','weldx_robot','-file',str(generated/'weldx-sim.urdf')],output='screen')
     js=Node(package='controller_manager',executable='spawner',arguments=['joint_state_broadcaster','--controller-manager-timeout','120'],output='screen')
     controller=Node(package='controller_manager',executable='spawner',arguments=['joint_trajectory_controller','--controller-manager-timeout','120'],output='screen')
-    move_group=Node(package='moveit_ros_move_group',executable='move_group',parameters=[config.to_dict(),{'use_sim_time':True,'publish_robot_description_semantic':True,'publish_planning_scene':True,'publish_geometry_updates':True,'publish_state_updates':True,'publish_transforms_updates':True}],output='screen')
+    # WELD-X owns exact gated FollowJointTrajectory execution. Do not start a
+    # redundant MoveIt execution route. This parameter does NOT prevent manager
+    # construction or fix its observed 2.12.4 callback-group teardown crash.
+    move_group=Node(package='moveit_ros_move_group',executable='move_group',parameters=[config.to_dict(),{'use_sim_time':True,'allow_trajectory_execution':False,'publish_robot_description_semantic':True,'publish_planning_scene':True,'publish_geometry_updates':True,'publish_state_updates':True,'publish_transforms_updates':True}],output='screen')
     return LaunchDescription([
         SetEnvironmentVariable('GZ_PARTITION','weldx_virtual'),
         gazebo,rsp,bridge,spawn,

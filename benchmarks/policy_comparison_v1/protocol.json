@@ -1,0 +1,45 @@
+{
+  "version": "policy-comparison-v1",
+  "scope": "paired policy replay on shared actual ROS/MoveIt evaluations, followed by nominal Gazebo execution and separate held-out boundary rejection; NOT commissioning authorization or a manual engineering user study",
+  "jobs": [
+    "benchmarks/recovery_v1/configuration.json",
+    "benchmarks/nominal_jobs/angled_torch.json"
+  ],
+  "search_seed_blocks": [
+    20261023,
+    20261024
+  ],
+  "heldout_seed": 20261123,
+  "candidate_budget_per_block": 8,
+  "wall_budget_per_block_s": 180,
+  "candidate_generation": "six deterministic space-spreading coarse grid candidates then two local refinements around the best nominal joint margin; identical observed pool for all policies",
+  "policies": [
+    "fixed_original_placement_proxy",
+    "nominal_first_feasible",
+    "nominal_ranked",
+    "robust_hard_gated"
+  ],
+  "nominal_ranking": "all nominal hard gates first, then descending minimum joint limit margin, ascending relocation, lexicographic x/y/yaw",
+  "robust_ranking": "existing Engine hard feasibility and robustness gates, then existing deterministic rank_key",
+  "metrics": [
+    "candidate_count",
+    "nominal_evaluation_seconds",
+    "uncertainty_evaluation_seconds",
+    "paired_replay_compute_seconds",
+    "nominal_complete_execution_outcome",
+    "robustness_status",
+    "heldout_boundary_status",
+    "relocation_m",
+    "joint_limit_margin_rad",
+    "failure_categories",
+    "observed_scenario_count"
+  ],
+  "manual_baseline": "No human manual trial supplied. Fixed original configuration is a labelled proxy only; human task time, approval and engineering success are unavailable, not zero.",
+  "integrity": "Input jobs/tolerances/distributions/amplitudes unchanged. Only the explicit search/held-out seed blocks above are applied to experiment copies. Full evidence and all failures retained. No physical specifications or statistical significance claimed.",
+  "execution": "Serialized virtual-only nominal test harness, not a commissioning gate bypass: no recommendation/approval is fabricated. Nominal execution does not qualify a job as robust.",
+  "stopping": "Mandatory boundary failures reject robust policy; unexecuted MC remains missing. No threshold relaxation. Scenario sets frozen before first run. Never reuse comparison results as final held-out authorization.",
+  "input_sha256": {
+    "benchmarks/recovery_v1/configuration.json": "2883c6794eb59080b425685c7451b3c3f4d96b983dcd26edbe6e6964d60e0b08",
+    "benchmarks/nominal_jobs/angled_torch.json": "5434d79d7063a47b575e7f180e40dd55f56e1959a53e10897ca6a300b51a5b0d"
+  }
+}

@@ -6,3 +6,6 @@ header{min-height:72px}.hero{padding:28px 0 24px;gap:32px}.hero h1{font-size:cla
 #placement-map text{pointer-events:none}
 
 dialog{width:min(1100px,90vw);max-height:85vh;background:#111e2a;color:#eaf2fa;border:1px solid #58c9c3;padding:24px}dialog::backdrop{background:#050b14d9}.full-record{max-height:65vh;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+
+/* Long recorded scenario IDs must not widen the mobile viewport. */
+select{max-width:calc(100% - 16px);min-width:0}

@@ -4,10 +4,11 @@ relative to the nominal tool. It does not claim link, mass or compliance fidelit
 """
 from pathlib import Path
 import hashlib,json,time
+from dataclasses import replace
 import numpy as np
 from scipy.spatial.transform import Rotation
 from weldx.engine import serial
-from weldx.validation import Check,Plan,GATES,Result
+from weldx.validation import Check,Plan,GATES,Result,ScenarioExecution,scenario_digest
 from .cell import RoboticsError,NAMES
 
 def exceeds(value,limit):
@@ -28,14 +29,16 @@ def error(cell,c,perturbed,model,expected,actual):
 
 def run(adapter,c,perturbed,scenario,segments,cancel,deadline):
     cell=adapter.cell;completed=[];observations=[];start=time.monotonic();failure=None
-    # Reserve restoration time before changing experimental geometry. Conservative
-    # wall estimate uses 1x simulation even when the server requests faster physics.
     estimated=sum(info['duration_s'] for name,t,info in segments)+40
+    identity=adapter.plans[c.digest()][0]
+    record={'scenario':serial(scenario),'scenario_hash':scenario_digest(scenario),'config_hash':c.digest(),
+        'adapter_version':adapter.version,'trajectory_id':identity,'outcome':'unknown','complete_job_executed':False,
+        'scope':'actual Gazebo open-loop experiment; virtual TCP calibration mismatch, not physical dynamics'}
     if deadline-time.monotonic()<estimated:
-        adapter.reports.append({'scenario':serial(scenario),'config_hash':c.digest(),'outcome':'unknown','complete_job_executed':False,'reason':'insufficient remaining budget for complete perturbed execution and restoration'})
-        return adapter.unknown(c,'insufficient remaining budget for complete perturbed Gazebo execution and restoration')
+        record['reason']='insufficient remaining budget for complete perturbed execution and restoration'
+        adapter.reports.append(record)
+        return adapter.unknown(c,record['reason'])
     cell.active_deadline=deadline-20;current_name=c.job.segments()[0]
-    record={'scenario':serial(scenario),'config_hash':c.digest(),'outcome':'unknown','complete_job_executed':False,'scope':'actual Gazebo open-loop experiment; virtual TCP calibration mismatch, not a physical dynamics model'}
     try:
         adapter.scene.synchronize(perturbed,allow_respawn=True);cell.ready();cell.sync_planning(perturbed)
         initial=dict(zip(segments[0][1].joint_names,segments[0][1].points[0].positions))
@@ -44,29 +47,55 @@ def run(adapter,c,perturbed,scenario,segments,cancel,deadline):
         for name,trajectory,info in segments:
             current_name=name
             observer=lambda expected,actual:error(cell,c,perturbed,scenario.model,expected,actual)
-            observation=cell.execute_segment(c,trajectory,cancel,observer if name.endswith(':weld') else None)
+            observation=cell.execute_segment(c,trajectory,cancel,observer)
             endpoint=observer(dict(zip(trajectory.joint_names,trajectory.points[-1].positions)),cell.values())
             errors=observation['scenario_feedback']+[endpoint]
             max_position=max(e['tcp_error_m'] for e in errors);max_angle=max(e['orientation_error_rad'] for e in errors)
-            observations.append({'segment':name,'max_actual_scenario_tcp_error_m':max_position,'max_actual_scenario_orientation_error_rad':max_angle,'controller_tracking':{k:v for k,v in observation.items() if k!='scenario_feedback'}})
+            observations.append({'segment':name,'max_actual_scenario_tcp_error_m':max_position,
+                'max_actual_scenario_orientation_error_rad':max_angle,
+                'controller_tracking':{k:v for k,v in observation.items() if k!='scenario_feedback'}})
             if exceeds(max_position,c.constraints.position_tolerance_m) or exceeds(max_angle,c.constraints.orientation_tolerance_rad):
                 failure=(name,'tcp_tolerance',f'actual perturbed execution residual {max_position}m/{max_angle}rad');break
             completed.append(name)
-        complete=tuple(completed)==c.job.segments()
-        record.update(outcome='fail' if failure else 'pass' if complete else 'unknown',complete_job_executed=complete)
-        if failure:return adapter.unknown(c,failure[2],failure[:2])
-        if not complete:return adapter.unknown(c,'perturbed complete-job execution incomplete')
-        return Plan(c.digest(),adapter.version,tuple(Check(s,g,Result.PASS,'actual complete perturbed job executed; '+g+' checked on fixed trajectories and observed feedback') for s in c.job.segments() for g in GATES),adapter.plans[c.digest()][0])
-    except RoboticsError as e:
-        record['reason']=str(e)
-        if e.constraint=='tcp_tolerance':
-            record['outcome']='fail';return adapter.unknown(c,str(e),(current_name,'tcp_tolerance'))
-        return adapter.unknown(c,'perturbed execution could not be confirmed: '+str(e))
+        record['complete_job_executed']=tuple(completed)==c.job.segments()
+    except RoboticsError as exc:
+        record['error']={'constraint':exc.constraint,'type':type(exc).__name__,'reason':str(exc)}
+        if exc.constraint in ('tcp_tolerance','collision','joint_limits','dynamics'):
+            failure=(current_name,exc.constraint,str(exc))
+    except Exception as exc:
+        record['error']={'constraint':'unknown','type':type(exc).__name__,'reason':str(exc)}
     finally:
         cell.active_cancel=None;cell.active_deadline=None
+        try:
+            restoration=adapter.scene.synchronize(c,allow_respawn=True);cell.ready();cell.sync_planning(c)
+            record['restoration']={'confirmed':True,'readback':restoration}
+        except Exception as exc:
+            record['restoration']={'confirmed':False,'error':str(exc),'type':type(exc).__name__}
         record.update(completed_segments=completed,segment_observations=observations,elapsed_s=time.monotonic()-start)
-        adapter.reports.append(record)
-        directory=Path('evidence/phase2/scenarios');directory.mkdir(parents=True,exist_ok=True)
-        filename=hashlib.sha256((c.digest()+scenario.id).encode()).hexdigest()+'.json';(directory/filename).write_text(json.dumps(record,indent=2)+'\n')
-        # Failed restoration raises: it must not be hidden by a scenario success.
-        adapter.scene.synchronize(c,allow_respawn=True);cell.ready();cell.sync_planning(c)
+    proof=None
+    if observations and record['restoration']['confirmed']:
+        proof=ScenarioExecution(c.digest(),adapter.version,scenario_digest(scenario),identity,tuple(completed),
+            tuple(o['controller_tracking']['feedback_samples'] for o in observations),
+            max(o['controller_tracking']['maximum_in_motion_tracking']['joint_error_rad'] for o in observations),
+            max(o['max_actual_scenario_tcp_error_m'] for o in observations),
+            max(o['max_actual_scenario_orientation_error_rad'] for o in observations),True,
+            'Gazebo joint feedback and actual FollowJointTrajectory action feedback; virtual TCP calibration model',
+            tuple(o['segment'] for o in observations))
+        record['execution_evidence']=serial(proof)
+    if not record['restoration']['confirmed']:
+        result=adapter.unknown(c,'restoration unconfirmed; all execution authorization blocked');adapter.bound=None
+    elif failure:
+        record['outcome']='fail';result=replace(adapter.unknown(c,failure[2],failure[:2]),execution_evidence=proof,trajectory_id=identity)
+    elif record['complete_job_executed']:
+        result=Plan(c.digest(),adapter.version,tuple(Check(s,g,Result.PASS,
+            'complete observed perturbed job; exact scenario receipt and verified scene restoration')
+            for s in c.job.segments() for g in GATES),identity,proof)
+        if proof and proof.confirms(c,scenario,result):record['outcome']='pass'
+        else:result=adapter.unknown(c,'complete-job observer receipt did not confirm required evidence')
+    else:
+        result=adapter.unknown(c,'perturbed execution incomplete: '+str(record.get('error','no complete observed segment sequence')))
+    adapter.reports.append(record)
+    directory=Path('evidence/phase3/scenarios');directory.mkdir(parents=True,exist_ok=True)
+    filename=hashlib.sha256((c.digest()+scenario.id+str(time.monotonic_ns())).encode()).hexdigest()+'.json'
+    (directory/filename).write_text(json.dumps(record,indent=2)+'\n')
+    return result

@@ -22,6 +22,7 @@ class RosAdapter:
         files=list(Path(__file__).parent.glob('*.py'))+[Path('/workspace/.runtime/generated/weldx.urdf'),Path('/var/lib/dpkg/status')]
         files += [Path('/workspace/weldx') / n for n in ('model.py','validation.py','robustness.py','engine.py')]
         files+=list(Path('/workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/config').glob('*'))
+        files+=list(Path('/workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/launch').glob('*.py'))
         files+=list(Path('/workspace/ros_ws/install/weldx_description/share/weldx_description/worlds').glob('*'))
         for link in self.cell.urdf.findall('link'):
             for mesh in link.findall('collision/geometry/mesh'):files.append(Path(mesh.get('filename').removeprefix('file://')))
@@ -140,9 +141,19 @@ class RosAdapter:
         finally:
             self.cell.active_cancel=None;self.cell.active_deadline=None
             self.cell.sync_planning(c)
+    def binding_valid(self,c):
+        if self.bound!=c.digest() or not self.ready:return False
+        try:
+            expected={'base_link':([c.base.x_m,c.base.y_m,c.base_height_m],[0,0,c.base.yaw_rad])}
+            for name,p in [('fixture',c.fixture),('workpiece',c.workpiece)]:
+                expected[name]=([p.x_m,p.y_m,p.z_m],[p.roll_rad,p.pitch_rad,p.yaw_rad])
+            self.scene.verify(expected)
+            return True
+        except RoboticsError:
+            return False
     def execute(self,c,plan,cancel,deadline):
         if self.bound!=c.digest() or self.plans.get(c.digest(),(None,))[0]!=plan.trajectory_id:raise RoboticsError('controller','exact scene/trajectory binding missing or stale')
-        if not self.ready:raise RoboticsError('controller','runtime health or dependency binding is stale')
+        if not self.binding_valid(c):raise RoboticsError('controller','runtime health, dependency or observed scene binding is stale')
         self.cell.active_cancel=cancel;self.cell.active_deadline=deadline
         self.scene.synchronize(c);self.cell.sync_planning(c);self.cell.ready();completed=[];maximum=0.
         segments=self.plans[c.digest()][1]

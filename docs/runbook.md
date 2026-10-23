@@ -1,3 +1,5 @@
+> Current continuation: [Phase 3 report](phase3/final-report.md) and [Phase 3 runbook](phase3/runbook.md). Historical checkpoint text below is retained, not a current acceptance claim.
+
 > Historical orchestration checkpoint document. For the current real robotics integration, measured results and remaining blockers, see [Phase 2](phase2/README.md).
 
 # Runbook, experiment protocol and risks

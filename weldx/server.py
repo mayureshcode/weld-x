@@ -19,7 +19,7 @@ class App:
         self.future = None
         self.task_lock = threading.Lock()
         self.task = None
-    def submit(self, operation):
+    def submit(self, operation, arguments=None):
         with self.task_lock:
             if self.future and not self.future.done():
                 raise Denied("another background task is running")
@@ -27,7 +27,7 @@ class App:
             self.task = {"operation": operation, "status": "running", "error": None}
             def run():
                 try:
-                    getattr(self.engine, operation)(self.cancel)
+                    getattr(self.engine, operation)(**(arguments or {}),cancel=self.cancel)
                     self.task["status"] = "cancelled" if self.cancel.is_set() else "finished"
                 except Exception as exc:
                     self.task.update(status="failed", error=f"{type(exc).__name__}: {exc}")
@@ -78,6 +78,21 @@ def handler(app):
                     if record is None:
                         return self.respond(404, {"error": "evidence record not found"})
                     return self.respond(200, record)
+            if parsed.path == "/api/scene-evidence":
+                query=parse_qs(parsed.query)
+                if any(k not in ('candidate_id','source','scenario_id') or len(v)!=1 for k,v in query.items()):
+                    return self.respond(400,{"error":"only exact candidate_id/source/scenario_id selectors allowed"})
+                if not hasattr(app.engine.adapter,'cell'):
+                    return self.respond(503,{"error":"real robotics scene unavailable"})
+                with app.engine.lock:
+                    candidate=app.engine.candidates.get(query.get('candidate_id',[''])[0])
+                    if 'candidate_id' in query and not candidate:
+                        return self.respond(404,{"error":"candidate not found"})
+                    config=candidate.configuration if candidate else app.engine.config
+                    evaluation=candidate.evaluation if candidate else app.engine.final or app.engine.initial
+                from robotics.model_view import scene_evidence
+                return self.respond(200,scene_evidence(app.engine.adapter,config,evaluation,
+                    query.get('source',[''])[0],query.get('scenario_id',[''])[0]))
             if self.path == "/api/state":
                 return self.respond(200, {**app.engine.snapshot(), "task": app.task})
             if self.path == '/api/telemetry':
@@ -119,7 +134,7 @@ def handler(app):
                 if self.path == "/api/approve":
                     return self.respond(200, app.engine.approve(body["candidate_id"], body["config_hash"], body["engineer"]))
                 if self.path == "/api/apply":
-                    return self.respond(200, app.engine.apply(body["approval_id"]).model_dump(mode="json"))
+                    return self.respond(202, app.submit("apply", {"approval_id": body["approval_id"]}))
                 return self.respond(404, {"error": "not found"})
             except Denied as exc:
                 app.engine._event("request_rejected", {"path": self.path, "reason": str(exc)})

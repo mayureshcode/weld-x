@@ -1,5 +1,5 @@
 """Trusted adapter contract. UNKNOWN and missing evidence never pass a gate."""
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from enum import Enum
 import hashlib
 import math
@@ -22,12 +22,53 @@ class Check:
     measurement: float | None = None
     margin: float | None = None
 
+def scenario_digest(scenario):
+    return hashlib.sha256(canonical(asdict(scenario)).encode()).hexdigest()
+
+@dataclass(frozen=True)
+class ScenarioExecution:
+    """Trusted observer receipt, not a planning request or a sensor specification."""
+    config_hash: str
+    adapter_version: str
+    scenario_hash: str
+    trajectory_id: str
+    completed_segments: tuple[str, ...]
+    feedback_samples_per_segment: tuple[int, ...]
+    maximum_tracking_error_rad: float
+    maximum_tcp_error_m: float
+    maximum_orientation_error_rad: float
+    restored: bool
+    observer: str
+    observed_segments: tuple[str, ...] = ()
+    def observed(self,config,scenario,plan):
+        segments=self.observed_segments or self.completed_segments
+        return bool(self.config_hash==config.digest() and self.adapter_version==plan.adapter_version
+            and self.scenario_hash==scenario_digest(scenario) and self.trajectory_id==plan.trajectory_id
+            and segments and segments==config.job.segments()[:len(segments)]
+            and len(self.feedback_samples_per_segment)==len(segments)
+            and all(isinstance(n,int) and not isinstance(n,bool) and n>0 for n in self.feedback_samples_per_segment)
+            and self.restored is True and self.observer.strip()
+            and all(isinstance(v,(int,float)) and not isinstance(v,bool) and math.isfinite(v) and v>=0
+                for v in (self.maximum_tracking_error_rad,self.maximum_tcp_error_m,self.maximum_orientation_error_rad)))
+    def confirms(self, config, scenario, plan):
+        measurements=(self.maximum_tracking_error_rad,self.maximum_tcp_error_m,self.maximum_orientation_error_rad)
+        limits=(config.constraints.max_tracking_error_rad,config.constraints.position_tolerance_m,config.constraints.orientation_tolerance_rad)
+        return bool(self.observed(config,scenario,plan) and self.config_hash == config.digest() and self.adapter_version == plan.adapter_version
+            and self.scenario_hash == scenario_digest(scenario) and self.trajectory_id == plan.trajectory_id
+            and self.completed_segments == config.job.segments()
+            and len(self.feedback_samples_per_segment) == len(self.completed_segments)
+            and all(isinstance(n,int) and not isinstance(n,bool) and n>0 for n in self.feedback_samples_per_segment)
+            and all(isinstance(v,(int,float)) and not isinstance(v,bool) and math.isfinite(v)
+                and 0<=v<=limit+1e-12 for v,limit in zip(measurements,limits))
+            and self.restored is True and bool(self.observer.strip()))
+
 @dataclass(frozen=True)
 class Plan:
     config_hash: str
     adapter_version: str
     checks: tuple[Check, ...]
     trajectory_id: str | None = None
+    execution_evidence: ScenarioExecution | None = None
     def outcome(self, config: Configuration, adapter_version: str) -> Result:
         if self.config_hash != config.digest() or self.adapter_version != adapter_version:
             return Result.UNKNOWN

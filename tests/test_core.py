@@ -90,7 +90,9 @@ class CoreTests(unittest.TestCase):
         self.assertEqual(aggregate(c,'heldout',r.trials[:-1]).outcome,Result.UNKNOWN)
         self.assertEqual(aggregate(c,'heldout',r.trials+(r.trials[0],)).outcome,Result.UNKNOWN)
         changed=list(r.trials)
-        changed[0]=dataclasses.replace(changed[0],outcome=Result.FAIL)
+        # A confirmed failure needs the corresponding failed constraint record.
+        checks=list(changed[0].plan.checks);checks[0]=dataclasses.replace(checks[0],result=Result.FAIL)
+        changed[0]=dataclasses.replace(changed[0],plan=dataclasses.replace(changed[0].plan,checks=tuple(checks)),outcome=Result.FAIL)
         self.assertEqual(aggregate(c,'heldout',changed).outcome,Result.FAIL)
         larger=c.model_copy(update={'uncertainty':c.uncertainty.model_copy(update={'min_mc_count':100})})
         self.assertEqual(aggregate(larger,'heldout',r.trials).outcome,Result.UNKNOWN)

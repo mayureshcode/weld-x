@@ -1,3 +1,5 @@
+> Current continuation: [Phase 3 report](docs/phase3/final-report.md) and [Phase 3 runbook](docs/phase3/runbook.md). Historical checkpoint text below is retained, not a current acceptance claim.
+
 # WELD-X — evidence-gated virtual commissioning
 
 **Current work: `engineering/robotics-integration`; main checkpoint preserved. The project is not yet fully commissioned.**

@@ -15,7 +15,8 @@ class ActualAdapterTests(unittest.TestCase):
  def test_01_exact_nominal_contract(self):
   self.assertEqual(self.a.synchronize(self.c,self.cancel,time.monotonic()+30),self.c.digest())
   plan=self.a.validate(self.c,NOMINAL,self.cancel,time.monotonic()+60)
-  Path('evidence/phase2/actual-adapter-nominal.json').write_text(json.dumps({'outcome':plan.outcome(self.c,self.a.version).value,'checks':[c.__dict__ for c in plan.checks]},indent=2))
+  Path('evidence/phase3').mkdir(parents=True,exist_ok=True)
+  Path('evidence/phase3/actual-adapter-nominal.json').write_text(json.dumps({'outcome':plan.outcome(self.c,self.a.version).value,'checks':[c.__dict__ for c in plan.checks]},indent=2))
   self.assertEqual(plan.outcome(self.c,self.a.version),Result.PASS)
  def test_02_open_loop_failure_is_confirmed(self):
   scenario=Scenario('integration:base:error','base','boundary',1701,base=(.002,0,0,0))

@@ -58,6 +58,11 @@ class Evaluation:
     nominal: Plan
     robustness: Robustness
     elapsed_s: float
+    def status(self,config,adapter):
+        if self.config_hash!=config.digest() or self.adapter_version!=adapter.version:return Result.UNKNOWN
+        nominal=self.nominal.outcome(config,adapter.version)
+        if nominal==Result.FAIL or self.robustness.outcome==Result.FAIL:return Result.FAIL
+        return Result.PASS if self.qualifies(config,adapter) else Result.UNKNOWN
     def qualifies(self, config, adapter):
         return (self.config_hash == config.digest() and self.adapter_version == adapter.version
                 and self.nominal.outcome(config, adapter.version) == Result.PASS
@@ -146,14 +151,16 @@ class Engine:
                         "tested":len(preflight),"failures":[serial(t) for t in preflight if t.outcome==Result.FAIL],
                         "mc_status":"not run: mandatory boundary failed; no success-rate claim"})
                     return Evaluation(config.digest(),self.adapter.version,phase,nominal,
-                        aggregate(config,phase,preflight),time.monotonic()-start)
-            for scenario in scenarios(config, phase):
+                        aggregate(config,phase,preflight,self.adapter.version),time.monotonic()-start)
+            # Mandatory complete-job boundaries precede Monte Carlo spending.
+            ordered=sorted(scenarios(config,phase),key=lambda s:s.kind!="boundary")
+            for scenario in ordered:
                 if cancel.is_set() or time.monotonic() >= deadline:
                     break
                 plan = self._plan(config, scenario, cancel, deadline)
                 trials.append(Trial(scenario, plan, plan.outcome(config, self.adapter.version)))
         return Evaluation(config.digest(), self.adapter.version, phase, nominal,
-                          aggregate(config, phase, trials), time.monotonic()-start)
+                          aggregate(config, phase, trials,self.adapter.version), time.monotonic()-start)
     def detect(self, cancel=None):
         self._begin("detect")
         try:
@@ -235,7 +242,13 @@ class Engine:
                     best = min(qualified, key=lambda c: rank_key(c, self.adapter, config))
                     self.recommended = best.id
                     self._event("recommendation", {"candidate_id": best.id, "origin_hash": config.digest(),
-                        "limits": self.last_search, "limitations": "search evidence only; engineer approval and fresh held-out revalidation required"})
+                        "limits": self.last_search, "original_configuration": self.original.model_dump(mode="json"),
+                        "original_failure_evidence": evaluation_summary(self.initial),
+                        "proposed_base": best.configuration.base.model_dump(),"relocation_m": best.relocation_m,
+                        "uncertainty_assumptions":best.configuration.uncertainty.model_dump(),
+                        "nominal_and_robustness_evidence":evaluation_summary(best.evaluation),
+                        "expected_benefit":"Qualifying tested placement under the declared simulation model; no independent fixture-error compensation is claimed.",
+                        "limitations": "bounded search evidence only; explicit engineer approval and fresh exact held-out revalidation required"})
                     self._stage("RECOMMEND")
                 else:
                     self._event("no_solution", {"message": "No robust placement found within the declared search bounds and computation budget.",
@@ -261,24 +274,35 @@ class Engine:
             self.approval = approval
             self._stage("APPROVE")
             return approval
-    def apply(self, approval_id):
-        with self.lock:
-            if self.active_operation:
-                raise Denied("operation active")
-            a = self.approval
-            if not a or a["id"] != approval_id or a["config_hash"] != self.config.digest() or a["adapter_version"] != self.adapter.version or self.stage != "APPROVE":
-                raise Denied("approval missing, stale or already consumed")
-            c = self.candidates[a["candidate_id"]]
-            updated = Configuration.model_validate({**c.configuration.model_dump(mode="json"), "revision": self.config.revision+1})
-            # Declarative application invalidates authority. The trusted adapter must
-            # confirm exact runtime synchronization during revalidation before any execution.
-            self._event("configuration_applied", {"approval": a, "configuration": updated.model_dump(mode="json"),
-                                                  "hash": updated.digest(), "execution_authorization": "invalidated"})
-            self.config = updated
-            self.approval = self.final = None
-            self.recoveries += 1
-            self._stage("APPLY")
+    def apply(self, approval_id, cancel=None):
+        self._begin("apply")
+        try:
+            with self.lock:
+                a=self.approval
+                if not a or a["id"]!=approval_id or a["config_hash"]!=self.config.digest() or a["adapter_version"]!=self.adapter.version or self.stage!="APPROVE":
+                    raise Denied("approval missing, stale or already consumed")
+                c=self.candidates[a["candidate_id"]]
+                if not c.evaluation.qualifies(c.configuration,self.adapter):
+                    raise Denied("approved candidate evidence is stale")
+                updated=Configuration.model_validate({**c.configuration.model_dump(mode="json"),"revision":self.config.revision+1})
+                self._event("configuration_applied",{"approval":a,"configuration":updated.model_dump(mode="json"),
+                    "hash":updated.digest(),"execution_authorization":"invalidated; synchronization pending"})
+                self.config=updated;self.approval=self.final=None;self.recoveries+=1;self._stage("APPLY")
+            cancel=cancel or threading.Event();deadline=time.monotonic()+updated.search.max_seconds
+            try:
+                binding=self.adapter.synchronize(updated,cancel,deadline)
+            except Exception as exc:
+                self._event("application_synchronization_error",{"type":type(exc).__name__,"message":str(exc)})
+                binding=None
+            with self.lock:
+                self._check_snapshot(updated)
+                confirmed=binding==updated.digest() and not cancel.is_set() and time.monotonic()<deadline
+                self._event("application_synchronized" if confirmed else "application_synchronization_unconfirmed",
+                    {"config_hash":updated.digest(),"execution_authorization":"invalidated; exact held-out revalidation required"})
+                if not confirmed:self._stage("STOPPED")
             return updated
+        finally:
+            self._end()
     def revalidate(self, cancel=None):
         self._begin("revalidate")
         try:
@@ -299,7 +323,7 @@ class Engine:
                 result = self.evaluate(config, "heldout", cancel, deadline)
             else:
                 result = Evaluation(config.digest(), self.adapter.version, "heldout",
-                    Plan(config.digest(), self.adapter.version, ()), aggregate(config, "heldout", ()), 0)
+                    Plan(config.digest(), self.adapter.version, ()), aggregate(config, "heldout", (),self.adapter.version), 0)
                 self._event("scene_synchronization_unconfirmed", {"config_hash": config.digest()})
             with self.lock:
                 self._check_snapshot(config)
@@ -311,6 +335,7 @@ class Engine:
             self._end()
     def authorized(self):
         return bool(self.journal.healthy and self.adapter.ready and self.final and self.final.phase == "heldout"
+                    and (not hasattr(self.adapter,"binding_valid") or self.adapter.binding_valid(self.config))
                     and self.final.qualifies(self.config, self.adapter))
     def execute(self, cancel=None):
         self._begin("execute")
@@ -355,7 +380,7 @@ class Engine:
                 "config_hash": self.config.digest(), "health": self.adapter.health(), "authorized": self.authorized(),
                 "recommended": self.recommended, "approval": self.approval, "search": self.last_search,
                 "candidates": [{"id": c.id, "base": c.configuration.base.model_dump(),
-                    "classification": c.classification(self.adapter), "evidence": candidate_summary(c)} for c in self.candidates.values()],
+                    "classification": c.classification(self.adapter), "status": c.evaluation.status(c.configuration,self.adapter).value, "evidence": candidate_summary(c)} for c in self.candidates.values()],
                 "initial": evaluation_summary(self.initial), "final": evaluation_summary(self.final), "execution": serial(self.execution),
                 "audit": [{k: e[k] for k in ("sequence", "time_unix_s", "kind", "digest", "previous")} for e in self.journal.events],
                 "presentation": "Summaries only; full immutable evidence is available through /api/evidence and /api/audit", "active_operation": self.active_operation}
@@ -373,7 +398,8 @@ def evaluation_summary(e):
         failed=[c for c in t.plan.checks if c.result == Result.FAIL]
         unknown=[c for c in t.plan.checks if c.result == Result.UNKNOWN]
         trials.append({"scenario": serial(t.scenario), "outcome": serial(t.outcome),
-            "summary_checks": serial(failed or unknown[:1]),
+            "summary_checks": serial(failed or unknown[:1]), "evidence_kind": t.evidence_kind,
+            "execution_evidence": serial(t.plan.execution_evidence),
             "check_count": len(t.plan.checks), "trajectory_id": t.plan.trajectory_id})
     return {"config_hash": e.config_hash, "adapter_version": e.adapter_version,
         "phase": e.phase, "elapsed_s": e.elapsed_s, "nominal": serial(e.nominal),

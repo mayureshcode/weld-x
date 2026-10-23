@@ -2,7 +2,7 @@
 from pathlib import Path
 import hashlib
 from weldx.model import Configuration
-from weldx.validation import Check, Execution, GATES, Plan, Result
+from weldx.validation import Check, Execution, GATES, Plan, Result, ScenarioExecution, scenario_digest
 
 def configuration(**updates):
     c = Configuration.model_validate_json(Path('examples/job_01.json').read_text())
@@ -32,7 +32,10 @@ class TestAdapter:
         fails = self.fail or (self.heldout_fail and scenario.id.startswith('heldout:'))
         checks = tuple(Check(s,g,Result.FAIL if fails and g=='collision' else Result.PASS,
                              'unit-test fixture only', margin=0.2) for s in config.job.segments() for g in GATES)
-        return Plan(config.digest(), self.version, checks, 'test-plan:'+config.digest())
+        identity='test-plan:'+config.digest()
+        proof=None if scenario.kind=='nominal' else ScenarioExecution(config.digest(),self.version,scenario_digest(scenario),identity,
+            config.job.segments(),tuple(1 for _ in config.job.segments()),0.,0.,0.,True,'UNIT TEST DOUBLE — NOT ROBOTICS EVIDENCE')
+        return Plan(config.digest(), self.version, checks, identity, proof)
     def execute(self, config, plan, cancel, deadline):
         if self.execution_error:
             raise RuntimeError('deliberate controller fixture error')
