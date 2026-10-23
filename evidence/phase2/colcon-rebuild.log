@@ -1,0 +1,68 @@
+Starting >>> weldx_bringup
+-- Install configuration: ""
+-- Up-to-date: /workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/config
+-- Up-to-date: /workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/config/weldx.srdf
+-- Installing: /workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/config/controllers.yaml
+-- Up-to-date: /workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/config/kinematics.yaml
+-- Up-to-date: /workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/config/moveit_controllers.yaml
+-- Up-to-date: /workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/config/joint_limits.yaml
+-- Up-to-date: /workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/launch
+-- Up-to-date: /workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/launch/cell.launch.py
+-- Up-to-date: /workspace/ros_ws/install/weldx_bringup/share/ament_index/resource_index/package_run_dependencies/weldx_bringup
+-- Up-to-date: /workspace/ros_ws/install/weldx_bringup/share/ament_index/resource_index/parent_prefix_path/weldx_bringup
+-- Up-to-date: /workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/environment/ament_prefix_path.sh
+-- Up-to-date: /workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/environment/ament_prefix_path.dsv
+-- Up-to-date: /workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/environment/path.sh
+-- Up-to-date: /workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/environment/path.dsv
+-- Up-to-date: /workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/local_setup.bash
+-- Up-to-date: /workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/local_setup.sh
+-- Up-to-date: /workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/local_setup.zsh
+-- Up-to-date: /workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/local_setup.dsv
+-- Up-to-date: /workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/package.dsv
+-- Up-to-date: /workspace/ros_ws/install/weldx_bringup/share/ament_index/resource_index/packages/weldx_bringup
+-- Up-to-date: /workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/cmake/weldx_bringupConfig.cmake
+-- Up-to-date: /workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/cmake/weldx_bringupConfig-version.cmake
+-- Up-to-date: /workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/package.xml
+Finished <<< weldx_bringup [0.35s]
+Starting >>> weldx_description
+-- Install configuration: ""
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/urdf
+-- Installing: /workspace/ros_ws/install/weldx_description/share/weldx_description/urdf/weldx.urdf.in
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/meshes
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/meshes/irb120_3_58
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/meshes/irb120_3_58/collision
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/meshes/irb120_3_58/collision/base_link.stl
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/meshes/irb120_3_58/collision/link_1.stl
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/meshes/irb120_3_58/collision/link_2.stl
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/meshes/irb120_3_58/collision/link_3.stl
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/meshes/irb120_3_58/collision/link_4.stl
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/meshes/irb120_3_58/collision/link_5.stl
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/meshes/irb120_3_58/collision/link_6.stl
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/meshes/irb120_3_58/visual
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/meshes/irb120_3_58/visual/base_link.stl
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/meshes/irb120_3_58/visual/link_1.stl
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/meshes/irb120_3_58/visual/link_2.stl
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/meshes/irb120_3_58/visual/link_3.stl
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/meshes/irb120_3_58/visual/link_4.stl
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/meshes/irb120_3_58/visual/link_5.stl
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/meshes/irb120_3_58/visual/link_6.stl
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/worlds
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/worlds/cell.sdf
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/ament_index/resource_index/package_run_dependencies/weldx_description
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/ament_index/resource_index/parent_prefix_path/weldx_description
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/environment/ament_prefix_path.sh
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/environment/ament_prefix_path.dsv
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/environment/path.sh
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/environment/path.dsv
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/local_setup.bash
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/local_setup.sh
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/local_setup.zsh
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/local_setup.dsv
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/package.dsv
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/ament_index/resource_index/packages/weldx_description
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/cmake/weldx_descriptionConfig.cmake
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/cmake/weldx_descriptionConfig-version.cmake
+-- Up-to-date: /workspace/ros_ws/install/weldx_description/share/weldx_description/package.xml
+Finished <<< weldx_description [0.17s]
+
+Summary: 2 packages finished [0.85s]

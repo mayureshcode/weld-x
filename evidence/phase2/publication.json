@@ -1,0 +1,26 @@
+{
+  "repository": "https://github.com/mayureshcode/weld-x",
+  "branch": "engineering/robotics-integration",
+  "main_checkpoint_preserved": "8344af53d1d7451f878081f389ccc598c7db6558",
+  "remote_verified_commits": [
+    {
+      "sha": "d6fc8d6f2583d79c47fb0b0f2a94dc7c3ec2e954",
+      "scope": "licensed viewer dependencies"
+    },
+    {
+      "sha": "29d731baec3745f0cc09679ac951bb559eb86303",
+      "scope": "robotics and core implementation"
+    },
+    {
+      "sha": "7065b0e945072f47fc3bb53012482d8b9289de2d",
+      "scope": "benchmark scenarios and rejection evidence"
+    },
+    {
+      "sha": "7cec549644819840eb480b2ebf869e18fe2f3468",
+      "scope": "browser-verified stable controls and explicit full evidence inspection"
+    }
+  ],
+  "main_merge": false,
+  "CI_verified": false,
+  "local_history": "Source-mirror local history differs from original remote checkpoint ancestry; no forced push."
+}

@@ -1,0 +1,47 @@
+{
+  "scope": "actual Gazebo + gz_ros2_control + MoveIt; not a test double",
+  "result": "passed",
+  "controllers": {
+    "joint_trajectory_controller": "active",
+    "joint_state_broadcaster": "active"
+  },
+  "joint_feedback_samples": 219,
+  "planned_points": 16,
+  "controller_status": 4,
+  "controller_error_code": 0,
+  "observed_max_joint_movement_rad": 0.19883460188011925,
+  "endpoint_max_joint_tracking_error_rad": 0.0010760189272248644,
+  "initial": {
+    "joint_1": 2.3778621027712332e-21,
+    "joint_2": 1.5254625432707758e-12,
+    "joint_3": 7.037599970710496e-12,
+    "joint_4": -5.907295001271676e-14,
+    "joint_5": 5.944637531268812e-12,
+    "joint_6": 2.93959694595407e-14
+  },
+  "observed_final": {
+    "joint_1": 0.19883460188011925,
+    "joint_2": -0.14917563617628624,
+    "joint_3": 0.14917410247634624,
+    "joint_4": 0.09942818701367324,
+    "joint_5": -0.09936796840256085,
+    "joint_6": 0.09936501940464695
+  },
+  "planned_final": {
+    "joint_1": 0.19991062080734412,
+    "joint_2": -0.14998291924805376,
+    "joint_3": 0.14998137724110855,
+    "joint_4": 0.09996625538864173,
+    "joint_5": -0.09990571090276354,
+    "joint_6": 0.09990274593997747
+  },
+  "observed_tcp_position_m": [
+    0.44437423203070125,
+    0.08761137328564664,
+    0.6459553137809485
+  ],
+  "limitations": [
+    "planning scene environment not yet synchronized in this smoke test",
+    "does not establish complete welding job execution or robustness"
+  ]
+}

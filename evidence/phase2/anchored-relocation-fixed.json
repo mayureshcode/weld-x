@@ -1,0 +1,79 @@
+{
+  "result": "passed",
+  "translated": {
+    "immediate": {
+      "weldx_robot": {
+        "position_error_m": 3.469446951953614e-18,
+        "orientation_error_rad": 6.93889390390723e-18
+      },
+      "base_link": {
+        "position_error_m": 0.0,
+        "orientation_error_rad": 0.0
+      },
+      "fixture": {
+        "position_error_m": 0.0,
+        "orientation_error_rad": 0.0
+      },
+      "workpiece": {
+        "position_error_m": 0.0,
+        "orientation_error_rad": 0.0
+      }
+    },
+    "persistent": {
+      "weldx_robot": {
+        "position_error_m": 3.469446951953614e-18,
+        "orientation_error_rad": 6.93889390390723e-18
+      },
+      "base_link": {
+        "position_error_m": 0.0,
+        "orientation_error_rad": 0.0
+      },
+      "fixture": {
+        "position_error_m": 0.0,
+        "orientation_error_rad": 0.0
+      },
+      "workpiece": {
+        "position_error_m": 0.0,
+        "orientation_error_rad": 0.0
+      }
+    }
+  },
+  "restored": {
+    "immediate": {
+      "weldx_robot": {
+        "position_error_m": 0.0,
+        "orientation_error_rad": 0.0
+      },
+      "base_link": {
+        "position_error_m": 0.0,
+        "orientation_error_rad": 0.0
+      },
+      "fixture": {
+        "position_error_m": 0.0,
+        "orientation_error_rad": 0.0
+      },
+      "workpiece": {
+        "position_error_m": 0.0,
+        "orientation_error_rad": 0.0
+      }
+    },
+    "persistent": {
+      "weldx_robot": {
+        "position_error_m": 0.0,
+        "orientation_error_rad": 0.0
+      },
+      "base_link": {
+        "position_error_m": 0.0,
+        "orientation_error_rad": 0.0
+      },
+      "fixture": {
+        "position_error_m": 0.0,
+        "orientation_error_rad": 0.0
+      },
+      "workpiece": {
+        "position_error_m": 0.0,
+        "orientation_error_rad": 0.0
+      }
+    }
+  }
+}

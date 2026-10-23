@@ -1,0 +1,9 @@
+{
+  "scope": "actual connected dashboard and no-solution workflow, not a successful approved recovery",
+  "checks": [
+    "live URDF/observed-joint 3D view; execution initially blocked",
+    "real detection rejected mandatory uncertainty boundary",
+    "bounded actual search ended without robust recommendation; execute remains disabled"
+  ],
+  "errors": []
+}

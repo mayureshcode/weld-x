@@ -1,0 +1,8 @@
+{
+  "result": "passed",
+  "records": 68,
+  "head": "62c08787f2961ede8b3a78c47d7dbb7e318ca6cfe0e0890bf89ccb9b030339fc",
+  "file": "evidence/phase2/dashboard-final-audit.jsonl",
+  "sha256": "61e9c5b3e9d320b0d22ef124042525bad0b550a01b812a2eb079ec08fdf6eb32",
+  "compression": "gzip/base64 lossless text copy for GitHub; original JSONL bundled in archive"
+}

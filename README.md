@@ -1,3 +1,21 @@
+# WELD-X — evidence-gated virtual commissioning
+
+**Current work: `engineering/robotics-integration`; main checkpoint preserved. The project is not yet fully commissioned.**
+
+Real Jazzy/Harmonic/MoveIt robotics and five nominal jobs now execute in the verified project-local Ubuntu environment. The separately versioned 99%-target recovery benchmark is **rejected by mandatory boundary tests**, not represented as a successful recovery. No physical welding or safety certification is claimed.
+
+- [Current engineering report](docs/phase2/README.md)
+- [Install, launch and test runbook](docs/phase2/runbook.md)
+- [Architecture and actual interfaces](docs/phase2/architecture.md)
+- [Acceptance ledger](docs/phase2/acceptance.md)
+- [Decisions, risks and next actions](docs/phase2/risks.md)
+- Proposed assumptions and frozen scenarios: `benchmarks/recovery_v1/`
+- Original asset hashes/licensing: `third_party/abb/`; run `python3 tools/fetch-robot-assets.py` before building a fresh checkout.
+
+---
+
+## Original orchestration checkpoint (historical)
+
 # WELD-X
 
 **Evidence before execution.** Virtual robotic welding commissioning, targeting Ubuntu 24.04, ROS 2 Jazzy, Gazebo Harmonic and MoveIt 2.

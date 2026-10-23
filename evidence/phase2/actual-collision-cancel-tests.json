@@ -1,0 +1,49 @@
+{
+  "scope": "isolated real simulator diagnostics, not robustness/approval-authorized commissioning execution",
+  "result": "passed",
+  "self_collision": {
+    "sample_index": 31,
+    "seed": 20261023,
+    "joint_positions": {
+      "joint_1": -0.15988623144487457,
+      "joint_2": 1.8984007135090093,
+      "joint_3": 0.9531335450306457,
+      "joint_4": -0.5947894380565217,
+      "joint_5": -0.4529225011233513,
+      "joint_6": 5.822944777829612
+    },
+    "contacts": [
+      [
+        "base_link",
+        "link_4"
+      ],
+      [
+        "base_link",
+        "link_5"
+      ],
+      [
+        "base_link",
+        "link_6"
+      ],
+      [
+        "base_link",
+        "weld_torch"
+      ]
+    ]
+  },
+  "cancel_path": {
+    "points": 10,
+    "joint_limit_margin_rad": 0.5578568693811525,
+    "collision_padding_m": 0.005,
+    "duration_s": 0.894396704,
+    "maximum_planned_tcp_speed_m_s": 0.07277934428997114
+  },
+  "cancellation": {
+    "action_status": 5,
+    "cancel_acknowledged": true,
+    "observed_movement_rad": 0.0019522882707077721,
+    "post_cancel_drift_rad": 0.0,
+    "hold_observation_wall_s": 0.3,
+    "scope": "software-level simulated hold; not a certified emergency stop"
+  }
+}

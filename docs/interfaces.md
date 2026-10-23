@@ -1,3 +1,5 @@
+> Historical orchestration checkpoint document. For the current real robotics integration, measured results and remaining blockers, see [Phase 2](phase2/README.md).
+
 # Interfaces and lifecycle
 
 ## HTTP

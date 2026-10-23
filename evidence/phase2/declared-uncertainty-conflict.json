@@ -1,0 +1,18 @@
+{
+  "config_hash": "6deaf9918edec1d9bfbbbfc008cd2c56a7634028aec08765262135357c6dfee5",
+  "nominal": "pass",
+  "fixture_z_error_m": 0.002,
+  "tcp_tolerance_m": 0.001,
+  "outcome": "fail",
+  "failed_checks": [
+    {
+      "segment": "seam_1:weld",
+      "constraint": "tcp_tolerance",
+      "result": "fail",
+      "reason": "open-loop necessary-condition failure: TCP 0.002 m, orientation 1.34067972e-08 rad",
+      "measurement": null,
+      "margin": null
+    }
+  ],
+  "scope": "necessary-condition failure using actual model/FCL and fixed nominal trajectory; not a perturbed execution success"
+}

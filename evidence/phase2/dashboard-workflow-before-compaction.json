@@ -1,0 +1,50 @@
+{
+  "scope": "actual connected dashboard and no-solution workflow, not a successful approved recovery",
+  "checks": [
+    "live URDF/observed-joint 3D view; execution initially blocked",
+    "real detection rejected mandatory uncertainty boundary",
+    "bounded actual search ended without robust recommendation; execute remains disabled",
+    "real candidate selection linked map, comparison and diagnostics",
+    "seam highlight and source-specific recorded diagnostics",
+    "mobile page has no viewport overflow",
+    "direct unauthorized execution request denied by backend",
+    "lost API/telemetry connection visibly locks UI and freezes 3D view"
+  ],
+  "errors": [],
+  "search": {
+    "candidate_count": 16,
+    "elapsed_s": 300.38808819399947,
+    "termination": "time_budget",
+    "bounds": {
+      "x_m": {
+        "minimum": -0.2,
+        "maximum": 0.2,
+        "step": 0.1
+      },
+      "y_m": {
+        "minimum": -0.2,
+        "maximum": 0.2,
+        "step": 0.1
+      },
+      "yaw_rad": {
+        "minimum": -0.3,
+        "maximum": 0.3,
+        "step": 0.3
+      },
+      "max_candidates": 16,
+      "max_seconds": 300.0,
+      "max_attempts": 3,
+      "total_seconds": 900.0,
+      "refinement_fraction": 0.25,
+      "robustness_comparable_delta": 0.02
+    },
+    "attempt": 1,
+    "cumulative_search_seconds": 300.38808819399947
+  },
+  "candidate_classes": {
+    "validation_incomplete": 1,
+    "nominally_feasible_not_robust": 8,
+    "nominally_infeasible": 7
+  },
+  "result": "passed"
+}
