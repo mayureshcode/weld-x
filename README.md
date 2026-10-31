@@ -2,6 +2,20 @@
 
 **Evidence before execution.** Virtual robotic welding commissioning, targeting Ubuntu 24.04, ROS 2 Jazzy, Gazebo Harmonic and MoveIt 2.
 
+## Live workcell console — new branch
+
+The `feat/weldx-live-workcell-single-launch` branch introduces an original-GLB 3D viewer and a **read-only ROS 2 joint/TF telemetry panel**, with a foundry-inspired visual redesign.
+
+On Ubuntu 24.04, place the exact original GLB at `assets/source/demo_robotic_welding_workcell.glb` and run:
+
+```bash
+bash scripts/start_weldx.sh --visual
+```
+
+The single command starts the locally served dashboard/GLB viewer, checks/install dependencies, and reads ROS telemetry when Jazzy is installed. For launching a **separately verified existing** ROS simulation alongside it, set `WELDX_ROS_LAUNCH_PACKAGE` and `WELDX_ROS_LAUNCH_FILE` and use `--simulation`. See [Live workcell integration and limitations](docs/live-workcell.md).
+
+**Important:** The GLB robot cannot yet be articulated from live joints, the geometric model is not calibrated to Gazebo/MoveIt, and no real robotics adapter has been commissioned. No source file, screenshot or dashboard color change creates a validated robot simulation.
+
 ## Ubuntu handoff — workcell + dashboard
 
 The development branch `feat/weldx-workcell-visual-enhancement` adds a clearer dashboard, a non-destructive Blender GLB enhancer, a source-asset checksum manifest, and a repeatable Ubuntu bootstrap script. These are **not** equivalent to an implemented robotics adapter or a validated robot job.
