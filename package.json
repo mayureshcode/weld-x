@@ -1,0 +1,13 @@
+{
+  "name": "weldx-workcell-console",
+  "private": true,
+  "version": "0.2.0",
+  "description": "Locally served WELD-X three-dimensional workcell viewer",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "three": "0.170.0"
+  },
+  "scripts": {
+    "check": "node --check dashboard/app.js && node --check dashboard/workcell.js"
+  }
+}
