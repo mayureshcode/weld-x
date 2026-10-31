@@ -2,6 +2,18 @@
 
 **Evidence before execution.** Virtual robotic welding commissioning, targeting Ubuntu 24.04, ROS 2 Jazzy, Gazebo Harmonic and MoveIt 2.
 
+## Ubuntu handoff — workcell + dashboard
+
+The development branch `feat/weldx-workcell-visual-enhancement` adds a clearer dashboard, a non-destructive Blender GLB enhancer, a source-asset checksum manifest, and a repeatable Ubuntu bootstrap script. These are **not** equivalent to an implemented robotics adapter or a validated robot job.
+
+```bash
+git clone -b feat/weldx-workcell-visual-enhancement --single-branch https://github.com/mayureshcode/weld-x.git
+cd weld-x
+bash scripts/ubuntu_setup.sh
+```
+
+**Important:** The original `demo_robotic_welding_workcell.glb` binary must be placed in `assets/source/` on Ubuntu; the GitHub branch currently stores its checksum and LFS rule, not the actual GLB bytes. For the exact LFS upload and Blender steps, see [Ubuntu handoff](docs/ubuntu-handoff.md), [workcell guide](docs/workcell.md), and [dashboard verification](docs/dashboard-refinement.md). The dashboard's execution lock remains deliberate until actual trusted simulator evidence exists.
+
 ## Honest project status
 
 This is a **tested orchestration foundation**, NOT a completed robotic welding simulator. The build environment has no ROS/Gazebo/MoveIt runtime. The production adapter explicitly returns UNKNOWN; it never fabricates collision checks, trajectories or successful motion. ABB IRB 120 remains **PROVISIONAL**.
