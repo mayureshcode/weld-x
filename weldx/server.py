@@ -5,13 +5,16 @@ import argparse
 import json
 from pathlib import Path
 import secrets
+import time
 import threading
 from .engine import Denied, Engine, Journal, serial
 from .model import Configuration
 
 class App:
-    def __init__(self, engine):
+    def __init__(self, engine, workcell=None, telemetry=None):
         self.engine = engine
+        self.workcell = Path(workcell).resolve() if workcell else None
+        self.telemetry_path = Path(telemetry).resolve() if telemetry else None
         self.token = secrets.token_urlsafe(32)
         self.pool = ThreadPoolExecutor(max_workers=1)
         self.cancel = threading.Event()
@@ -36,6 +39,40 @@ class App:
 
 def handler(app):
     class Handler(BaseHTTPRequestHandler):
+        def binary(self, path, mime):
+            size = path.stat().st_size
+            self.send_response(200)
+            self.send_header("Content-Type", mime)
+            self.send_header("Content-Length", str(size))
+            self.send_header("Cache-Control", "no-store")
+            self.send_header("X-Content-Type-Options", "nosniff")
+            self.end_headers()
+            with path.open("rb") as stream:
+                while True:
+                    block = stream.read(262144)
+                    if not block: break
+                    try: self.wfile.write(block)
+                    except (BrokenPipeError, ConnectionResetError): break
+        def telemetry(self):
+            data = {"connected": False, "reason": "ROS bridge not running", "joint_count": 0, "tf_count": 0, "joints": []}
+            if app.telemetry_path and app.telemetry_path.is_file():
+                try:
+                    age = max(0, time.time() - app.telemetry_path.stat().st_mtime)
+                    sample = json.loads(app.telemetry_path.read_text())
+                    if not isinstance(sample, dict): raise ValueError("bad snapshot")
+                    if age > 3:
+                        data["reason"] = "Stale ROS telemetry (%.1fs)" % age
+                    else:
+                        joints = sample.get("joints", [])
+                        frames = sample.get("tf_count", 0)
+                        if not isinstance(joints, list) or not isinstance(frames, int): raise ValueError("bad telemetry")
+                        data.update(connected=bool(sample.get("received",False)), joint_count=len(joints),
+                                    tf_count=frames, joints=joints[:32], age_seconds=round(age,2),
+                                    reason="fresh" if sample.get("received",False) else "No ROS samples received")
+                except (OSError, ValueError, TypeError):
+                    data["reason"] = "ROS telemetry unreadable"
+            return data
+
         def log_message(self, fmt, *args):
             # HTTP access logs remain visible to the local operator.
             super().log_message(fmt, *args)
@@ -46,7 +83,7 @@ def handler(app):
             self.send_header("Content-Length", str(len(data)))
             self.send_header("Cache-Control", "no-store")
             self.send_header("X-Content-Type-Options", "nosniff")
-            self.send_header("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self'; frame-ancestors 'none'; base-uri 'none'")
+            self.send_header("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self'; style-src 'self'; frame-ancestors 'none'; base-uri 'none'")
             self.end_headers()
             self.wfile.write(data)
         def local(self):
@@ -57,9 +94,26 @@ def handler(app):
                 return self.respond(403, {"error": "loopback Host required"})
             if self.path == "/api/session":
                 return self.respond(200, {"csrf_token": app.token})
+            if self.path == "/api/telemetry":
+                return self.respond(200, self.telemetry())
+            if self.path == "/assets/workcell.glb":
+                if app.workcell and app.workcell.is_file():
+                    return self.binary(app.workcell, "model/gltf-binary")
+                return self.respond(404, {"error": "Original GLB missing"})
+            if self.path.startswith("/vendor/three/"):
+                relative = self.path[len("/vendor/three/"):]
+                if not relative or any(part in ("", ".", "..") for part in relative.split("/")):
+                    return self.respond(404, {"error": "invalid path"})
+                if not (relative.startswith("build/") or relative.startswith("examples/jsm/")) or not relative.endswith(".js"):
+                    return self.respond(404, {"error": "not allowed"})
+                root = (Path(__file__).resolve().parent.parent/"node_modules"/"three").resolve()
+                target = (root/relative).resolve()
+                if not target.is_relative_to(root) or not target.is_file():
+                    return self.respond(404, {"error": "Three.js unavailable; run npm install"})
+                return self.binary(target, "text/javascript; charset=utf-8")
             if self.path == "/api/state":
                 return self.respond(200, {**app.engine.snapshot(), "task": app.task})
-            assets = {"/": ("index.html", "text/html"), "/app.js": ("app.js", "application/javascript"), "/style.css": ("style.css", "text/css")}
+            assets = {"/": ("index.html", "text/html"), "/app.js": ("app.js", "application/javascript"), "/style.css": ("style.css", "text/css"), "/workcell.js": ("workcell.js", "application/javascript")}
             if self.path in assets:
                 filename, mime = assets[self.path]
                 return self.respond(200, (Path(__file__).resolve().parent.parent/"dashboard"/filename).read_text(), mime)
@@ -97,6 +151,8 @@ def main():
     parser.add_argument("--config", default="examples/job_01.json")
     parser.add_argument("--audit", default=".runtime/audit.jsonl")
     parser.add_argument("--port", type=int, default=8765)
+    parser.add_argument("--workcell", default="assets/source/demo_robotic_welding_workcell.glb")
+    parser.add_argument("--telemetry", default=".runtime/ros_telemetry.json")
     args = parser.parse_args()
     import fcntl
     lock_path = Path(args.audit+".lock")
@@ -107,7 +163,7 @@ def main():
     except BlockingIOError:
         raise SystemExit("another server owns this audit journal; choose a separate audit path")
     config = Configuration.model_validate_json(Path(args.config).read_text())
-    app = App(Engine(config, Journal(args.audit)))
+    app = App(Engine(config, Journal(args.audit)), workcell=args.workcell, telemetry=args.telemetry)
     server = ThreadingHTTPServer(("127.0.0.1", args.port), handler(app))
     print(f"WELD-X http://127.0.0.1:{server.server_port} — robotics unavailable; execution blocked", flush=True)
     try:
