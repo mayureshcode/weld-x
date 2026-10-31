@@ -98,6 +98,8 @@ def camera(name, pos, target, coll):
 
 def main():
     a = args()
+    if a.input.suffix.lower() != ".glb":
+        raise ValueError("Expected a .glb input file")
     if not a.input.is_file():
         raise FileNotFoundError(a.input)
     if a.input.resolve() == a.output.resolve():
@@ -106,7 +108,7 @@ def main():
     bpy.ops.object.delete(use_global=False)
     bpy.ops.import_scene.gltf(filepath=str(a.input))
     imported = tuple(bpy.context.scene.objects)
-    initial = {o.name: tuple(tuple(row) for row in o.matrix_world) for o in imported}
+    initial = {o.as_pointer(): tuple(tuple(row) for row in o.matrix_world) for o in imported}
     lo, hi = bounds(imported)
     center = (lo + hi) / 2
     extent = hi - lo
@@ -146,11 +148,11 @@ def main():
     camera("WELDX_CAM_02_WORKPIECE", center + Vector((0.45*distance, -0.7*distance, 0.5*distance)), center, presentation)
     camera("WELDX_CAM_03_COMMISSIONING", center + Vector((-0.8*distance, -0.8*distance, 0.7*distance)), center, presentation)
     bpy.context.scene.camera = bpy.data.objects["WELDX_CAM_01_OVERVIEW"]
-    bpy.context.scene.render.engine = "BLENDER_EEVEE_NEXT" if "BLENDER_EEVEE_NEXT" in bpy.types.RenderSettings.bl_rna.properties["engine"].enum_items.keys() else "BLENDER_EEVEE"
+    bpy.context.scene.render.engine = "BLENDER_EEVEE_NEXT" if bpy.app.version >= (4, 2, 0) else "BLENDER_EEVEE"
     bpy.context.scene.render.resolution_x = 1280
     bpy.context.scene.render.resolution_y = 720
     bpy.context.scene.render.resolution_percentage = 100
-    unchanged = all(tuple(tuple(row) for row in o.matrix_world) == initial[o.name] for o in imported)
+    unchanged = all(tuple(tuple(row) for row in o.matrix_world) == initial[o.as_pointer()] for o in imported)
     if not unchanged:
         raise AssertionError("Imported object transform changed")
     a.output.parent.mkdir(parents=True, exist_ok=True)
