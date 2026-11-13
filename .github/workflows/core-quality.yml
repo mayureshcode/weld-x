@@ -18,7 +18,7 @@ jobs:
       - name: Python unit tests (no ROS simulation)
         run: python -m unittest discover -s tests -t . -v
       - name: Python syntax check
-        run: python -m compileall -q weldx robotics tests tools/audit_final_glb.py ros_ws/src/weldx_bringup/launch
+        run: python -m compileall -q weldx robotics tests tools/audit_final_glb.py tools/build_visual_preview.py ros_ws/src/weldx_bringup/launch
       - name: Bash syntax check
         run: bash -n scripts/start_weldx.sh
       - name: JavaScript syntax check
