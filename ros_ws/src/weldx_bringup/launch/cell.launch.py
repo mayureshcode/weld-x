@@ -28,7 +28,10 @@ def generate_launch_description():
         .trajectory_execution(file_path='config/moveit_controllers.yaml')
         .planning_pipelines(default_planning_pipeline='ompl',pipelines=['ompl'])
         .to_moveit_configs())
-    gazebo=ExecuteProcess(cmd=['gz','sim','-r','-s','-v','3',str(desc/'worlds/cell.sdf')],output='screen')
+    world=Path(os.environ.get('WELDX_WORLD_SDF', str(desc/'worlds/cell.sdf'))).expanduser().resolve()
+    if not world.is_file():
+        raise FileNotFoundError(f'WELD-X world missing: {world}')
+    gazebo=ExecuteProcess(cmd=['gz','sim','-r','-s','-v','3',str(world)],output='screen')
     rsp=Node(package='robot_state_publisher',executable='robot_state_publisher',parameters=[{'robot_description':urdf,'use_sim_time':True}],output='screen')
     bridge=Node(package='ros_gz_bridge',executable='parameter_bridge',arguments=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'],output='screen')
     spawn=Node(package='ros_gz_sim',executable='create',arguments=['-world','weldx_cell','-name','weldx_robot','-file',str(generated/'weldx-sim.urdf')],output='screen')
