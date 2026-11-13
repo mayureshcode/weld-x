@@ -7,8 +7,10 @@ In a separate flagship worktree, run `bash scripts/setup_native.sh` once (see
 bash start_weldx.sh
 ```
 
-Default = latest GLB visual preview + installed ROS robot + Gazebo GUI +
-MoveIt + dashboard on localhost:8765. `bash start_weldx.sh --baseline`
+Default = latest GLB workcell **and customized robot visual** + hidden
+legacy Gazebo robot meshes (its ROS joints/collisions stay active) + Gazebo GUI +
+MoveIt + dashboard on localhost:8765. The customized GLB robot is static and
+NOT articulated by /joint_states. `bash start_weldx.sh --baseline`
 selects the old validated robot-world prototype instead. No automatic
 robot motion. The latest positioner remains static and the visual-preview
 shell lacks collisions, so the UI must stay **fail-closed** for execution.
