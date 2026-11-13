@@ -97,13 +97,15 @@ if [[ "$MODE" == visual-preview ]]; then
   echo "Missing newest GLB: $SOURCE" >&2; exit 2
  fi
  echo "Generating VNext visual-only scene (positioner static; no CAD collision)..."
- python3 "$ROOT/tools/build_visual_preview.py" "$SOURCE" --output-dir "$ROOT/assets_vnext/exports" >"$LOG/preview-export.log" 2>&1 || {
+ python3 "$ROOT/tools/build_visual_preview.py" "$SOURCE" --include-visual-robot --output-dir "$ROOT/assets_vnext/exports" >"$LOG/preview-export.log" 2>&1 || {
   tail -40 "$LOG/preview-export.log" >&2; exit 1
  }
  export WELDX_WORLD_SDF="$ROOT/assets_vnext/exports/weldx_visual_preview.sdf"
+ export WELDX_HIDE_SIM_ROBOT_VISUALS=1
  echo "Visual preview world: $WELDX_WORLD_SDF"
+ echo "Custom GLB robot visible in its authored static pose; old simulated ABB meshes hidden."
 elif [[ "$MODE" == simulation ]]; then
- unset WELDX_WORLD_SDF
+ unset WELDX_WORLD_SDF WELDX_HIDE_SIM_ROBOT_VISUALS
 fi
 
 if [[ "$MODE" != dashboard-only ]]; then
@@ -155,7 +157,8 @@ echo "WELD-X dashboard: http://127.0.0.1:$PORT"
 echo "Logs: $LOG | Mode: $MODE"
 echo "Virtual-only; no motion commanded. Approval gates remain enabled."
 if [[ "$MODE" == visual-preview ]]; then
- echo "VISUAL PREVIEW: positioner is static and CAD walls have no collision mesh; dashboard execution stays locked."
+ echo "VISUAL PREVIEW: new GLB robot and positioner are STATIC; ROS collisions may not align with visuals."
+ echo "No CAD collision model or verified new joint mapping. Dashboard execution remains LOCKED."
 fi
 if [[ "$GUI" -eq 1 && "${WELDX_OPEN_BROWSER:-1}" == 1 ]] && command -v xdg-open >/dev/null; then
  xdg-open "http://127.0.0.1:$PORT" >/dev/null 2>&1 || true
