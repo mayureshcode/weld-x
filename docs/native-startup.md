@@ -66,20 +66,22 @@ or install compatible versions **into the isolated venv**. Never use
 
 ```bash
 cd ~/weld-x-flagship
-bash scripts/start_weldx.sh
+./start_weldx.sh
 ```
 
 This performs dependency checks, refuses a preoccupied dashboard port,
 starts the Gazebo server/ROS controllers/MoveIt, waits for active controllers
-and the `move_group` node, starts the Gazebo GUI, launches
-`python -m weldx.server --robotics`, and waits until the API is responding.
+and the `move_group` node, starts the Gazebo GUI, and waits for the API.
+The default preview keeps the API fail-closed without `--robotics`; only
+`--baseline` enables the real robotics adapter for the prototype world.
 The browser opens at `http://127.0.0.1:8765`. All startup and backend errors
 are logged to `.runtime/launcher_logs/`.
 
 Additional modes:
 
 ```bash
-./start_weldx.sh --visual-preview  # visual-only GLB CAD shell, NO execution authority\n./start_weldx.sh --no-gui
+./start_weldx.sh --visual-preview  # visual-only GLB CAD shell, NO execution authority
+./start_weldx.sh --no-gui
 ./start_weldx.sh --dashboard-only
 WELDX_OPEN_BROWSER=0 ./start_weldx.sh
 WELDX_JOB_CONFIG=benchmarks/recovery_v1/configuration.json ./start_weldx.sh
@@ -167,7 +169,7 @@ scale/position and do not treat it as calibrated.
 present in this mode. The launcher deliberately runs the dashboard without
 `--robotics` to keep execution locked. This mode is for inspecting the final
 appearance and ROS model coexistence only, not collision-safe robot movement.
-Use the default `--simulation` mode for the legacy robot/controller acceptance
+Use `--baseline` (alias `--simulation`) for the legacy robot/controller acceptance
 and continue the mechanical link-frame integration as the next release gate.
 
 ## Operator command (after one-time native setup)
@@ -186,6 +188,5 @@ cell instead use `./start_weldx.sh --baseline`. The preview does not have
 CAD collision or a controllable positioner, and the browser execution route
 remains deliberately disabled. Stop the whole session using Ctrl+C.
 
-The GitHub connector may create executable files with mode 0644; to be safe
-run `chmod +x start_weldx.sh` once in your worktree, or run
-`bash start_weldx.sh` without changing file permissions.
+Both launch scripts are tracked as executable. If your local filesystem
+strips executable permissions, run `bash start_weldx.sh` instead.
