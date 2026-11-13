@@ -79,10 +79,10 @@ are logged to `.runtime/launcher_logs/`.
 Additional modes:
 
 ```bash
-bash scripts/start_weldx.sh --visual-preview  # visual-only GLB CAD shell, NO execution authority\nbash scripts/start_weldx.sh --no-gui
-bash scripts/start_weldx.sh --dashboard-only
-WELDX_OPEN_BROWSER=0 bash scripts/start_weldx.sh
-WELDX_JOB_CONFIG=benchmarks/recovery_v1/configuration.json bash scripts/start_weldx.sh
+./start_weldx.sh --visual-preview  # visual-only GLB CAD shell, NO execution authority\n./start_weldx.sh --no-gui
+./start_weldx.sh --dashboard-only
+WELDX_OPEN_BROWSER=0 ./start_weldx.sh
+WELDX_JOB_CONFIG=benchmarks/recovery_v1/configuration.json ./start_weldx.sh
 ```
 
 `--dashboard-only` is explicitly fail-closed without robotics;
@@ -169,3 +169,23 @@ present in this mode. The launcher deliberately runs the dashboard without
 appearance and ROS model coexistence only, not collision-safe robot movement.
 Use the default `--simulation` mode for the legacy robot/controller acceptance
 and continue the mechanical link-frame integration as the next release gate.
+
+## Operator command (after one-time native setup)
+
+Run from the **flagship worktree** (not the dirty legacy checkout):
+
+```bash
+cd ~/weld-x-flagship
+./start_weldx.sh
+```
+
+This defaults to **the latest WELD-X_final.glb visual preview**, not the old
+prototype. It internally starts both Gazebo server and GUI, ROS controllers,
+MoveIt, and localhost dashboard. For the old, controller-validated prototype
+cell instead use `./start_weldx.sh --baseline`. The preview does not have
+CAD collision or a controllable positioner, and the browser execution route
+remains deliberately disabled. Stop the whole session using Ctrl+C.
+
+The GitHub connector may create executable files with mode 0644; to be safe
+run `chmod +x start_weldx.sh` once in your worktree, or run
+`bash start_weldx.sh` without changing file permissions.
