@@ -16,6 +16,14 @@ def generate_launch_description():
     urdf=(desc/'urdf/weldx.urdf.in').read_text().replace('@ASSET_DIR@',str(desc)).replace('@CONFIG_DIR@',str(bringup/'config'))
     (generated/'weldx.urdf').write_text(urdf)
     sim=ET.fromstring(urdf)
+    # Preview mode renders the customized GLB robot inside the static CAD shell.
+    # Remove ONLY Gazebo URDF visuals to avoid rendering two overlapping robots.
+    # Preserve dynamics, all joints, transmissions, controllers, and collisions.
+    # MoveIt/robot_state_publisher retain the complete original URDF.
+    if os.environ.get('WELDX_HIDE_SIM_ROBOT_VISUALS') == '1':
+        for link in sim.findall('link'):
+            for visual in list(link.findall('visual')):
+                link.remove(visual)
     ET.SubElement(sim,'link',name='world')
     anchor=ET.SubElement(sim,'joint',name='world_anchor',type='fixed')
     ET.SubElement(anchor,'parent',link='world');ET.SubElement(anchor,'child',link='base_link')
