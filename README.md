@@ -84,3 +84,6 @@ The core CI workflow is retained in the downloadable workspace archive but **not
 Five example job inputs cover single/two-seam positions and orientations. They are uncommissioned **input fixtures**, not five verified feasible welding jobs.
 
 Virtual-only. No physical actuation, real welding, certification or production-reliability claim. No project license has been selected; third-party source licensing is recorded in the audit.
+
+> **Latest visual-only environment:** `bash scripts/start_weldx.sh --visual-preview`
+> builds a new Gazebo shell from your locally supplied `assets_vnext/source/WELD-X_final.glb`, excludes the decorative duplicate robot, and shows the current ROS robot model beside a **static** positioner. This is a **preview without CAD collisions**; the API remains fail-closed. See [Native startup](docs/native-startup.md).
