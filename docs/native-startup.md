@@ -38,6 +38,13 @@ Ubuntu 24.04, ROS 2 Jazzy, Gazebo Harmonic, MoveIt 2, ros_gz_sim,
 ros_gz_bridge and gz_ros2_control are prerequisites. Use your existing
 package manager or ROS setup; avoid changing system Python with pip.
 
+**One-time recommended setup:** from a clean flagship worktree run
+`bash scripts/setup_native.sh`. It copies your existing GLB without
+modifying its source, verifies licensed meshes, builds the local ROS overlay
+and prepares a ROS-capable virtual environment. It does **not** install ROS
+system packages and may need network access for licensed meshes and Pydantic.
+The commands below are equivalent manual steps if setup encounters an issue.
+
 ```bash
 cd ~/weld-x-flagship
 source /opt/ros/jazzy/setup.bash
