@@ -1,7 +1,7 @@
 ## One-command native launch (VNext branch)
 
-After setting up the native ROS overlay and `assets_vnext/source/WELD-X_final.glb` as
-explained in [native-startup.md](docs/native-startup.md):
+In a separate flagship worktree, run `bash scripts/setup_native.sh` once (see
+[native-startup.md](docs/native-startup.md)); then each launch is:
 
 ```bash
 bash start_weldx.sh
