@@ -4,7 +4,7 @@ same open-loop trajectories. Potential successes require complete perturbed Gaze
 Insufficient execution evidence remains UNKNOWN and cannot authorize recovery.
 """
 from pathlib import Path
-import hashlib,json,math,threading,time
+import hashlib,json,math,os,threading,time
 import numpy as np
 from scipy.spatial.transform import Rotation
 from weldx.validation import Check,Plan,Execution,GATES,Result
@@ -19,16 +19,30 @@ class RosAdapter:
         self.cell=Cell();self.scene=SceneTransport();self.plans={};self.reports=[];self.bound=None
         self.dependency_signature=self._fingerprint();self.version=type(self).version+':'+self.dependency_signature[:16]
     def _fingerprint(self):
-        files=list(Path(__file__).parent.glob('*.py'))+[Path('/workspace/.runtime/generated/weldx.urdf'),Path('/var/lib/dpkg/status')]
-        files += [Path('/workspace/weldx') / n for n in ('model.py','validation.py','robustness.py','engine.py')]
-        files+=list(Path('/workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/config').glob('*'))
-        files+=list(Path('/workspace/ros_ws/install/weldx_bringup/share/weldx_bringup/launch').glob('*.py'))
-        files+=list(Path('/workspace/ros_ws/install/weldx_description/share/weldx_description/worlds').glob('*'))
+        # Fingerprint the paths actually used by this native/isolated runtime.
+        # Missing files must fail closed rather than silently weaken integrity.
+        from ament_index_python.packages import get_package_share_directory
+        root = Path(os.environ.get('WELDX_PROJECT_ROOT', Path(__file__).resolve().parents[1])).resolve()
+        generated = Path(os.environ.get('WELDX_GENERATED_DIR', root / '.runtime/generated')).resolve()
+        bringup = Path(get_package_share_directory('weldx_bringup'))
+        description = Path(get_package_share_directory('weldx_description'))
+        files = list(Path(__file__).parent.glob('*.py')) + [generated / 'weldx.urdf']
+        status = Path('/var/lib/dpkg/status')
+        if status.exists():
+            files.append(status)
+        files += [root / 'weldx' / name for name in ('model.py','validation.py','robustness.py','engine.py')]
+        files += list((bringup / 'config').glob('*'))
+        files += list((bringup / 'launch').glob('*.py'))
+        files += list((description / 'worlds').glob('*'))
         for link in self.cell.urdf.findall('link'):
-            for mesh in link.findall('collision/geometry/mesh'):files.append(Path(mesh.get('filename').removeprefix('file://')))
-        digest=hashlib.sha256()
+            for mesh in link.findall('collision/geometry/mesh'):
+                files.append(Path(mesh.get('filename').removeprefix('file://')))
+        digest = hashlib.sha256()
         for file in sorted(set(files)):
-            digest.update(str(file).encode());digest.update(file.read_bytes())
+            if not file.is_file():
+                raise FileNotFoundError(f'Missing robot dependency: {file}')
+            digest.update(str(file).encode())
+            digest.update(file.read_bytes())
         return digest.hexdigest()
     def intact(self):return self._fingerprint()==self.dependency_signature
     @property
