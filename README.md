@@ -1,3 +1,5 @@
+> **VNext native integration branch:** `feat/weldx-flagship-native-integration` adds a one-command native Gazebo/MoveIt/real-backend/dashboard launcher, portable generated URDF paths, a graphite/safety-amber UI refinement, structural GLB audit and offline smoke tests. See [Native startup](docs/native-startup.md). These changes are **pushed for review, not yet natively accepted**. The uploaded `WELD-X_final.glb` has **not** been converted into verified articulated Gazebo links, and this branch still launches the prototype cell.
+
 > Current continuation: [Phase 3 report](docs/phase3/final-report.md) and [Phase 3 runbook](docs/phase3/runbook.md). Historical checkpoint text below is retained, not a current acceptance claim.
 
 # WELD-X — evidence-gated virtual commissioning
