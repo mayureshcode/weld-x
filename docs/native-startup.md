@@ -165,10 +165,13 @@ bash scripts/start_weldx.sh --visual-preview
 ```
 
 This automatically generates `assets_vnext/exports/weldx_shell_preview.glb`,
-`weldx_visual_preview.sdf`, and a JSON report. The GLB source remains unchanged;
-the decorative GLB robot and extra branded scene branch are excluded. The full
-positioner is only a **static appearance**, and the existing ROS robot still
-uses the previously verified ABB-derived kinematic model. The preview applies
+`weldx_visual_preview.sdf`, and a JSON report. The GLB source remains unchanged.
+The **customized primary GLB robot is now included as a static visual**; the
+secondary duplicate branded scene branch is still excluded. In Gazebo the
+original ABB robot's *visual* meshes are hidden to avoid showing two robots;
+its existing ROS-controlled links, collisions and MoveIt geometry remain.
+The new visual robot is **NOT articulated by those joints** and may not be
+accurately aligned to their collision geometry. The positioner is also static. The preview applies
 a *candidate* +90 degree X-axis glTF-to-Gazebo orientation; visually inspect
 scale/position and do not treat it as calibrated.
 
@@ -192,8 +195,31 @@ This defaults to **the latest WELD-X_final.glb visual preview**, not the old
 prototype. It internally starts both Gazebo server and GUI, ROS controllers,
 MoveIt, and localhost dashboard. For the old, controller-validated prototype
 cell instead use `./start_weldx.sh --baseline`. The preview does not have
-CAD collision or a controllable positioner, and the browser execution route
-remains deliberately disabled. Stop the whole session using Ctrl+C.
+CAD collision, a calibrated articulated customized robot, or a controllable
+positioner, and the browser execution route remains deliberately disabled. Stop the whole session using Ctrl+C.
 
 Both launch scripts are tracked as executable. If your local filesystem
 strips executable permissions, run `bash start_weldx.sh` instead.
+
+## Fix for the old orange robot appearing in the new environment
+
+The original `--visual-preview` omitted `WELDX_ROBOT_ROOT`, exposing only the
+orange ROS robot. This was the cause of the earlier screenshot. The updated
+preview retains that GLB branch and excludes `Sketchfab_model.001` instead.
+
+From the already-created independent worktree, **stop the existing launch first**,
+then update and rebuild the native ROS package (the XML launch also changed):
+
+```bash
+cd ~/weld-x-flagship
+git pull --ff-only
+bash scripts/setup_native.sh
+./start_weldx.sh
+```
+
+No new worktree or asset download is required. The default command now shows
+the *customized robot visually*, but the ROS robot mechanics remain those of
+the existing ABB model. To verify actual joint movement, run
+`./start_weldx.sh --baseline` and use measured /joint_states feedback.
+
+Native Gazebo visual alignment and six-link mapping still require acceptance.
