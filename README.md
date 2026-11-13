@@ -1,3 +1,18 @@
+## One-command native launch (VNext branch)
+
+After setting up the native ROS overlay and `assets_vnext/source/WELD-X_final.glb` as
+explained in [native-startup.md](docs/native-startup.md):
+
+```bash
+bash start_weldx.sh
+```
+
+Default = latest GLB visual preview + installed ROS robot + Gazebo GUI +
+MoveIt + dashboard on localhost:8765. `bash start_weldx.sh --baseline`
+selects the old validated robot-world prototype instead. No automatic
+robot motion. The latest positioner remains static and the visual-preview
+shell lacks collisions, so the UI must stay **fail-closed** for execution.
+
 > **VNext native integration branch:** `feat/weldx-flagship-native-integration` adds a one-command native Gazebo/MoveIt/real-backend/dashboard launcher, portable generated URDF paths, a graphite/safety-amber UI refinement, structural GLB audit and offline smoke tests. See [Native startup](docs/native-startup.md). These changes are **pushed for review, not yet natively accepted**. The uploaded `WELD-X_final.glb` has **not** been converted into verified articulated Gazebo links, and this branch still launches the prototype cell.
 
 > Current continuation: [Phase 3 report](docs/phase3/final-report.md) and [Phase 3 runbook](docs/phase3/runbook.md). Historical checkpoint text below is retained, not a current acceptance claim.
