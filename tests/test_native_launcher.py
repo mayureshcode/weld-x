@@ -24,6 +24,17 @@ class NativeLauncherTests(unittest.TestCase):
                                 capture_output=True, text=True, timeout=5)
         self.assertEqual(result.returncode, 2)
 
+    def test_root_entrypoint_and_default_visual_preview(self):
+        wrapper = ROOT / 'start_weldx.sh'
+        result = subprocess.run(['bash', '-n', str(wrapper)], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('scripts/start_weldx.sh', wrapper.read_text())
+        launcher = SCRIPT.read_text()
+        self.assertIn('MODE=visual-preview', launcher)
+        self.assertIn('--simulation|--baseline', launcher)
+        self.assertIn('build_visual_preview.py', launcher)
+        self.assertNotIn('MODE=simulation\\nGUI=1', launcher)
+
     def test_portability_and_process_scope(self):
         launch = (ROOT / "ros_ws/src/weldx_bringup/launch/cell.launch.py").read_text()
         cell = (ROOT / "robotics/cell.py").read_text()
