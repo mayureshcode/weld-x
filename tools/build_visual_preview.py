@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """NON-COLLIDABLE Gazebo visual preview of WELD-X_final.glb.
 
-Preserves original binary source. Excludes the decorative robot and second
-scene branch; the positioner remains a STATIC visual, not a joint model.
+Preserves original binary source. The standalone preview may include the
+source robot as a STATIC VISUAL while excluding its duplicate scene branch.
+The positioner remains STATIC; neither is a ROS-driven articulated model.
 """
 from __future__ import annotations
 import argparse
@@ -17,7 +18,7 @@ import sys
 JSON_CHUNK = 0x4E4F534A
 
 
-def split_glb(source: Path) -> tuple[bytes, dict]:
+def split_glb(source: Path, *, include_visual_robot: bool = False) -> tuple[bytes, dict]:
     raw = source.read_bytes()
     if len(raw) < 20:
         raise ValueError("Source GLB is too short")
@@ -74,9 +75,10 @@ def split_glb(source: Path) -> tuple[bytes, dict]:
     result = deepcopy(document)
     result["scenes"][scene_index]["nodes"] = roots
     parent = parents[0]
-    result["nodes"][parent]["children"] = [
-        i for i in nodes[parent]["children"] if i != robot
-    ]
+    if not include_visual_robot:
+        result["nodes"][parent]["children"] = [
+            i for i in nodes[parent]["children"] if i != robot
+        ]
     # Static CAD preview: do not attempt to play/interpret Blender animations.
     result.pop("animations", None)
     payload = json.dumps(result, separators=(",", ":"), ensure_ascii=False).encode()
@@ -91,7 +93,9 @@ def split_glb(source: Path) -> tuple[bytes, dict]:
         "exported_sha256": hashlib.sha256(output).hexdigest(),
         "original_scene_roots": len(scene.get("nodes", [])),
         "exported_scene_roots": len(roots),
-        "decorative_robot_excluded": True,
+        "decorative_robot_excluded": not include_visual_robot,
+        "source_robot_visible_static_only": include_visual_robot,
+        "source_robot_articulation": "NOT connected to ROS joints",
         "positioner_static_visual_only": True,
         "collision_geometry_included": False,
         "valid_for_robotics_execution": False,
@@ -120,9 +124,12 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("source", type=Path)
     parser.add_argument("--output-dir", type=Path, default=Path("assets_vnext/exports"))
+    parser.add_argument("--include-visual-robot", action="store_true",
+                        help="show source robot STATIC only; requires hiding the URDF visual "
+                             "in Gazebo to avoid duplicate robots")
     args = parser.parse_args()
     try:
-        data, info = split_glb(args.source)
+        data, info = split_glb(args.source, include_visual_robot=args.include_visual_robot)
         args.output_dir.mkdir(parents=True, exist_ok=True)
         glb = args.output_dir / "weldx_shell_preview.glb"
         sdf = args.output_dir / "weldx_visual_preview.sdf"
