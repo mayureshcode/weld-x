@@ -12,7 +12,7 @@ from moveit_configs_utils import MoveItConfigsBuilder
 def generate_launch_description():
     desc=Path(get_package_share_directory('weldx_description'))
     bringup=Path(get_package_share_directory('weldx_bringup'))
-    generated=Path('/workspace/.runtime/generated');generated.mkdir(parents=True,exist_ok=True)
+    generated=Path(os.environ.get('WELDX_GENERATED_DIR', str(Path.cwd()/'.runtime/generated'))).expanduser().resolve();generated.mkdir(parents=True, exist_ok=True)
     urdf=(desc/'urdf/weldx.urdf.in').read_text().replace('@ASSET_DIR@',str(desc)).replace('@CONFIG_DIR@',str(bringup/'config'))
     (generated/'weldx.urdf').write_text(urdf)
     sim=ET.fromstring(urdf)
