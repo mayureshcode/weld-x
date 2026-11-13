@@ -20,7 +20,7 @@ jobs:
       - name: Python syntax check
         run: python -m compileall -q weldx robotics tests tools/audit_final_glb.py tools/build_visual_preview.py ros_ws/src/weldx_bringup/launch
       - name: Bash syntax check
-        run: bash -n scripts/start_weldx.sh
+        run: bash -n start_weldx.sh scripts/start_weldx.sh
       - name: JavaScript syntax check
         run: |
           node --check dashboard/app.js
