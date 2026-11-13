@@ -9,3 +9,52 @@ dialog{width:min(1100px,90vw);max-height:85vh;background:#111e2a;color:#eaf2fa;b
 
 /* Long recorded scenario IDs must not widen the mobile viewport. */
 select{max-width:calc(100% - 16px);min-width:0}
+
+/* VNext graphite + safety amber product-console refinement.
+   Deliberately style-only: no changes to authorization or motion logic. */
+:root {
+  --bg:#0b0e12; --surface:#161c23; --line:#35404a;
+  --text:#f0f1f2; --muted:#a7b2bc; --cyan:#f2b243;
+  --warning:#ffc66d; --risk:#ff8e82;
+}
+body {
+  background:radial-gradient(ellipse 88% 42% at 50% -8%,#26313a 0%,#0b0e12 74%) fixed;
+  font-family:Inter, "Segoe UI", system-ui, sans-serif;
+}
+header {
+  min-height:76px; background:#10161dd9;
+  backdrop-filter:blur(16px); position:sticky;top:0;z-index:15;
+  border-bottom:1px solid #4a5055;
+}
+.brand{font-weight:900;font-size:26px;letter-spacing:.10em}
+.mode,.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.tag{border-radius:8px}
+main{max-width:1480px;padding-top:12px}
+.hero h1{font-weight:850;line-height:1.1}
+.hero aside{border-left:4px solid var(--cyan);border-radius:0 12px 12px 0}
+section:not(.hero){
+  border-radius:12px;box-shadow:0 12px 36px #00000018;
+  background:linear-gradient(150deg,#1b232b 0%,#13191f 100%);
+}
+.notice{border-radius:10px;border-color:#6d5430}
+.heading h2{font-size:21px;font-weight:720;letter-spacing:-.02em}
+.workflow li.current{border-color:var(--cyan);color:var(--text)}
+button {
+  border-radius:8px;font-weight:650;transition:background .14s ease,color .14s ease;
+  background:#332716;color:var(--warning);
+}
+button:not(:disabled):hover{background:#514025}
+button:disabled{background:#202831;opacity:.68}
+#cell-view {
+  background:radial-gradient(circle at 45% 38%,#28343c 0%,#0b1117 78%);
+  border-radius:10px;height:480px;box-shadow:inset 0 0 28px #0006;
+}
+#placement-map{border-radius:10px;background:#101820}
+select,input{border-radius:7px;background:#0c1218}
+table tbody tr:hover{background:#ffffff08}
+dialog{background:#141c23;border-color:var(--cyan);border-radius:12px}
+@media (max-width:760px){
+  header{position:static}
+  main{padding:0 16px 24px}
+  #cell-view{height:340px}
+}
