@@ -10,11 +10,12 @@ for arg in "$@"; do
  case "$arg" in
   --simulation) MODE=simulation ;;
   --dashboard-only) MODE=dashboard-only; GUI=0 ;;
+  --visual-preview) MODE=visual-preview ;;
   --no-gui) GUI=0 ;;
   -h|--help)
-   echo "Usage: bash scripts/start_weldx.sh [--simulation] [--no-gui] [--dashboard-only]"
+   echo "Usage: bash scripts/start_weldx.sh [--simulation] [--visual-preview] [--no-gui] [--dashboard-only]"
    echo "Options: WELDX_PYTHON, WELDX_PORT, WELDX_JOB_CONFIG, WELDX_OPEN_BROWSER=0"
-   echo "Native ROS 2 Jazzy + Gazebo Harmonic + MoveIt + dashboard. Existing prototype world only."
+   echo "Native ROS 2 Jazzy + Gazebo Harmonic + MoveIt + dashboard. Use --visual-preview for the new non-collidable CAD shell."
    exit 0 ;;
   *) echo "Unknown argument: $arg" >&2; exit 2 ;;
  esac
@@ -46,10 +47,10 @@ if [[ -f /opt/ros/jazzy/setup.bash ]]; then
  set +u
  source /opt/ros/jazzy/setup.bash
  set -u
-elif [[ "$MODE" == simulation ]]; then
+elif [[ "$MODE" != dashboard-only ]]; then
  echo "ROS 2 Jazzy not installed" >&2; exit 2
 fi
-if [[ "$MODE" == simulation ]]; then
+if [[ "$MODE" != dashboard-only ]]; then
  OVERLAY=""
  for path in "$ROOT/ros_ws/install_native/local_setup.bash" "$ROOT/ros_ws/install/local_setup.bash"; do
   if [[ -f "$path" ]]; then OVERLAY="$path"; break; fi
@@ -90,7 +91,22 @@ then
  echo "Port $PORT already occupied: close old dashboard first." >&2; exit 2
 fi
 
-if [[ "$MODE" == simulation ]]; then
+if [[ "$MODE" == visual-preview ]]; then
+ SOURCE="$ROOT/assets_vnext/source/WELD-X_final.glb"
+ if [[ ! -f "$SOURCE" ]]; then
+  echo "Missing newest GLB: $SOURCE" >&2; exit 2
+ fi
+ echo "Generating VNext visual-only scene (positioner static; no CAD collision)..."
+ python3 "$ROOT/tools/build_visual_preview.py" "$SOURCE" --output-dir "$ROOT/assets_vnext/exports" >"$LOG/preview-export.log" 2>&1 || {
+  tail -40 "$LOG/preview-export.log" >&2; exit 1
+ }
+ export WELDX_WORLD_SDF="$ROOT/assets_vnext/exports/weldx_visual_preview.sdf"
+ echo "Visual preview world: $WELDX_WORLD_SDF"
+elif [[ "$MODE" == simulation ]]; then
+ unset WELDX_WORLD_SDF
+fi
+
+if [[ "$MODE" != dashboard-only ]]; then
  echo "Starting Gazebo server, controllers, MoveIt..."
  ros2 launch weldx_bringup cell.launch.py >"$LOG/ros.log" 2>&1 &
  ROS_PID=$!
@@ -138,6 +154,9 @@ fi
 echo "WELD-X dashboard: http://127.0.0.1:$PORT"
 echo "Logs: $LOG | Mode: $MODE"
 echo "Virtual-only; no motion commanded. Approval gates remain enabled."
+if [[ "$MODE" == visual-preview ]]; then
+ echo "VISUAL PREVIEW: positioner is static and CAD walls have no collision mesh; dashboard execution stays locked."
+fi
 if [[ "$GUI" -eq 1 && "${WELDX_OPEN_BROWSER:-1}" == 1 ]] && command -v xdg-open >/dev/null; then
  xdg-open "http://127.0.0.1:$PORT" >/dev/null 2>&1 || true
 fi
