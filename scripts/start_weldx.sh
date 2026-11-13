@@ -4,18 +4,18 @@
 set -Eeuo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
-MODE=simulation
+MODE=visual-preview
 GUI=1
 for arg in "$@"; do
  case "$arg" in
-  --simulation) MODE=simulation ;;
+  --simulation|--baseline) MODE=simulation ;;
   --dashboard-only) MODE=dashboard-only; GUI=0 ;;
   --visual-preview) MODE=visual-preview ;;
   --no-gui) GUI=0 ;;
   -h|--help)
-   echo "Usage: bash scripts/start_weldx.sh [--simulation] [--visual-preview] [--no-gui] [--dashboard-only]"
+   echo "Usage: ./start_weldx.sh [--visual-preview|--baseline] [--no-gui|--dashboard-only]"
    echo "Options: WELDX_PYTHON, WELDX_PORT, WELDX_JOB_CONFIG, WELDX_OPEN_BROWSER=0"
-   echo "Native ROS 2 Jazzy + Gazebo Harmonic + MoveIt + dashboard. Use --visual-preview for the new non-collidable CAD shell."
+   echo "Default: latest visual-only workcell; use --baseline for legacy validated robot/cell."
    exit 0 ;;
   *) echo "Unknown argument: $arg" >&2; exit 2 ;;
  esac
