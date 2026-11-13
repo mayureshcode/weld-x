@@ -127,3 +127,19 @@ Use Ctrl+C in the launcher terminal. Only its recorded child PIDs are
 signaled; it does not use `killall` or terminate unrelated projects.
 Before starting, stop **old** manually launched WELD-X sessions to avoid
 port, domain and scene-writer conflicts.
+
+## Structural audit of your final GLB
+
+```bash
+python3 tools/audit_final_glb.py assets_vnext/source/WELD-X_final.glb \\
+  --report assets_vnext/reports/structure.json
+# Use --strict in the actual export/release gate; nonzero flags ambiguity.
+python3 tools/audit_final_glb.py assets_vnext/source/WELD-X_final.glb --strict
+```
+
+The audit is **read-only**; it reports scene roots, duplicate branches, animated
+nodes outside named robot/positioner roots and whether a partition is safe for
+*automatic* export. The final customized GLB is known to contain a second
+small branded-robot branch and other animated subassemblies; it should fail a
+strict partition gate until ownership and exclusions are reviewed. The audit
+never asserts calibrated URDF joints or valid Gazebo collision geometry.
