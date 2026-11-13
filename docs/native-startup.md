@@ -79,7 +79,7 @@ are logged to `.runtime/launcher_logs/`.
 Additional modes:
 
 ```bash
-bash scripts/start_weldx.sh --no-gui
+bash scripts/start_weldx.sh --visual-preview  # visual-only GLB CAD shell, NO execution authority\nbash scripts/start_weldx.sh --no-gui
 bash scripts/start_weldx.sh --dashboard-only
 WELDX_OPEN_BROWSER=0 bash scripts/start_weldx.sh
 WELDX_JOB_CONFIG=benchmarks/recovery_v1/configuration.json bash scripts/start_weldx.sh
@@ -143,3 +143,29 @@ nodes outside named robot/positioner roots and whether a partition is safe for
 small branded-robot branch and other animated subassemblies; it should fail a
 strict partition gate until ownership and exclusions are reviewed. The audit
 never asserts calibrated URDF joints or valid Gazebo collision geometry.
+
+## Latest enclosure preview (no commissioning authority)
+
+The final source GLB is local and is **not included in the Git repository**.
+In the independent `~/weld-x-flagship` worktree:
+
+```bash
+mkdir -p assets_vnext/source
+cp ~/weld-x-project/assets_vnext/source/WELD-X_final.glb assets_vnext/source/
+bash scripts/start_weldx.sh --visual-preview
+```
+
+This automatically generates `assets_vnext/exports/weldx_shell_preview.glb`,
+`weldx_visual_preview.sdf`, and a JSON report. The GLB source remains unchanged;
+the decorative GLB robot and extra branded scene branch are excluded. The full
+positioner is only a **static appearance**, and the existing ROS robot still
+uses the previously verified ABB-derived kinematic model. The preview applies
+a *candidate* +90 degree X-axis glTF-to-Gazebo orientation; visually inspect
+scale/position and do not treat it as calibrated.
+
+**Hard restrictions:** no CAD wall collisions or positioner controllers are
+present in this mode. The launcher deliberately runs the dashboard without
+`--robotics` to keep execution locked. This mode is for inspecting the final
+appearance and ROS model coexistence only, not collision-safe robot movement.
+Use the default `--simulation` mode for the legacy robot/controller acceptance
+and continue the mechanical link-frame integration as the next release gate.
