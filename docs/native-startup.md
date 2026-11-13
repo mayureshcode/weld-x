@@ -53,8 +53,8 @@ source /opt/ros/jazzy/setup.bash
 python3 tools/fetch-robot-assets.py
 
 cd ros_ws
-colcon build --base-paths src --build-base build_native \
-  --install-base install_native --log-base log_native --symlink-install
+colcon --log-base log_native build --base-paths src --build-base build_native \
+  --install-base install_native --symlink-install
 cd ..
 source ros_ws/install_native/local_setup.bash
 
