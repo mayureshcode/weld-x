@@ -35,6 +35,14 @@ class NativeLauncherTests(unittest.TestCase):
         self.assertIn('build_visual_preview.py', launcher)
         self.assertNotIn('MODE=simulation\\nGUI=1', launcher)
 
+    def test_native_setup_uses_global_colcon_options_in_correct_order(self):
+        script = (ROOT / 'scripts/setup_native.sh').read_text()
+        self.assertIn('colcon --log-base log_native build', script)
+        self.assertNotIn('--install-base install_native --log-base log_native', script)
+        result = subprocess.run(['bash', '-n', str(ROOT / 'scripts/setup_native.sh')],
+                                capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
     def test_portability_and_process_scope(self):
         launch = (ROOT / "ros_ws/src/weldx_bringup/launch/cell.launch.py").read_text()
         cell = (ROOT / "robotics/cell.py").read_text()
