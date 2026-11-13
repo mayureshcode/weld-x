@@ -36,8 +36,9 @@ python3 tools/fetch-robot-assets.py
 echo "Building WELD-X native ROS workspace..."
 (
   cd ros_ws
-  colcon build --base-paths src --build-base build_native \
-    --install-base install_native --log-base log_native --symlink-install
+  # --log-base is a colcon GLOBAL option, so it MUST precede 'build'.
+  colcon --log-base log_native build --base-paths src --build-base build_native \
+    --install-base install_native --symlink-install
 )
 set +u
 source "$ROOT/ros_ws/install_native/local_setup.bash"
