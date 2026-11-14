@@ -44,6 +44,10 @@ try:
         assert "viewer-expanded" not in page.locator("#twin").get_attribute("class")
         result["checks"].append("Viewport expand/restore works")
         if view=="STATIC GLB / CAD PREVIEW":
+            page.wait_for_function(
+                "() => document.getElementById('scene-status').textContent.startsWith('SOURCE GLB PREVIEW')",
+                timeout=80000)
+            result["checks"].append("Real source GLB mesh load completed")
             assert "STATIC" in page.locator("#inspector-source").inner_text()
             assert page.locator("#execute").is_disabled()
             assert "NOT JOINT SYNCHRONIZED" in page.locator("#view-accuracy").inner_text()
