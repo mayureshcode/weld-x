@@ -12,10 +12,18 @@ from moveit_configs_utils import MoveItConfigsBuilder
 def generate_launch_description():
     desc=Path(get_package_share_directory('weldx_description'))
     bringup=Path(get_package_share_directory('weldx_bringup'))
-    generated=Path('/workspace/.runtime/generated');generated.mkdir(parents=True,exist_ok=True)
+    generated=Path(os.environ.get('WELDX_GENERATED_DIR', str(Path.cwd()/'.runtime/generated'))).expanduser().resolve();generated.mkdir(parents=True, exist_ok=True)
     urdf=(desc/'urdf/weldx.urdf.in').read_text().replace('@ASSET_DIR@',str(desc)).replace('@CONFIG_DIR@',str(bringup/'config'))
     (generated/'weldx.urdf').write_text(urdf)
     sim=ET.fromstring(urdf)
+    # Preview mode renders the customized GLB robot inside the static CAD shell.
+    # Remove ONLY Gazebo URDF visuals to avoid rendering two overlapping robots.
+    # Preserve dynamics, all joints, transmissions, controllers, and collisions.
+    # MoveIt/robot_state_publisher retain the complete original URDF.
+    if os.environ.get('WELDX_HIDE_SIM_ROBOT_VISUALS') == '1':
+        for link in sim.findall('link'):
+            for visual in list(link.findall('visual')):
+                link.remove(visual)
     ET.SubElement(sim,'link',name='world')
     anchor=ET.SubElement(sim,'joint',name='world_anchor',type='fixed')
     ET.SubElement(anchor,'parent',link='world');ET.SubElement(anchor,'child',link='base_link')
@@ -28,7 +36,10 @@ def generate_launch_description():
         .trajectory_execution(file_path='config/moveit_controllers.yaml')
         .planning_pipelines(default_planning_pipeline='ompl',pipelines=['ompl'])
         .to_moveit_configs())
-    gazebo=ExecuteProcess(cmd=['gz','sim','-r','-s','-v','3',str(desc/'worlds/cell.sdf')],output='screen')
+    world=Path(os.environ.get('WELDX_WORLD_SDF', str(desc/'worlds/cell.sdf'))).expanduser().resolve()
+    if not world.is_file():
+        raise FileNotFoundError(f'WELD-X world missing: {world}')
+    gazebo=ExecuteProcess(cmd=['gz','sim','-r','-s','-v','3',str(world)],output='screen')
     rsp=Node(package='robot_state_publisher',executable='robot_state_publisher',parameters=[{'robot_description':urdf,'use_sim_time':True}],output='screen')
     bridge=Node(package='ros_gz_bridge',executable='parameter_bridge',arguments=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'],output='screen')
     spawn=Node(package='ros_gz_sim',executable='create',arguments=['-world','weldx_cell','-name','weldx_robot','-file',str(generated/'weldx-sim.urdf')],output='screen')

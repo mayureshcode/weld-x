@@ -5,7 +5,7 @@ No success-path mock or fallback. Service/action failures raise evidence-bearing
 from __future__ import annotations
 from collections import deque
 from copy import deepcopy
-import json,math,threading,time,xml.etree.ElementTree as ET
+import json,math,os,threading,time,xml.etree.ElementTree as ET
 from pathlib import Path
 import numpy as np
 from scipy.spatial.transform import Rotation
@@ -47,7 +47,8 @@ class Cell(Node):
         self._spin_executor=SingleThreadedExecutor();self._spin_executor.add_node(self)
         self._running=True;self.thread=threading.Thread(target=self._spin,daemon=True);self.thread.start()
         self.health_timer=self.create_timer(1.,self._poll_controllers)
-        self.urdf=ET.parse('/workspace/.runtime/generated/weldx.urdf')
+        generated=Path(os.environ.get('WELDX_GENERATED_DIR', str(Path(__file__).resolve().parents[1]/'.runtime/generated'))).expanduser().resolve()
+        self.urdf=ET.parse(generated/'weldx.urdf')
         self.joints={j.get('name'):j for j in self.urdf.findall('joint')}
         self.by_child={j.find('child').get('link'):j for j in self.joints.values()}
         self.limits={n:tuple(float(self.joints[n].find('limit').get(k)) for k in ['lower','upper']) for n in NAMES}

@@ -1,0 +1,27 @@
+name: WELD-X core quality gates
+on:
+  push:
+    branches: [engineering/robotics-integration, feat/weldx-flagship-native-integration]
+  pull_request:
+    branches: [engineering/robotics-integration]
+jobs:
+  offline:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install project
+        run: python -m pip install -e .
+      - name: Python unit tests (no ROS simulation)
+        run: python -m unittest discover -s tests -t . -v
+      - name: Python syntax check
+        run: python -m compileall -q weldx robotics tests tools/audit_final_glb.py tools/build_visual_preview.py ros_ws/src/weldx_bringup/launch
+      - name: Bash syntax check
+        run: bash -n start_weldx.sh scripts/start_weldx.sh scripts/setup_native.sh
+      - name: JavaScript syntax check
+        run: |
+          node --check dashboard/app.js
+          node --check dashboard/scene.js

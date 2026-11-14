@@ -1,3 +1,22 @@
+## One-command native launch (VNext branch)
+
+In a separate flagship worktree, run `bash scripts/setup_native.sh` once (see
+[native-startup.md](docs/native-startup.md)); then each launch is:
+
+```bash
+bash start_weldx.sh
+```
+
+Default = latest GLB workcell **and customized robot visual** + hidden
+legacy Gazebo robot meshes (its ROS joints/collisions stay active) + Gazebo GUI +
+MoveIt + dashboard on localhost:8765. The customized GLB robot is static and
+NOT articulated by /joint_states. `bash start_weldx.sh --baseline`
+selects the old validated robot-world prototype instead. No automatic
+robot motion. The latest positioner remains static and the visual-preview
+shell lacks collisions, so the UI must stay **fail-closed** for execution.
+
+> **VNext native integration branch:** `feat/weldx-flagship-native-integration` adds a one-command native Gazebo/MoveIt/real-backend/dashboard launcher, portable generated URDF paths, a graphite/safety-amber UI refinement, structural GLB audit and offline smoke tests. See [Native startup](docs/native-startup.md). These changes are **pushed for review, not yet natively accepted**. The uploaded `WELD-X_final.glb` has **not** been converted into verified articulated Gazebo links, and this branch still launches the prototype cell.
+
 > Current continuation: [Phase 3 report](docs/phase3/final-report.md) and [Phase 3 runbook](docs/phase3/runbook.md). Historical checkpoint text below is retained, not a current acceptance claim.
 
 # WELD-X — evidence-gated virtual commissioning
@@ -82,3 +101,6 @@ The core CI workflow is retained in the downloadable workspace archive but **not
 Five example job inputs cover single/two-seam positions and orientations. They are uncommissioned **input fixtures**, not five verified feasible welding jobs.
 
 Virtual-only. No physical actuation, real welding, certification or production-reliability claim. No project license has been selected; third-party source licensing is recorded in the audit.
+
+> **Latest visual-only environment:** `bash scripts/start_weldx.sh --visual-preview`
+> builds a new Gazebo shell from your locally supplied `assets_vnext/source/WELD-X_final.glb`, excludes the decorative duplicate robot, and shows the current ROS robot model beside a **static** positioner. This is a **preview without CAD collisions**; the API remains fail-closed. See [Native startup](docs/native-startup.md).

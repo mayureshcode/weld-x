@@ -3,6 +3,7 @@ from concurrent.futures import ThreadPoolExecutor
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import argparse
 import json
+import os
 from pathlib import Path
 from urllib.parse import urlsplit, parse_qs
 import secrets
@@ -95,6 +96,30 @@ def handler(app):
                     query.get('source',[''])[0],query.get('scenario_id',[''])[0]))
             if self.path == "/api/state":
                 return self.respond(200, {**app.engine.snapshot(), "task": app.task})
+            if self.path == "/api/viewer-meta":
+                mode = os.environ.get("WELDX_VIEW_MODE", "live-urdf" if hasattr(app.engine.adapter, "cell") else "unavailable")
+                if mode not in ("glb-preview", "live-urdf"):
+                    mode = "unavailable"
+                return self.respond(200, {
+                    "mode": mode,
+                    "workcell_mesh": "/assets/workcell-preview.glb" if mode == "glb-preview" else None,
+                    "static_visual": mode == "glb-preview",
+                    "articulated_custom_glb": False,
+                    "telemetry_source": "ROS joint states" if mode == "live-urdf" else "not synchronized",
+                    "execution_source": "backend authorization only",
+                })
+            if self.path == "/assets/weldx-hero.webp":
+                path = Path(__file__).resolve().parent.parent / "dashboard/assets/weldx-hero.webp"
+                if not path.is_file():
+                    return self.respond(404, {"error":"Decorative art unavailable"})
+                return self.respond(200, path.read_bytes(), "image/webp")
+            if self.path == "/assets/workcell-preview.glb":
+                if os.environ.get("WELDX_VIEW_MODE") != "glb-preview":
+                    return self.respond(404, {"error":"3D GLB preview not enabled"})
+                mesh = Path(__file__).resolve().parent.parent / "assets_vnext/exports/weldx_shell_preview.glb"
+                if not mesh.is_file():
+                    return self.respond(503, {"error":"GLB missing; run the visual-preview generator"})
+                return self.respond(200, mesh.read_bytes(), "model/gltf-binary")
             if self.path == '/api/telemetry':
                 adapter=app.engine.adapter
                 return self.respond(200,adapter.telemetry() if hasattr(adapter,'telemetry') else {'live':False,'joint_positions':{},'reason':'ROS adapter not enabled'})
@@ -102,7 +127,7 @@ def handler(app):
                 if not hasattr(app.engine.adapter,'cell'):return self.respond(503,{'error':'real runtime model unavailable'})
                 from robotics.model_view import model_view
                 return self.respond(200,model_view(app.engine.adapter.cell))
-            vendor={'/vendor/'+n:n for n in ['three.module.min.js','STLLoader.js','OrbitControls.js']}
+            vendor={'/vendor/'+n:n for n in ['three.module.min.js','STLLoader.js','OrbitControls.js','GLTFLoader.js','BufferGeometryUtils.js']}
             if self.path in vendor:
                 return self.respond(200,(Path(__file__).resolve().parent.parent/'dashboard/vendor'/vendor[self.path]).read_bytes(),'application/javascript')
             meshes={'/assets/visual/'+n+'.stl':n+'.stl' for n in ['base_link']+['link_'+str(i) for i in range(1,7)]}

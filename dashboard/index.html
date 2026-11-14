@@ -1,10 +1,110 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>WELD-X / Commissioning Console</title><link rel="stylesheet" href="/style.css"><script defer src="/app.js"></script><script type="module" src="/scene.js"></script></head>
-<body><header><a class="brand" href="/" aria-label="WELD-X home">WELD<span>—X</span></a><span class="mode">VIRTUAL COMMISSIONING / DEVELOPMENT</span><span id="connection" class="tag">Connecting</span></header>
-<main><section class="hero"><div><p class="eyebrow">ENGINEERING CONTROL / 001</p><h1>Evidence before<br><span>execution.</span></h1><p class="lead">Configuration integrity. Bounded placement search.<br>Engineer-controlled recovery.</p></div><aside><p class="eyebrow">EXECUTION AUTHORIZATION</p><h2 id="authorization">LOCKED</h2><p id="authreason">Checking backend state.</p><p class="mono" id="version">Configuration —</p></aside></section>
-<div class="notice" role="status"><strong id="runtime-title">ROBOTICS EVIDENCE REQUIRED</strong><span id="runtime-notice">Checking actual runtime connections. No execution is permitted without exact-configuration nominal and robustness evidence.</span></div>
-<section aria-labelledby="workflow-title"><div class="heading"><h2 id="workflow-title">Mission workflow</h2><span id="stage" class="mono">IDLE</span></div><ol class="workflow"><li>01 Detect</li><li>02 Search</li><li>03 Map</li><li>04 Recommend</li><li>05 Approve</li><li>06 Apply</li><li>07 Revalidate</li><li>08 Execute</li></ol><div class="actions"><button id="detect">Run detection</button><button id="search" disabled>Search placements</button><button id="revalidate">Revalidate configuration</button><button id="execute" disabled>Execute job</button><button id="cancel" disabled>Cancel task</button></div><p id="task" class="muted" aria-live="polite">No active task</p><p id="error" class="error" role="alert"></p></section>
-<div class="columns"><section><div class="cell-panel"><div class="heading"><h2>Observed 3D welding cell</h2><span class="eyebrow">JOINT FEEDBACK / URDF</span></div><div id="cell-view" aria-label="3D cell reconstructed from runtime URDF and observed joint states"></div><p id="scene-status">Waiting for the actual runtime model.</p><label for="seam-select">Declared seam highlight</label><select id="seam-select"><option value="">All seams</option></select><p class="muted">Cyan lines: declared weld geometry. Cyan ring: selected mounting preview, not an executed candidate. No independent robot animation.</p></div><label><input id="show-planned" type="checkbox" checked> Show exact planned TCP paths</label><p id="scene-evidence-status" class="muted">No trajectory evidence selected.</p></section><section><div class="heading"><h2>Exact configuration</h2><span class="eyebrow">CONTENT ADDRESSED</span></div><dl id="configuration"></dl><p class="muted">World frame: REP-103 · metres / radians / seconds</p><p class="mono hash" id="hash"></p></section></div>
-<section><div class="heading"><h2>Placement evidence</h2><span id="count" class="eyebrow">0 EVALUATED</span></div><p class="muted">Evaluated points only; no interpolated feasibility guarantee. Hollow points are unevaluated, never failures.</p><div class="map-tools"><label for="map-yaw">Evaluated yaw slice (rad)</label><select id="map-yaw"></select><p id="map-status" class="muted"></p></div><svg id="placement-map" role="img" aria-label="Evaluated placement map in world metres"></svg><div class="map-legend"><span class="robust">● Robust</span><span class="nominal">● Nominal only</span><span class="infeasible">● Infeasible</span><span class="incomplete-key">● Incomplete</span><span>○ Unevaluated</span><span>＋ Original</span><span>★ Recommended</span></div><div id="comparison"></div><div class="table-wrap"><table><thead><tr><th>Candidate</th><th>x / y (m)</th><th>Yaw (rad)</th><th>Classification</th><th>Inspect</th></tr></thead><tbody id="candidates"></tbody></table></div><div id="candidate-detail" class="detail"></div><div id="approval-form" hidden><label for="engineer">Engineer name (local, self-declared identity)</label><input id="engineer" maxlength="128" autocomplete="name"><button id="approve">Approve exact recommendation</button><button id="apply" disabled>Apply approved placement</button><p class="muted">Approval is not execution authorization. Fresh held-out revalidation is mandatory.</p></div></section>
-<div class="columns"><section><div class="heading"><h2>Uncertainty evidence</h2><span class="eyebrow">BOUNDARY + SEEDED MC</span></div><p class="muted">Individual and combined source records, not causal attribution. Necessary-condition failures are not successful executed jobs; unknown trials have no empirical success rate.</p><label for="source-select">Inspect uncertainty source</label><select id="source-select"><option value="">All sources</option><option>base</option><option>fixture</option><option>model</option><option>combined</option></select><label for="scenario-select">Recorded scenario</label><select id="scenario-select"><option value="">Select source first</option></select><p id="source-detail" class="muted"></p><div class="table-wrap"><table><thead><tr><th>Source</th><th>Monte Carlo observed jobs</th><th>Boundary evidence — screens are not passes</th><th>Gate</th></tr></thead><tbody id="sensitivity"></tbody></table></div></section><section><div class="heading"><h2>Constraint diagnostics</h2><span class="eyebrow">PASS / FAIL / UNKNOWN</span></div><p id="diagnostic-summary" class="muted">No validation has run.</p><div id="diagnostics" class="records"></div></section></div>
-<section><div class="heading"><h2>Runtime connections</h2><span class="eyebrow">REAL BACKEND STATUS</span></div><dl id="health"></dl></section><section><div class="heading"><h2>Audit history</h2><span class="eyebrow">HASH-LINKED / LOCAL DISK</span></div><p class="muted">Integrity-checkable history; not tamper-proof or a certified approval system.</p><div id="audit" class="records"></div></section><footer>WELD-X / 0.1.0 <span>Virtual-only engineering demonstrator · Not an industrial safety system</span></footer></main></body></html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b1118">
+  <title>WELD-X · Digital Twin Studio</title>
+  <link rel="stylesheet" href="/style.css">
+  <script defer src="/app.js"></script>
+  <script type="module" src="/scene.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#twin" aria-label="WELD-X Digital Twin home">WELD<span>—X</span><small>STUDIO</small></a>
+  <div class="topbar-label"><span class="topbar-divider"></span>VIRTUAL ROBOTICS WORKSTATION <span class="edition">/ COMMISSIONING LAB</span></div>
+  <div class="header-right"><span class="header-mode">SIMULATION ONLY</span><span id="connection" class="tag">CONNECTING</span></div>
+</header>
+<div class="app-frame">
+  <nav class="side-rail" aria-label="Workspaces">
+    <div class="rail-heading">WORKSPACES</div>
+    <a class="rail-link active" href="#twin"><span class="rail-icon">◈</span> Digital twin</a>
+    <a class="rail-link" href="#workflow-title"><span class="rail-icon">◇</span> Job planner</a>
+    <a class="rail-link" href="#optimization"><span class="rail-icon">⌁</span> Optimization</a>
+    <a class="rail-link" href="#diagnostics-section"><span class="rail-icon">⊞</span> Diagnostics</a>
+    <a class="rail-link" href="#audit-section"><span class="rail-icon">▤</span> Audit history</a>
+    <div class="rail-separator"></div>
+    <div class="rail-footer"><span class="status-pip"></span> LOCAL WORKSTATION<br><small>ROS 2 JAZZY · GAZEBO HARMONIC</small></div>
+  </nav>
+  <main id="main-content">
+    <section class="intro" aria-label="Studio overview">
+      <div class="intro-copy">
+        <p class="eyebrow">ENGINEERING PLATFORM <span class="eyebrow-line"></span> WELD-X / VNEXT</p>
+        <h1>Every motion.<br><span>Under control.</span></h1>
+        <p class="lead">A cinematic lens on virtual commissioning — with real evidence behind every decision.</p>
+      </div>
+      <div class="intro-visual" aria-hidden="true"><div class="intro-visual-caption">AI CONCEPT VISUAL · NOT TELEMETRY <span>WELD-X / ART DIRECTION</span></div></div>
+      <aside class="hero-auth">
+        <p class="eyebrow">EXECUTION AUTHORITY</p>
+        <h2 id="authorization">LOCKED</h2>
+        <p id="authreason">Checking backend evidence.</p>
+        <p class="mono" id="version">Configuration —</p>
+      </aside>
+    </section>
+    <div class="notice" role="status"><span class="notice-icon">!</span><strong id="runtime-title">ROBOTICS EVIDENCE REQUIRED</strong><span id="runtime-notice">Checking robotics connections. Unverified execution remains blocked.</span></div>
+    <section class="workspace" id="twin" aria-labelledby="twin-title">
+      <div class="section-toolbar">
+        <div><p class="eyebrow">WORKSPACE / 01</p><h2 id="twin-title">Digital twin <span class="section-sub">/ Workcell overview</span></h2></div>
+        <div class="toolbar-status"><span id="view-mode" class="badge">SCENE INITIALIZING</span><span id="runtime-led" class="dot-indicator">NO VERIFIED FEEDBACK</span></div>
+      </div>
+      <div class="studio-grid">
+        <div class="viewport-panel">
+          <div class="viewport-topline"><span>WELD-X / 3D SCENE</span><span id="view-accuracy">VISUALIZATION IS NOT EXECUTION EVIDENCE</span></div>
+          <div class="cell-panel">
+            <div id="cell-view" aria-label="Interactive 3D WELD-X scene. Static preview and measured robot states are distinguished.">
+              <div class="viewer-fallback">Loading WELD-X 3D workcell…</div>
+            </div>
+            <div class="viewport-overlay"><span class="crosshair">⊕</span><span>DRAG TO ORBIT <i>·</i> SCROLL TO ZOOM</span></div>
+          </div>
+          <div class="camera-strip" role="group" aria-label="Camera presets">
+            <span class="strip-label">CAMERA</span>
+            <button type="button" id="view-home" data-camera="home">Isometric</button>
+            <button type="button" id="view-top" data-camera="top">Top</button>
+            <button type="button" id="view-side" data-camera="side">Side</button>
+            <button type="button" id="view-robot" data-camera="robot">Focus robot</button>
+            <button type="button" id="view-focus">Expand view</button>
+          </div>
+          <p id="scene-status" class="scene-caption">Waiting for model initialization.</p>
+          <div class="scene-controls">
+            <label for="seam-select">Highlighted weld seam</label>
+            <select id="seam-select"><option value="">All seams</option></select>
+            <label class="check-row"><input id="show-planned" type="checkbox" checked> Planned TCP paths</label>
+          </div>
+          <p id="scene-evidence-status" class="muted">No trajectory evidence selected.</p>
+        </div>
+        <aside class="inspector">
+          <div class="inspector-head"><p class="eyebrow">INSPECTOR / ROBOT</p><h3>WELD-X <span>ARM 01</span></h3><p>6 AXIS · VIRTUAL ROBOT</p></div>
+          <div class="inspector-status"><span>FEEDBACK SOURCE</span><strong id="inspector-source">AWAITING TELEMETRY</strong></div>
+          <div class="joint-header">JOINT POSITIONS <span>DEGREES</span></div>
+          <div class="joint-list" id="joint-data" aria-label="Observed robot joint angles">
+            <div class="joint-empty">Joint measurements unavailable — no live movement is implied.</div>
+          </div>
+          <div class="inspector-note" id="inspector-note">Preview geometry is independent of ROS articulation until calibrated.</div>
+          <div class="inspector-metrics"><span>JOB REVISION</span><strong id="inspector-job">—</strong><span>WORKFLOW STAGE</span><strong id="inspector-stage">—</strong></div>
+        </aside>
+      </div>
+    </section>
+    <section class="mission-section" aria-labelledby="workflow-title">
+      <div class="heading"><div><p class="eyebrow">WORKSPACE / 02</p><h2 id="workflow-title">Job planning &amp; validation</h2></div><span id="stage" class="stage-pill">IDLE</span></div>
+      <ol class="workflow"><li>01 Detect</li><li>02 Search</li><li>03 Map</li><li>04 Recommend</li><li>05 Approve</li><li>06 Apply</li><li>07 Revalidate</li><li>08 Execute</li></ol>
+      <div class="actions"><button id="detect" type="button">Run detection</button><button id="search" type="button" disabled>Search placements</button><button id="revalidate" type="button">Revalidate</button><button id="execute" type="button" disabled>Execute job</button><button id="cancel" type="button" disabled>Cancel task</button></div>
+      <p id="task" class="muted" aria-live="polite">No active task</p><p id="error" class="error" role="alert"></p>
+    </section>
+    <div class="data-grid" id="optimization">
+      <section><div class="heading"><div><p class="eyebrow">CONFIGURATION</p><h2>Exact job definition</h2></div><span class="eyebrow">CONTENT ADDRESSED</span></div><dl id="configuration"></dl><p class="muted">REP-103 / metres, radians and seconds</p><p class="mono hash" id="hash"></p></section>
+      <section><div class="heading"><div><p class="eyebrow">PLACEMENT OPTIMIZATION</p><h2>Search space</h2></div><span id="count" class="eyebrow">0 EVALUATED</span></div><p class="muted">Measured samples only; gaps are not extrapolated as feasible.</p><div class="map-tools"><label for="map-yaw">Evaluated yaw</label><select id="map-yaw"></select><p id="map-status" class="muted"></p></div><svg id="placement-map" role="img" aria-label="Evaluated placement map in world metres"></svg><div class="map-legend"><span class="robust">● Robust</span><span class="nominal">● Nominal only</span><span class="infeasible">● Infeasible</span><span class="incomplete-key">● Incomplete</span><span>○ Unevaluated</span><span>＋ Original</span><span>★ Recommended</span></div></section>
+    </div>
+    <section><div class="heading"><div><p class="eyebrow">CANDIDATES</p><h2>Placement evidence</h2></div></div><div id="comparison"></div><div class="table-wrap"><table><thead><tr><th>Candidate</th><th>x / y (m)</th><th>Yaw (rad)</th><th>Classification</th><th>Inspect</th></tr></thead><tbody id="candidates"></tbody></table></div><div id="candidate-detail" class="detail"></div><div id="approval-form" hidden><label for="engineer">Engineer name (self-declared local identity)</label><input id="engineer" maxlength="128" autocomplete="name"><button id="approve" type="button">Approve exact recommendation</button><button id="apply" type="button" disabled>Apply placement</button><p class="muted">Approval alone does not authorize execution. Fresh revalidation is required.</p></div></section>
+    <div class="data-grid" id="diagnostics-section">
+      <section><div class="heading"><div><p class="eyebrow">UNCERTAINTY ANALYSIS</p><h2>Boundary &amp; Monte Carlo</h2></div></div><p class="muted">Missing trials do not count as zero success; necessary-condition screens are not executed jobs.</p><label for="source-select">Uncertainty source</label><select id="source-select"><option value="">All sources</option><option>base</option><option>fixture</option><option>model</option><option>combined</option></select><label for="scenario-select">Recorded scenario</label><select id="scenario-select"><option value="">Select source first</option></select><p id="source-detail" class="muted"></p><div class="table-wrap"><table><thead><tr><th>Source</th><th>Monte Carlo observed jobs</th><th>Boundary evidence</th><th>Gate</th></tr></thead><tbody id="sensitivity"></tbody></table></div></section>
+      <section><div class="heading"><div><p class="eyebrow">ENGINEERING DIAGNOSTICS</p><h2>Constraint analysis</h2></div></div><p id="diagnostic-summary" class="muted">No validation has run.</p><div id="diagnostics" class="records"></div></section>
+    </div>
+    <div class="data-grid">
+      <section><div class="heading"><div><p class="eyebrow">SYSTEM HEALTH</p><h2>Runtime connections</h2></div></div><dl id="health"></dl></section>
+      <section id="audit-section"><div class="heading"><div><p class="eyebrow">EVIDENCE</p><h2>Audit timeline</h2></div></div><p class="muted">Locally integrity-checkable history; not a certified safety system.</p><div id="audit" class="records"></div></section>
+    </div>
+    <footer>WELD-X / VNEXT <span>VIRTUAL-ONLY ENGINEERING DEMONSTRATOR · NOT AN INDUSTRIAL SAFETY SYSTEM</span></footer>
+  </main>
+</div>
+</body>
+</html>
