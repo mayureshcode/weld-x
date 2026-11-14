@@ -111,6 +111,7 @@ async function loadGLB(url) {
   const foundRobot = workcell.getObjectByName('WELDX_ROBOT_ROOT');
   if(foundRobot) robotCenter = boxFor(foundRobot).getCenter(new THREE.Vector3());
   setStatus('SOURCE GLB PREVIEW · Static custom robot and positioner. Drag to inspect; no motion is inferred.');
+  $('scene-evidence-status').textContent = 'STATIC GLB · No calibrated ROS joint mapping or trajectory overlay. Verify movement in --baseline.';
 }
 async function loadURDF() {
   const r=await fetch('/api/model');
