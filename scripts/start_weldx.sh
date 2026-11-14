@@ -101,11 +101,15 @@ if [[ "$MODE" == visual-preview ]]; then
   tail -40 "$LOG/preview-export.log" >&2; exit 1
  }
  export WELDX_WORLD_SDF="$ROOT/assets_vnext/exports/weldx_visual_preview.sdf"
+ export WELDX_VIEW_MODE=glb-preview
  export WELDX_HIDE_SIM_ROBOT_VISUALS=1
  echo "Visual preview world: $WELDX_WORLD_SDF"
  echo "Custom GLB robot visible in its authored static pose; old simulated ABB meshes hidden."
 elif [[ "$MODE" == simulation ]]; then
+ export WELDX_VIEW_MODE=live-urdf
  unset WELDX_WORLD_SDF WELDX_HIDE_SIM_ROBOT_VISUALS
+else
+ unset WELDX_VIEW_MODE
 fi
 
 if [[ "$MODE" != dashboard-only ]]; then
