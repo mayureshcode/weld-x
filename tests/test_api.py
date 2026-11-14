@@ -35,6 +35,31 @@ class APITests(unittest.TestCase):
     def test_static_assets_and_missing_route(self):
         for path in ['/','/app.js','/style.css']:self.assertEqual(self.request(path)[0],200)
         self.assertEqual(self.request('/../weldx/engine.py')[0],404)
+    def test_workcell_viewer_routes_fail_closed(self):
+        from unittest.mock import patch
+        status, raw = self.request('/api/viewer-meta')
+        self.assertEqual(status, 200)
+        meta = json.loads(raw)
+        self.assertEqual(meta['mode'], 'unavailable')
+        self.assertIsNone(meta['workcell_mesh'])
+        self.assertFalse(meta['articulated_custom_glb'])
+        self.assertEqual(self.request('/assets/workcell-preview.glb')[0], 404)
+        with patch.dict('os.environ', {'WELDX_VIEW_MODE': 'glb-preview'}):
+            status, raw = self.request('/api/viewer-meta')
+            self.assertEqual(status, 200)
+            meta = json.loads(raw)
+            self.assertTrue(meta['static_visual'])
+            self.assertFalse(meta['articulated_custom_glb'])
+            self.assertEqual(meta['workcell_mesh'], '/assets/workcell-preview.glb')
+            # On a CI checkout the GLB is absent; a local native preview may
+            # already have produced it. Neither case grants execution authority.
+            self.assertIn(self.request('/assets/workcell-preview.glb')[0], (200, 503))
+            self.assertFalse(self.app.engine.authorized())
+        status, body = self.request('/assets/weldx-hero.webp')
+        self.assertEqual(status, 200)
+        self.assertTrue(body.startswith(b'RIFF'))
+        self.assertEqual(self.request('/assets/weldx-hero.webp?file=../../secrets')[0], 404)
+
     def test_csrf_required(self):
         self.assertEqual(self.request('/api/detect',{},token=False)[0],403)
     def test_foreign_origin_and_host_rejected(self):
