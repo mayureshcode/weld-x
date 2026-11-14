@@ -32,6 +32,7 @@ function render(){
  text('stage',state.stage);text('authorization',state.authorized?'AUTHORIZED':'LOCKED');
  text('authreason',state.authorized?'Exact configuration passed mandatory backend gates.':'Mandatory robotics evidence is missing, unknown or failed.');
  text('version',`Revision ${state.configuration.revision} / ${state.configuration.job.id}`);text('hash',state.config_hash);
+ text('inspector-job',state.configuration.job.id);text('inspector-stage',state.stage);
  dl('health',Object.entries(state.health));const c=state.configuration;
  dl('configuration',[['Robot',c.robot],['Model version',c.model_version],['Job / seams',`${c.job.id} / ${c.job.seams.length}`],['Base x / y',`${c.base.x_m} / ${c.base.y_m} m`],['Base yaw',`${c.base.yaw_rad} rad`],['MC threshold',`${c.uncertainty.success_threshold*100}% (declared)`],['MC samples / source',c.uncertainty.mc_count]]);
  const busy=state.task?.status==='running'||!!state.active_operation;
@@ -52,7 +53,7 @@ function render(){
  const nextAudit=state.audit.at(-1)?.digest||'';if(auditKey!==nextAudit){auditKey=nextAudit;$('audit').replaceChildren();for(const entry of [...state.audit].reverse()){const row=node('div','');row.className='record';row.append(node('strong',`${String(entry.sequence).padStart(3,'0')} / ${entry.kind}`),node('span',new Date(entry.time_unix_s*1000).toISOString()+' · '+entry.digest.slice(0,16)));const inspect=node('button','Inspect record');inspect.onclick=()=>inspectRecord('/api/audit?sequence='+entry.sequence,row);row.append(inspect);$('audit').append(row);}}
 }
 let refreshing=false;
-async function refresh(){if(refreshing)return;refreshing=true;try{const response=await fetch('/api/state');if(!response.ok)throw new Error(`API ${response.status}`);state=await response.json();render();}catch(error){text('connection','BACKEND DISCONNECTED');$('connection').className='tag bad';text('authorization','LOCKED');text('authreason','Backend unreachable. Displayed records may be stale.');text('error',error.message);for(const button of document.querySelectorAll('button'))button.disabled=true;}finally{refreshing=false;}}
+async function refresh(){if(refreshing)return;refreshing=true;try{const response=await fetch('/api/state');if(!response.ok)throw new Error(`API ${response.status}`);state=await response.json();render();}catch(error){text('connection','BACKEND DISCONNECTED');$('connection').className='tag bad';text('authorization','LOCKED');text('authreason','Backend unreachable. Displayed records may be stale.');text('error',error.message);for(const id of ['detect','search','revalidate','execute','cancel','approve','apply']){ const button=$(id); if(button) button.disabled=true; }}finally{refreshing=false;}}
 for(const action of ['detect','search','revalidate','execute','cancel'])$(action).onclick=()=>post(action);
 $('approve').onclick=()=>post('approve',{candidate_id:state.recommended,config_hash:state.config_hash,engineer:$('engineer').value});
 $('apply').onclick=()=>post('apply',{approval_id:state.approval.id});
@@ -91,3 +92,70 @@ async function inspectRecord(url,target){try{const r=await fetch(url);if(!r.ok)t
 function emitSceneEvidence(candidate){window.dispatchEvent(new CustomEvent('weldx-evidence-selection',{detail:{candidateId:candidate?.id||'',source:$('source-select').value,scenarioId:$('scenario-select').value,showPlanned:$('show-planned').checked}}));}
 $('scenario-select').onchange=()=>emitSceneEvidence(state?.candidates.find(c=>c.id===selected));
 $('show-planned').onchange=()=>emitSceneEvidence(state?.candidates.find(c=>c.id===selected));
+
+/* VNext read-only digital-twin inspector.
+ * Stale, missing or static GLB preview feedback is NEVER represented as measured.
+ * The backend remains the sole source of execution authorization. */
+let weldxViewerMode='unavailable';
+let weldxLastInspectorSignature='';
+(async()=>{
+  try {
+    const r=await fetch('/api/viewer-meta');
+    if(!r.ok)throw new Error('viewer metadata unavailable');
+    const info=await r.json();
+    weldxViewerMode=info.mode;
+    if(weldxViewerMode==='glb-preview'){
+      text('inspector-source','STATIC CAD PREVIEW');
+      text('inspector-note','The custom GLB robot and positioner are static. Their joint meshes are not mapped to ROS joint states; no simulated motion is implied.');
+      $('runtime-led').textContent='MODEL PREVIEW ONLY';
+      $('runtime-led').classList.remove('live');
+    } else if(weldxViewerMode==='live-urdf'){
+      text('inspector-source','WAITING FOR JOINT STATES');
+      text('inspector-note','Runtime URDF and observed ROS joint feedback. Physical fidelity is provisional; execution still requires backend evidence.');
+    } else {
+      text('inspector-source','NO VERIFIED MODEL');
+    }
+  }catch(_error) {
+    text('inspector-source','MODEL CONNECTION UNKNOWN');
+  }
+})();
+const inspectorList=$('joint-data');
+const joints=Array.from({length:6},(_,i)=>'joint_'+(i+1));
+const jointRows=new Map();
+for(const joint of joints) {
+  const row=node('div','');row.className='joint-row';
+  const label=node('strong','J'+joint.split('_')[1]);
+  const meter=document.createElement('meter');
+  meter.min=-180;meter.max=180;meter.low=-160;meter.high=160;meter.optimum=0;meter.value=0;
+  meter.setAttribute('aria-label',joint+' position');
+  const value=node('span','—');
+  row.append(label,meter,value);
+  jointRows.set(joint,{row,meter,value});
+}
+inspectorList.replaceChildren(...[...jointRows.values()].map(x=>x.row));
+function setInspectorValues(t) {
+  const measured=weldxViewerMode==='live-urdf' && t.live===true && t.joint_positions &&
+    joints.every(name=>Number.isFinite(t.joint_positions[name]));
+  const signature=measured ? JSON.stringify(joints.map(n=>t.joint_positions[n])) : 'stale:'+weldxViewerMode;
+  if(signature===weldxLastInspectorSignature)return;
+  weldxLastInspectorSignature=signature;
+  $('runtime-led').classList.toggle('live',measured);
+  $('runtime-led').textContent=measured?'OBSERVED JOINT FEEDBACK':
+    weldxViewerMode==='glb-preview'?'STATIC MODEL · NOT SYNCED':'NO CURRENT JOINT FEEDBACK';
+  text('inspector-source', measured?'LIVE / ROS JOINT STATES':
+    weldxViewerMode==='glb-preview'?'STATIC CAD PREVIEW':'NO FRESH TELEMETRY');
+  for(const name of joints){
+    const {row,meter,value}=jointRows.get(name);
+    if(measured) {
+      const deg=t.joint_positions[name]*180/Math.PI;
+      meter.value=Math.max(-180,Math.min(180,deg));
+      value.textContent=(deg>=0?'+':'')+deg.toFixed(2)+'°';
+      row.classList.remove('unavailable');
+    } else {
+      meter.value=0;
+      value.textContent='—';
+      row.classList.add('unavailable');
+    }
+  }
+}
+window.addEventListener('weldx-telemetry',event=>setInspectorValues(event.detail||{}));
