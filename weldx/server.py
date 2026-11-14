@@ -108,6 +108,11 @@ def handler(app):
                     "telemetry_source": "ROS joint states" if mode == "live-urdf" else "not synchronized",
                     "execution_source": "backend authorization only",
                 })
+            if self.path == "/assets/weldx-hero.webp":
+                path = Path(__file__).resolve().parent.parent / "dashboard/assets/weldx-hero.webp"
+                if not path.is_file():
+                    return self.respond(404, {"error":"Decorative art unavailable"})
+                return self.respond(200, path.read_bytes(), "image/webp")
             if self.path == "/assets/workcell-preview.glb":
                 if os.environ.get("WELDX_VIEW_MODE") != "glb-preview":
                     return self.respond(404, {"error":"3D GLB preview not enabled"})
